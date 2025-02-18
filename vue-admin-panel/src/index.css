@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.checkbox-checked {
+    &:is(:where(.checkbox):has(*:checked) *) {
+      opacity: 100%;
+    }
+}
+.checkbox-indeterminate {
+    &:is(:where(.checkbox):has(*:indeterminate) *) {
+      opacity: 100%;
+    }
+}
