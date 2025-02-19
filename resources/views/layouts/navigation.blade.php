@@ -1,4 +1,8 @@
-<header x-data="{ mobileMenuOpen: false }" class="flex justify-between bg-slate-800 text-white shadow-md">
+<header x-data="{
+    mobileMenuOpen: false,
+    cartItemsCount: {{ \App\Helpers\Cart::getCartItemsCount() }},
+}" @cart-change.window="cartItemsCount = $event.detail.count"
+    class="flex justify-between bg-slate-800 text-white shadow-md">
     <div>
         <a href="{{ route('home') }}" class="py-navbar-item block pl-5"> Logo </a>
     </div>
@@ -7,7 +11,7 @@
         :class="mobileMenuOpen ? 'left-0' : '-left-[220px]'">
         <ul>
             <li>
-                <a href="/src/cart.html"
+                <a href="{{ route('cart.index') }}"
                     class="relative flex items-center justify-between px-3 py-2 transition-colors hover:bg-slate-800">
                     <div class="flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 mr-2 h-5 w-5" fill="none"
@@ -18,7 +22,7 @@
                         Cart
                     </div>
                     <!-- Cart Items Counter -->
-                    <small x-show="$store.header.cartItems" x-transition x-text="$store.header.cartItems"
+                    <small x-show="cartItemsCount" x-transition x-text="cartItemsCount"
                         class="rounded-full bg-red-500 px-[8px] py-[2px]"></small>
                     <!--/ Cart Items Counter -->
                 </a>
@@ -51,20 +55,6 @@
                                         d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>
                                 My Profile
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/src/watchlist.html" class="flex items-center px-3 py-2 hover:bg-slate-900">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 h-5 w-5" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                </svg>
-                                Watchlist
-
-                                <small x-show="$store.header.watchlistItems" x-transition
-                                    x-text="$store.header.watchlistItems"
-                                    class="rounded-full bg-red-500 px-[8px] py-[2px]"></small>
                             </a>
                         </li>
                         <li class="hover:bg-slate-900">
@@ -117,7 +107,7 @@
     <nav class="hidden md:block">
         <ul class="grid grid-flow-col items-center">
             <li>
-                <a href="/src/cart.html"
+                <a href="{{ route('cart.index') }}"
                     class="py-navbar-item px-navbar-item relative inline-flex items-center hover:bg-slate-900">
                     <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor" stroke-width="2">
@@ -125,7 +115,7 @@
                             d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
                     Cart
-                    <small x-show="$store.header.cartItems" x-transition x-cloak x-text="$store.header.cartItems"
+                    <small x-show="cartItemsCount" x-transition x-cloak x-text="cartItemsCount"
                         class="absolute -right-3 top-4 z-[100] rounded-full bg-red-500 px-[8px] py-[2px]"></small>
                 </a>
             </li>
@@ -159,23 +149,6 @@
                                         d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>
                                 My Profile
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/src/watchlist.html"
-                                class="flex items-center justify-between px-3 py-2 hover:bg-slate-900">
-                                <div class="flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 h-5 w-5" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                    </svg>
-                                    Watchlist
-                                </div>
-
-                                <small x-show="$store.header.watchlistItems" x-transition
-                                    x-text="$store.header.watchlistItems"
-                                    class="rounded-full bg-red-500 px-[8px] py-[2px]"></small>
                             </a>
                         </li>
                         <li>
