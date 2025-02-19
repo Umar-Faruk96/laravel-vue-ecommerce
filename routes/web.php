@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['guestOrVerified'])->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('home');
-    Route::get('/product/{product:slug}', [ProductController::class, 'view'])->name('product.view');
+    Route::get('/product/{product:slug}', [ProductController::class, 'show'])->name('product.show');
 
     Route::prefix('/cart')->name('cart.')->group(function () {
         Route::get('/', [CartController::class, 'index'])->name('index');

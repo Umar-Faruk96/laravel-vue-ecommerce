@@ -11,14 +11,14 @@
                 'addToCartUrl' => route('cart.add', $product),
             ]) }})"
                 class="border-1 rounded-md border border-gray-200 bg-white transition-colors hover:border-purple-600">
-                <a href="{{ route('products.show', $product->slug) }}"
+                <a href="{{ route('product.show', $product->slug) }}"
                     class="aspect-h-3 aspect-w-2 block overflow-hidden">
                     <img src="{{ $product->image }}" alt=""
                         class="rounded-lg object-cover transition-transform hover:rotate-1 hover:scale-105" />
                 </a>
                 <div class="p-4">
                     <h3 class="text-lg">
-                        <a href="{{ route('products.show', $product->slug) }}">
+                        <a href="{{ route('product.show', $product->slug) }}">
                             {{ $product->title }}
                         </a>
                     </h3>
