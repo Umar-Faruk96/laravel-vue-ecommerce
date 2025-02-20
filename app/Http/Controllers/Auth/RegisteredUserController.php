@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\User;
+use App\Models\{User, Customer};
 use App\Helpers\Cart;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
@@ -43,6 +43,14 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
+
+        $customer = new Customer();
+        $customerNames = explode(' ', $user->name);
+        $customer->user_id = $user->id;
+        $customer->first_name = $customerNames[0];
+        $customer->last_name = $customerNames[1];
+        $customer->email = $user->email;
+        $customer->save();
 
         Auth::login($user);
 
