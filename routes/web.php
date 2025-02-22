@@ -1,8 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,10 @@ Route::middleware(['guestOrVerified'])->group(function () {
         Route::post('/add/{product:slug}', [CartController::class, 'add'])->name('add');
         Route::post('/remove/{product:slug}', [CartController::class, 'remove'])->name('remove');
         Route::post('/update-quantity/{product:slug}', [CartController::class, 'updateQuantity'])->name('update-quantity');
+    });
+
+    Route::middleware(['auth', 'verified'])->group(function () {
+        Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     });
 });
 
