@@ -41,9 +41,163 @@
                         }
                         return null;
                     }
-                }" action="{{ route('profile.update') }}" method="post">
+                }" action="" method="post">
                     @csrf
-                    <x-button>Update</x-button>
+                    <h2 class="mb-2 text-xl font-semibold">Profile Details</h2>
+
+                    <div class="mb-3 grid grid-cols-2 gap-3">
+                        <x-text-input type="text" name="first_name"
+                            value="{{ old('first_name', $customer->first_name) }}" placeholder="First Name"
+                            class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                            
+                        <x-text-input type="text" name="last_name"
+                            value="{{ old('last_name', $customer->last_name) }}" placeholder="Last Name"
+                            class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                    </div>
+
+                    <div class="mb-3">
+                        <x-text-input type="email" name="email" value="{{ old('email', $customer->email) }}"
+                            placeholder="Your Email"
+                            class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                    </div>
+
+                    <div>
+                        <x-text-input type="text" name="phone" value="{{ old('phone', $customer->phone) }}"
+                            placeholder="Your Phone"
+                            class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                    </div>
+
+                    <h2 class="mb-2 mt-6 text-xl font-semibold">Billing Address</h2>
+
+                    <div class="mb-3 grid grid-cols-2 gap-3">
+                        <div>
+                            <x-text-input type="text" name="billing[address1]" x-model="billingAddress.address1"
+                                placeholder="Address 1"
+                                class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                        </div>
+
+                        <div>
+                            <x-text-input type="text" name="billing[address2]" x-model="billingAddress.address2"
+                                placeholder="Address 2"
+                                class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3 grid grid-cols-2 gap-3">
+                        <div>
+                            <x-text-input type="text" name="billing[city]" x-model="billingAddress.city"
+                                placeholder="City"
+                                class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                        </div>
+
+                        <div>
+                            <x-text-input type="text" name="billing[zipcode]" x-model="billingAddress.zipcode"
+                                placeholder="ZipCode"
+                                class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3 grid grid-cols-2 gap-3">
+                        <div>
+                            <x-text-input type="select" name="billing[country_code]"
+                                x-model="billingAddress.country_code"
+                                class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600">
+                                <option value="">Select Country</option>
+
+                                <template x-for="country of countries" :key="country.code">
+                                    <option :selected="country.code === billingAddress.country_code"
+                                        :value="country.code" x-text="country.name"></option>
+                                </template>
+                            </x-text-input>
+                        </div>
+
+                        <div>
+                            <template x-if="billingCountryStates">
+                                <x-text-input type="select" name="billing[state]" x-model="billingAddress.state"
+                                    class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600">
+                                    <option value="">Select State</option>
+
+                                    <template x-for="[code, state] of Object.entries(billingCountryStates)"
+                                        :key="code">
+                                        <option :selected="code === billingAddress.state" :value="code"
+                                            x-text="state"></option>
+                                    </template>
+                                </x-text-input>
+                            </template>
+                            <template x-if="!billingCountryStates">
+                                <x-text-input type="text" name="billing[state]" x-model="billingAddress.state"
+                                    placeholder="State"
+                                    class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                            </template>
+                        </div>
+                    </div>
+
+                    <div class="mb-2 mt-6 flex justify-between">
+                        <h2 class="text-xl font-semibold">Shipping Address</h2>
+                        <label for="sameAsBillingAddress" class="text-gray-700">
+                            <input @change="$event.target.checked ? shippingAddress = {...billingAddress} : ''"
+                                id="sameAsBillingAddress" type="checkbox"
+                                class="mr-2 text-purple-600 focus:ring-purple-600"> Same as Billing
+                        </label>
+                    </div>
+                    <div class="mb-3 grid grid-cols-2 gap-3">
+                        <div>
+                            <x-text-input type="text" name="shipping[address1]" x-model="shippingAddress.address1"
+                                placeholder="Address 1"
+                                class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                        </div>
+                        <div>
+                            <x-text-input type="text" name="shipping[address2]" x-model="shippingAddress.address2"
+                                placeholder="Address 2"
+                                class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                        </div>
+                    </div>
+                    <div class="mb-3 grid grid-cols-2 gap-3">
+                        <div>
+                            <x-text-input type="text" name="shipping[city]" x-model="shippingAddress.city"
+                                placeholder="City"
+                                class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                        </div>
+                        <div>
+                            <x-text-input name="shipping[zipcode]" x-model="shippingAddress.zipcode" type="text"
+                                placeholder="ZipCode"
+                                class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                        </div>
+                    </div>
+                    <div class="mb-3 grid grid-cols-2 gap-3">
+                        <div>
+                            <x-text-input type="select" name="shipping[country_code]"
+                                x-model="shippingAddress.country_code"
+                                class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600">
+                                <option value="">Select Country</option>
+                                <template x-for="country of countries" :key="country.code">
+                                    <option :selected="country.code === shippingAddress.country_code"
+                                        :value="country.code" x-text="country.name"></option>
+                                </template>
+                            </x-text-input>
+                        </div>
+                        <div>
+                            <template x-if="shippingCountryStates">
+                                <x-text-input type="select" name="shipping[state]" x-model="shippingAddress.state"
+                                    class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600">
+                                    <option value="">Select State</option>
+                                    <template x-for="[code, state] of Object.entries(shippingCountryStates)"
+                                        :key="code">
+                                        <option :selected="code === shippingAddress.state" :value="code"
+                                            x-text="state"></option>
+                                    </template>
+                                </x-text-input>
+                            </template>
+                            <template x-if="!shippingCountryStates">
+                                <x-text-input type="text" name="shipping[state]" x-model="shippingAddress.state"
+                                    placeholder="State"
+                                    class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                            </template>
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                        class="btn-primary w-full bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700">Update</button>
                 </form>
             </div>
         </div>
