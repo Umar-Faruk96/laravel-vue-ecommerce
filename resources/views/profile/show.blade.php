@@ -1,6 +1,6 @@
 <x-app-layout>
     <div x-data="{
-        flashMessage: '{{ \Illuminate\Support\Facades\Session::get('flash_message') }}',
+        flashMessage: '{{ \Illuminate\Support\Facades\Session::get('profile_message') }}',
         init() {
             if (this.flashMessage) {
                 setTimeout(() => this.$dispatch('notify', { message: this.flashMessage }), 200)
@@ -12,20 +12,20 @@
                 <form x-data="{
                     countries: {{ json_encode($countries) }},
                     billingAddress: {{ json_encode([
-                        'address1' => old('billing.address1', $billingAddress->address1),
-                        'address2' => old('billing.address2', $billingAddress->address2),
+                        'present_address' => old('billing.present_address', $billingAddress->present_address),
+                        'permanent_address' => old('billing.permanent_address', $billingAddress->permanent_address),
                         'city' => old('billing.city', $billingAddress->city),
                         'state' => old('billing.state', $billingAddress->state),
                         'country_code' => old('billing.country_code', $billingAddress->country_code),
-                        'zipcode' => old('billing.zipcode', $billingAddress->zipcode),
+                        'zip_code' => old('billing.zip_code', $billingAddress->zip_code),
                     ]) }},
                     shippingAddress: {{ json_encode([
-                        'address1' => old('shipping.address1', $shippingAddress->address1),
-                        'address2' => old('shipping.address2', $shippingAddress->address2),
+                        'present_address' => old('shipping.present_address', $shippingAddress->present_address),
+                        'permanent_address' => old('shipping.permanent_address', $shippingAddress->permanent_address),
                         'city' => old('shipping.city', $shippingAddress->city),
                         'state' => old('shipping.state', $shippingAddress->state),
                         'country_code' => old('shipping.country_code', $shippingAddress->country_code),
-                        'zipcode' => old('shipping.zipcode', $shippingAddress->zipcode),
+                        'zip_code' => old('shipping.zip_code', $shippingAddress->zip_code),
                     ]) }},
                     get billingCountryStates() {
                         const country = this.countries.find(c => c.code === this.billingAddress.country_code)
@@ -41,67 +41,58 @@
                         }
                         return null;
                     }
-                }" action="" method="post">
+                }" action="{{ route('profile.update') }}" method="post">
                     @csrf
                     <h2 class="mb-2 text-xl font-semibold">Profile Details</h2>
 
                     <div class="mb-3 grid grid-cols-2 gap-3">
                         <x-text-input type="text" name="first_name"
-                            value="{{ old('first_name', $customer->first_name) }}" placeholder="First Name"
-                            class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
-                            
+                            value="{{ old('first_name', $customer->first_name) }}" placeholder="First Name" />
+
                         <x-text-input type="text" name="last_name"
-                            value="{{ old('last_name', $customer->last_name) }}" placeholder="Last Name"
-                            class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                            value="{{ old('last_name', $customer->last_name) }}" placeholder="Last Name" />
                     </div>
 
                     <div class="mb-3">
                         <x-text-input type="email" name="email" value="{{ old('email', $customer->email) }}"
-                            placeholder="Your Email"
-                            class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                            placeholder="Your Email" />
                     </div>
 
                     <div>
                         <x-text-input type="text" name="phone" value="{{ old('phone', $customer->phone) }}"
-                            placeholder="Your Phone"
-                            class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                            placeholder="Your Phone" />
                     </div>
 
                     <h2 class="mb-2 mt-6 text-xl font-semibold">Billing Address</h2>
 
                     <div class="mb-3 grid grid-cols-2 gap-3">
                         <div>
-                            <x-text-input type="text" name="billing[address1]" x-model="billingAddress.address1"
-                                placeholder="Address 1"
-                                class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                            <x-text-input type="text" name="billing[present_address]"
+                                x-model="billingAddress.present_address" placeholder="Address 1" />
                         </div>
 
                         <div>
-                            <x-text-input type="text" name="billing[address2]" x-model="billingAddress.address2"
-                                placeholder="Address 2"
-                                class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                            <x-text-input type="text" name="billing[permanent_address]"
+                                x-model="billingAddress.permanent_address" placeholder="Address 2" />
                         </div>
                     </div>
 
                     <div class="mb-3 grid grid-cols-2 gap-3">
                         <div>
                             <x-text-input type="text" name="billing[city]" x-model="billingAddress.city"
-                                placeholder="City"
-                                class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                                placeholder="City" />
                         </div>
 
                         <div>
-                            <x-text-input type="text" name="billing[zipcode]" x-model="billingAddress.zipcode"
-                                placeholder="ZipCode"
-                                class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                            <x-text-input type="text" name="billing[zip_code]" x-model="billingAddress.zip_code"
+                                placeholder="ZipCode" />
                         </div>
                     </div>
 
                     <div class="mb-3 grid grid-cols-2 gap-3">
                         <div>
                             <x-text-input type="select" name="billing[country_code]"
-                                x-model="billingAddress.country_code"
-                                class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600">
+                                x-model="billingAddress.country_code">
                                 <option value="">Select Country</option>
 
                                 <template x-for="country of countries" :key="country.code">
@@ -113,8 +104,7 @@
 
                         <div>
                             <template x-if="billingCountryStates">
-                                <x-text-input type="select" name="billing[state]" x-model="billingAddress.state"
-                                    class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600">
+                                <x-text-input type="select" name="billing[state]" x-model="billingAddress.state">
                                     <option value="">Select State</option>
 
                                     <template x-for="[code, state] of Object.entries(billingCountryStates)"
@@ -124,10 +114,10 @@
                                     </template>
                                 </x-text-input>
                             </template>
+
                             <template x-if="!billingCountryStates">
                                 <x-text-input type="text" name="billing[state]" x-model="billingAddress.state"
-                                    placeholder="State"
-                                    class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                                    placeholder="State" />
                             </template>
                         </div>
                     </div>
@@ -140,47 +130,49 @@
                                 class="mr-2 text-purple-600 focus:ring-purple-600"> Same as Billing
                         </label>
                     </div>
+
                     <div class="mb-3 grid grid-cols-2 gap-3">
                         <div>
-                            <x-text-input type="text" name="shipping[address1]" x-model="shippingAddress.address1"
-                                placeholder="Address 1"
-                                class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                            <x-text-input type="text" name="shipping[present_address]"
+                                x-model="shippingAddress.present_address" placeholder="Address 1" />
                         </div>
+
                         <div>
-                            <x-text-input type="text" name="shipping[address2]" x-model="shippingAddress.address2"
-                                placeholder="Address 2"
-                                class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                            <x-text-input type="text" name="shipping[permanent_address]"
+                                x-model="shippingAddress.permanent_address" placeholder="Address 2" />
                         </div>
                     </div>
+
                     <div class="mb-3 grid grid-cols-2 gap-3">
                         <div>
                             <x-text-input type="text" name="shipping[city]" x-model="shippingAddress.city"
-                                placeholder="City"
-                                class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                                placeholder="City" />
                         </div>
+
                         <div>
-                            <x-text-input name="shipping[zipcode]" x-model="shippingAddress.zipcode" type="text"
-                                placeholder="ZipCode"
-                                class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                            <x-text-input name="shipping[zip_code]" x-model="shippingAddress.zip_code" type="text"
+                                placeholder="ZipCode" />
                         </div>
                     </div>
+
                     <div class="mb-3 grid grid-cols-2 gap-3">
                         <div>
                             <x-text-input type="select" name="shipping[country_code]"
-                                x-model="shippingAddress.country_code"
-                                class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600">
+                                x-model="shippingAddress.country_code">
                                 <option value="">Select Country</option>
+
                                 <template x-for="country of countries" :key="country.code">
                                     <option :selected="country.code === shippingAddress.country_code"
                                         :value="country.code" x-text="country.name"></option>
                                 </template>
                             </x-text-input>
                         </div>
+
                         <div>
                             <template x-if="shippingCountryStates">
-                                <x-text-input type="select" name="shipping[state]" x-model="shippingAddress.state"
-                                    class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600">
+                                <x-text-input type="select" name="shipping[state]" x-model="shippingAddress.state">
                                     <option value="">Select State</option>
+
                                     <template x-for="[code, state] of Object.entries(shippingCountryStates)"
                                         :key="code">
                                         <option :selected="code === shippingAddress.state" :value="code"
@@ -188,10 +180,10 @@
                                     </template>
                                 </x-text-input>
                             </template>
+
                             <template x-if="!shippingCountryStates">
                                 <x-text-input type="text" name="shipping[state]" x-model="shippingAddress.state"
-                                    placeholder="State"
-                                    class="w-full rounded border-gray-300 focus:border-purple-600 focus:ring-purple-600" />
+                                    placeholder="State" />
                             </template>
                         </div>
                     </div>

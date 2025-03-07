@@ -29,18 +29,18 @@ class ProfileRequest extends FormRequest
             'phone' => ['required', 'min:7'],
             'email' => ['required', 'email'],
 
-            'shipping.address1' => ['required'],
-            'shipping.address2' => ['required'],
+            'shipping.present_address' => ['required'],
+            'shipping.permanent_address' => ['required'],
             'shipping.city' => ['required'],
             'shipping.state' => ['required'],
-            'shipping.zipcode' => ['required'],
+            'shipping.zip_code' => ['required'],
             'shipping.country_code' => ['required', 'exists:countries,code'],
 
-            'billing.address1' => ['required'],
-            'billing.address2' => ['required'],
+            'billing.present_address' => ['required'],
+            'billing.permanent_address' => ['required'],
             'billing.city' => ['required'],
             'billing.state' => ['required'],
-            'billing.zipcode' => ['required'],
+            'billing.zip_code' => ['required'],
             'billing.country_code' => ['required', 'exists:countries,code'],
 
         ];
@@ -49,17 +49,17 @@ class ProfileRequest extends FormRequest
     public function attributes()
     {
         return [
-            'billing.address1' => 'address 1',
-            'billing.address2' => 'address 2',
+            'billing.present_address' => 'Billing Present Address',
+            'billing.permanent_address' => 'Billing Permanent Address',
             'billing.city' => 'city',
             'billing.state' => 'state',
-            'billing.zipcode' => 'zip code',
+            'billing.zip_code' => 'zip code',
             'billing.country_code' => 'country',
-            'shipping.address1' => 'address 1',
-            'shipping.address2' => 'address 2',
+            'shipping.present_address' => 'Shipping Present Address',
+            'shipping.permanent_address' => 'Shipping Permanent Address',
             'shipping.city' => 'city',
             'shipping.state' => 'state',
-            'shipping.zipcode' => 'zip code',
+            'shipping.zip_code' => 'zip code',
             'shipping.country_code' => 'country',
         ];
     }

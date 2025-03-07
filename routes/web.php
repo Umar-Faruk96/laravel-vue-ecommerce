@@ -29,6 +29,7 @@ Route::middleware(['guestOrVerified'])->group(function () {
 
     Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+        Route::post('/profile', [ProfileController::class, 'store'])->name('profile.update');
     });
 });
 
