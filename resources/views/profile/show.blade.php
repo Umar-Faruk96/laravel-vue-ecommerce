@@ -46,10 +46,10 @@
                     <h2 class="mb-2 text-xl font-semibold">Profile Details</h2>
 
                     <div class="mb-3 grid grid-cols-2 gap-3">
-                        <x-text-input type="text" name="first_name"
+                        <x-text-input name="first_name"
                             value="{{ old('first_name', $customer->first_name) }}" placeholder="First Name" />
 
-                        <x-text-input type="text" name="last_name"
+                        <x-text-input name="last_name"
                             value="{{ old('last_name', $customer->last_name) }}" placeholder="Last Name" />
                     </div>
 
@@ -59,7 +59,7 @@
                     </div>
 
                     <div>
-                        <x-text-input type="text" name="phone" value="{{ old('phone', $customer->phone) }}"
+                        <x-text-input type="number" name="phone" value="{{ old('phone', $customer->phone) }}"
                             placeholder="Your Phone" />
                     </div>
 
@@ -67,24 +67,24 @@
 
                     <div class="mb-3 grid grid-cols-2 gap-3">
                         <div>
-                            <x-text-input type="text" name="billing[present_address]"
+                            <x-text-input name="billing[present_address]"
                                 x-model="billingAddress.present_address" placeholder="Address 1" />
                         </div>
 
                         <div>
-                            <x-text-input type="text" name="billing[permanent_address]"
+                            <x-text-input name="billing[permanent_address]"
                                 x-model="billingAddress.permanent_address" placeholder="Address 2" />
                         </div>
                     </div>
 
                     <div class="mb-3 grid grid-cols-2 gap-3">
                         <div>
-                            <x-text-input type="text" name="billing[city]" x-model="billingAddress.city"
+                            <x-text-input name="billing[city]" x-model="billingAddress.city"
                                 placeholder="City" />
                         </div>
 
                         <div>
-                            <x-text-input type="text" name="billing[zip_code]" x-model="billingAddress.zip_code"
+                            <x-text-input name="billing[zip_code]" x-model="billingAddress.zip_code"
                                 placeholder="ZipCode" />
                         </div>
                     </div>
@@ -116,7 +116,7 @@
                             </template>
 
                             <template x-if="!billingCountryStates">
-                                <x-text-input type="text" name="billing[state]" x-model="billingAddress.state"
+                                <x-text-input name="billing[state]" x-model="billingAddress.state"
                                     placeholder="State" />
                             </template>
                         </div>
@@ -133,24 +133,24 @@
 
                     <div class="mb-3 grid grid-cols-2 gap-3">
                         <div>
-                            <x-text-input type="text" name="shipping[present_address]"
+                            <x-text-input name="shipping[present_address]"
                                 x-model="shippingAddress.present_address" placeholder="Address 1" />
                         </div>
 
                         <div>
-                            <x-text-input type="text" name="shipping[permanent_address]"
+                            <x-text-input name="shipping[permanent_address]"
                                 x-model="shippingAddress.permanent_address" placeholder="Address 2" />
                         </div>
                     </div>
 
                     <div class="mb-3 grid grid-cols-2 gap-3">
                         <div>
-                            <x-text-input type="text" name="shipping[city]" x-model="shippingAddress.city"
+                            <x-text-input name="shipping[city]" x-model="shippingAddress.city"
                                 placeholder="City" />
                         </div>
 
                         <div>
-                            <x-text-input name="shipping[zip_code]" x-model="shippingAddress.zip_code" type="text"
+                            <x-text-input name="shipping[zip_code]" x-model="shippingAddress.zip_code"
                                 placeholder="ZipCode" />
                         </div>
                     </div>
@@ -182,12 +182,33 @@
                             </template>
 
                             <template x-if="!shippingCountryStates">
-                                <x-text-input type="text" name="shipping[state]" x-model="shippingAddress.state"
+                                <x-text-input name="shipping[state]" x-model="shippingAddress.state"
                                     placeholder="State" />
                             </template>
                         </div>
                     </div>
 
+                    <button type="submit"
+                        class="btn-primary w-full bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700">Update</button>
+                </form>
+            </div>
+
+            <div class="rounded-lg bg-white p-3 shadow">
+                <form action="{{ route('profile.password.update') }}" method="post">
+                    @csrf
+                    <h2 class="mb-2 text-xl font-semibold">Update Password</h2>
+                    <div class="mb-3">
+                        <x-text-input type="password" name="old_password" placeholder="Your Current Password" />
+                    </div>
+
+                    <div class="mb-3">
+                        <x-text-input type="password" name="new_password" placeholder="New Password" />
+                    </div>
+
+                    <div class="mb-3">
+                        <x-text-input type="password" name="new_password_confirmation"
+                            placeholder="Repeat New Password" />
+                    </div>
                     <button type="submit"
                         class="btn-primary w-full bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700">Update</button>
                 </form>

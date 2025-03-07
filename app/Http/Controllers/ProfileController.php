@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Country;
 use Illuminate\View\View;
 use App\Enums\AddressType;
-use App\Http\Requests\ProfileRequest;
 use Illuminate\Http\Request;
 use App\Models\CustomerAddress;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\ProfileRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Requests\PasswordUpdateRequest;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
@@ -56,7 +58,21 @@ class ProfileController extends Controller
             CustomerAddress::create($billingData);
         } */
 
-        $request->session()->flash('profile_message', 'Your profile is successfully updated');
+        $request->session()->flash('profile_message', 'Your profile has updated successfully!');
+
+        return Redirect::route('profile.show');
+    }
+
+    public function updatePassword(PasswordUpdateRequest $request)
+    {
+
+        $user = $request->user();
+        $passwordData = $request->validated();
+
+        $user->password = Hash::make($passwordData['new_password']);
+        $user->save();
+
+        $request->session()->flash('profile_message', 'Your password has updated successfully!');
 
         return Redirect::route('profile.show');
     }

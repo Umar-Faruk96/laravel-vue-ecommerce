@@ -15,7 +15,7 @@
     @endif
 
     @if ($type === 'select')
-        <select {{ $disabled ? 'disabled' : '' }} {!! $attributes->merge([
+        <select @disabled($disabled) {!! $attributes->merge([
             'class' =>
                 'rounded-md w-full ' .
                 ($errors->has($attributeName) ? $errorClasses : (old($attributeName) ? $successClasses : $defaultClasses)),
@@ -23,12 +23,11 @@
             {{ $slot }}
         </select>
     @else
-        <input @disabled($disabled)
-            {{ $attributes->merge([
-                'class' =>
-                    'w-full rounded-md ' .
-                    ($errors->has($attributeName) ? $errorClasses : (old($attributeName) ? $successClasses : $defaultClasses)),
-            ]) }}>
+        <input @disabled($disabled) {!! $attributes->merge([
+            'class' =>
+                'w-full rounded-md ' .
+                ($errors->has($attributeName) ? $errorClasses : (old($attributeName) ? $successClasses : $defaultClasses)),
+        ]) !!} type="{{ $type }}">
     @endif
     @error($attributeName)
         <small class="text-red-600"> {{ $message }}</small>
