@@ -2,15 +2,17 @@
 
 namespace App\Helpers;
 
+use App\Models\Product;
 use App\Models\CartItem;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 class Cart
 {
     public static function getCartItemsCount(): int
     {
-        $request = request();
-        $user = $request->user();
+        $user = request()->user();
 
         if ($user) {
             return CartItem::where('user_id', $user->id)->sum('quantity');
@@ -23,8 +25,7 @@ class Cart
 
     public static function getCartItems(): Collection|array
     {
-        $request = request();
-        $user = $request->user();
+        $user = request()->user();
 
         if ($user) {
             return CartItem::where('user_id', $user->id)->get()->map(fn($item) => ['product_id' => $item->product_id, 'quantity' => $item->quantity]);
@@ -35,8 +36,7 @@ class Cart
 
     public static function getCookieCartItems(): array
     {
-        $request = request();
-        return json_decode($request->cookie('cart_items'), true) ?? [];
+        return json_decode(request()->cookie('cart_items'), true) ?? [];
     }
 
     public static function getCountFromItems(array $cartItems): int
@@ -46,9 +46,8 @@ class Cart
 
     public static function moveCartItemsIntoDB()
     {
-        $request = request();
         $cartItems = self::getCookieCartItems();
-        $dbCartItems = CartItem::where('user_id', $request->user()->id)->get()->keyBy('product_id');
+        $dbCartItems = CartItem::where('user_id', request()->user()->id)->get()->keyBy('product_id');
 
         $newCartItems = [];
 
@@ -59,7 +58,7 @@ class Cart
 
             $newCartItems[] = [
                 'product_id' => $cartItem['product_id'],
-                'user_id' => $request->user()->id,
+                'user_id' => request()->user()->id,
                 'quantity' => $cartItem['quantity']
             ];
         }
@@ -67,5 +66,15 @@ class Cart
         if ($newCartItems) {
             CartItem::insert($newCartItems);
         }
+    }
+
+    public static function getProductsAndCartItems(): array|EloquentCollection
+    {
+        $cartItems = self::getCartItems();
+        $ids = Arr::pluck($cartItems, 'product_id');
+        $products = Product::query()->whereIn('id', $ids)->get();
+        $cartItems = Arr::keyBy($cartItems, 'product_id');
+
+        return [$products, $cartItems];
     }
 }

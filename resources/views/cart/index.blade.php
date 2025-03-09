@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="container mx-auto lg:w-2/3 xl:w-2/3">
         <h1 class="mb-6 text-3xl font-bold">Your Cart Items</h1>
-
+        {{-- @dump($cartItems) --}}
         <div x-data="{
             cartItems: {{ json_encode(
                 $products->map(
@@ -33,6 +33,7 @@
                                     class="flex h-32 w-36 items-center justify-center overflow-hidden">
                                     <img :src="product.image" class="object-cover" alt="" />
                                 </a>
+
                                 <div class="flex flex-1 flex-col justify-between">
                                     <div class="mb-3 flex justify-between">
                                         <h3 x-text="product.title"></h3>
@@ -40,6 +41,7 @@
                                             ৳<span x-text="product.price"></span>
                                         </span>
                                     </div>
+
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center">
                                             Qty:
@@ -47,11 +49,13 @@
                                                 @change="changeQuantity()"
                                                 class="ml-3 w-16 border-gray-200 py-1 focus:border-purple-600 focus:ring-purple-600" />
                                         </div>
+
                                         <a href="#" @click.prevent="removeItemFromCart()"
                                             class="text-purple-600 hover:text-purple-500">Remove</a>
                                     </div>
                                 </div>
                             </div>
+
                             <!--/ Product Item -->
                             <hr class="my-5" />
                         </div>
@@ -63,13 +67,16 @@
                             <span class="font-semibold">Subtotal</span>
                             <span id="cartTotal" class="text-xl" x-text="`৳${cartTotal}`"></span>
                         </div>
+
                         <p class="mb-6 text-gray-500">
                             Shipping and taxes calculated at checkout.
                         </p>
-
-                        <button type="submit" class="btn-primary w-full py-3 text-lg">
-                            Proceed to Checkout
-                        </button>
+                        <form action="{{ route('checkout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn-primary w-full py-3 text-lg">
+                                Proceed to Checkout
+                            </button>
+                        </form>
                     </div>
                 </div>
                 <!--/ Product Items -->
