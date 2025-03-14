@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use Stripe\Stripe;
-use App\Helpers\Cart;
-use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Routing\Redirector;
-use Illuminate\View\View;
-use Stripe\Checkout\Session;
 use Stripe\Customer;
+use App\Helpers\Cart;
+use App\Models\Order;
+use App\Models\Payment;
+use Illuminate\View\View;
+use App\Enums\OrderStatus;
+use App\Enums\PaymentStatus;
+use Illuminate\Http\Request;
+use Stripe\Checkout\Session;
+use Illuminate\Routing\Redirector;
+use Illuminate\Http\RedirectResponse;
 
 class CheckoutController extends Controller
 {
@@ -22,9 +26,11 @@ class CheckoutController extends Controller
         [$products, $cartItems] = Cart::getProductsAndCartItems();
 
         $lineItems = [];
+        $totalPrice = 0;
 
         foreach ($products as $product) {
             $quantity = $cartItems[$product->id]['quantity'];
+            $totalPrice += $product->price * $quantity;
             $lineItems[] = [
                 'price_data' => [
                     'currency' => 'usd',
@@ -44,6 +50,27 @@ class CheckoutController extends Controller
             'success_url' => route('checkout.success', [], true),
             'cancel_url' => route('checkout.cancel', [], true),
         ]);
+
+        // Create Order
+        $orderData = [
+            'total_price' => $totalPrice,
+            'status' => OrderStatus::Unpaid,
+            'created_by' => $user->id,
+            'updated_by' => $user->id,
+        ];
+        $order = Order::create($orderData);
+
+        // Create Payment
+        $paymentData = [
+            'order_id' => $order->id,
+            'amount' => $totalPrice,
+            'status' => PaymentStatus::Pending,
+            'type' => 'cc',
+            'created_by' => $user->id,
+            'updated_by' => $user->id,
+            'session_id' => $session->id
+        ];
+        Payment::create($paymentData);
 
         return redirect($session->url);
     }
