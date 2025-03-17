@@ -1,10 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\{CartController, CheckoutController, OrderController, ProfileController, ProductController};
 
 /*
 |--------------------------------------------------------------------------
@@ -33,8 +30,11 @@ Route::middleware(['guestOrVerified'])->group(function () {
         Route::post('/profile', [ProfileController::class, 'store'])->name('profile.update');
         Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
         Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+        Route::post('/checkout/{order}', [CheckoutController::class, 'checkoutOrder'])->name('cart.checkout-order');
         Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
         Route::get('/checkout/cancel', [CheckoutController::class, 'cancel'])->name('checkout.cancel');
+        Route::get('/orders', [OrderController::class, 'index'])->name('order.index');
+        Route::get('/orders/{order}', [OrderController::class, 'show'])->name('order.show');
     });
 });
 

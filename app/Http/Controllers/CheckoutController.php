@@ -127,6 +127,39 @@ class CheckoutController extends Controller
         return view('checkout.failure', ['message' => ""]);
     }
 
+    public function checkoutOrder(Order $order, Request $request)
+    {
+        Stripe::setApiKey(getenv('STRIPE_SECRET_KEY'));
+
+        $lineItems = [];
+
+        foreach ($order->items as $item) {
+            $lineItems[] = [
+                'price_data' => [
+                    'currency' => 'usd',
+                    'product_data' => [
+                        'name' => $item->product->title,
+                        //                        'images' => [$product->image]
+                    ],
+                    'unit_amount' => $item->unit_price * 100,
+                ],
+                'quantity' => $item->quantity,
+            ];
+        }
+
+        $session = Session::create([
+            'line_items' => $lineItems,
+            'mode' => 'payment',
+            'success_url' => route('checkout.success', [], true) . '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => route('checkout.cancel', [], true), 
+        ]);
+
+        $order->payment->session_id = $session->id;
+        $order->payment->save();
+
+
+        return redirect($session->url);
+    }
     private function updateOrderAndSession(Payment $payment)
     {
         $payment->status = PaymentStatus::Paid;
