@@ -7,7 +7,7 @@
         'price' => $product->price,
         'addToCartUrl' => route('cart.add', $product),
     ]) }})" class="container mx-auto">
-        <div class="grid grid-cols-1 gap-6 lg:grid-cols-5">
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-5 mt-8">
             <div class="lg:col-span-3">
                 <div x-data="{
                     images: ['{{ $product->image }}'],
@@ -28,52 +28,60 @@
                         this.activeImage = this.images.length > 0 ? this.images[0] : null
                     }
                 }">
-                    <div class="relative">
+                    <div class="relative dark:bg-gray-800">
                         <template x-for="image in images">
                             <div x-show="activeImage === image" class="aspect-h-2 aspect-w-3">
                                 <img :src="image" alt="" class="mx-auto w-auto" />
                             </div>
                         </template>
+
                         <a @click.prevent="prev"
-                            class="absolute left-0 top-1/2 -translate-y-1/2 cursor-pointer bg-black/30 text-white">
+                            class="absolute left-0 top-1/2 -translate-y-1/2 cursor-pointer bg-black/30 text-white dark:bg-gray-500 ml-2 rounded-sm">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
                             </svg>
                         </a>
+
                         <a @click.prevent="next"
-                            class="absolute right-0 top-1/2 -translate-y-1/2 cursor-pointer bg-black/30 text-white">
+                            class="absolute right-0 top-1/2 -translate-y-1/2 cursor-pointer bg-black/30 text-white dark:bg-gray-500 mr-2 rounded-sm">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
                             </svg>
                         </a>
                     </div>
+
                     <div class="flex">
                         <template x-for="image in images">
                             <a @click.prevent="activeImage = image"
-                                class="flex h-[80px] w-[80px] cursor-pointer items-center justify-center border border-gray-300 hover:border-purple-500"
-                                :class="{ 'border-purple-600': activeImage === image }">
+                                class="flex h-[80px] w-[80px] cursor-pointer items-center justify-center border border-gray-300 hover:border-purple-500 dark:border-gray-600 dark:hover:border-purple-500 dark:bg-gray-700"
+                                :class="{ 'border-purple-600 dark:border-purple-600': activeImage === image }">
                                 <img :src="image" alt="" class="max-auto max-h-full w-auto" />
                             </a>
                         </template>
                     </div>
                 </div>
             </div>
-            <div class="lg:col-span-2">
-                <h1 class="text-lg font-semibold">
+
+            <div class="lg:col-span-2 space-y-6">
+                <h1 class="text-lg font-semibold dark:text-white lg:text-2xl">
                     {{ $product->title }}
                 </h1>
-                <div class="mb-6 text-xl font-bold">${{ $product->price }}</div>
-                <div class="mb-5 flex items-center justify-between">
-                    <label for="quantity" class="mr-4 block font-bold">
+
+                <div class="text-xl font-bold dark:text-white">${{ $product->price }}</div>
+
+                <div class="flex items-center justify-between">
+                    <label for="quantity" class="mr-4 block font-bold dark:text-white">
                         Quantity
                     </label>
+
                     <input type="number" name="quantity" x-ref="quantityEl" value="1" min="1"
-                        class="w-32 rounded focus:border-purple-500 focus:outline-none" />
+                        class="w-32 rounded focus:border-purple-500 dark:focus:border-purple-600 dark:border-2 focus:outline-none" />
                 </div>
+
                 <button @click="addToCart($refs.quantityEl.value)"
-                    class="btn-primary mb-6 flex w-full min-w-0 justify-center py-4 text-lg">
+                    class="btn-primary flex w-full min-w-0 justify-center py-4 text-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 h-6 w-6" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -81,10 +89,12 @@
                     </svg>
                     Add to Cart
                 </button>
-                <div class="mb-6" x-data="{ expanded: false }">
+
+                <div x-data="{ expanded: false }">
                     <div x-show="expanded" x-collapse.min.120px class="wysiwyg-content text-gray-500">
                         {{ $product->description }}
                     </div>
+
                     <p class="text-right">
                         <a @click="expanded = !expanded" href="javascript:void(0)"
                             class="text-purple-500 hover:text-purple-700"

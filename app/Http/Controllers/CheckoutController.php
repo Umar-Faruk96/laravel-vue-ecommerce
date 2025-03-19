@@ -15,7 +15,23 @@ class CheckoutController extends Controller
     {
         $user = $request->user();
 
-        Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        // unique transection id for every transection
+        $tran_id = "test" . rand(1111111, 9999999);
+
+        // aamarPay support Two type of currency USD & BDT  
+        $currency = "BDT";
+
+        // 10 taka is the minimum amount for show card option in aamarPay payment gateway
+        $amount = "10";
+
+        // aamarPay demo store id
+        $store_id = config('aamarpay.store_id');
+
+        // aamarPay demo signature key
+        $signature_key = config('aamarpay.signature_key');
+
+        // aamarPay payment gateway url
+        $url = "https://​sandbox​.aamarpay.com/jsonpost.php";
 
         [$products, $cartItems] = Cart::getProductsAndCartItems();
 
@@ -27,17 +43,27 @@ class CheckoutController extends Controller
             $quantity = $cartItems[$product->id]['quantity'];
             $totalPrice += $product->price * $quantity;
 
-            // initial setup for stripe
+            // initial setup for aamarPay
             $lineItems[] = [
-                'price_data' => [
-                    'currency' => 'usd',
-                    'product_data' => [
-                        'name' => $product->title,
-                        'images' => [$product->image]
-                    ],
-                    'unit_amount' => $product->price * 100,
-                ],
-                'quantity' => $quantity,
+                'store_id' => $store_id,
+                'tran_id' => $tran_id,
+                'success_url' => route('checkout.success', [], true),
+                'fail_url' => route('checkout.fail', [], true),
+                'cancel_url' => route('checkout.cancel', [], true),
+                'amount' => $product->price,
+                'currency' => $currency,
+                'signature_key' => $signature_key,
+                'desc' => $product->title,
+                'cus_name' => $user->customer->first_name,
+                'cus_email' => $user->customer->email,
+                'cus_add1' => $user->customer->shippingAddress->present_address,
+                'cus_add2' => $user->customer->billingAddress->present_address,
+                'cus_city' => $user->customer->shippingAddress->city,
+                'cus_state' => $user->customer->shippingAddress->state,
+                'cus_postcode' => $user->customer->shippingAddress->zip_code,
+                'cus_country' => $user->customer->shippingAddress->country_code,
+                'cus_phone' => $user->customer->phone,
+                'type' => 'json'
             ];
 
             $orderItems[] = [
@@ -47,13 +73,26 @@ class CheckoutController extends Controller
             ];
         }
 
-        // stripe setup
-        $session = Session::create([
-            'line_items' => $lineItems,
-            'mode' => 'payment',
-            'success_url' => route('checkout.success', [], true) . '?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url' => route('checkout.cancel', [], true),
+        $curl = curl_init();
+
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => json_encode(is_array($lineItems) ? $lineItems[0] : [$lineItems][0]),
+            CURLOPT_HTTPHEADER => [
+                'Content-Type: application/json'
+            ],
         ]);
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+        dump($response);
 
         // Create Order
         $orderData = [
@@ -76,21 +115,32 @@ class CheckoutController extends Controller
             'amount' => $totalPrice,
             'status' => PaymentStatus::Pending,
             'type' => 'cc',
+            'gateway' => 'aamarpay',
             'created_by' => $user->id,
             'updated_by' => $user->id,
-            'session_id' => $session->id
+            'session_id' => $tran_id
         ];
         Payment::create($paymentData);
 
         CartItem::where(['user_id' => $user->id])->delete();
 
-        return redirect($session->url);
+        $responseObj = json_decode($response);
+        // dd($responseObj);
+
+        if (!isset($responseObj->payment_url) && empty($responseObj->payment_url)) {
+            echo $response;
+        }
+
+        $paymentUrl = $responseObj->payment_url;
+        dd($paymentUrl);
+
+        return redirect()->away($paymentUrl);
     }
 
     public function success(Request $request): View
     {
         $user = $request->user();
-        Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        Stripe::setApiKey(config('stripe.secret_key'));
 
         try {
             $session_id = $request->get('session_id');
@@ -126,10 +176,14 @@ class CheckoutController extends Controller
     {
         return view('checkout.failure', ['message' => ""]);
     }
+    public function fail(Request $request)
+    {
+        return $request;
+    }
 
     public function checkoutOrder(Order $order, Request $request)
     {
-        Stripe::setApiKey(getenv('STRIPE_SECRET_KEY'));
+        Stripe::setApiKey(config('stripe.secret_key'));
 
         $lineItems = [];
 
@@ -151,7 +205,7 @@ class CheckoutController extends Controller
             'line_items' => $lineItems,
             'mode' => 'payment',
             'success_url' => route('checkout.success', [], true) . '?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url' => route('checkout.cancel', [], true), 
+            'cancel_url' => route('checkout.cancel', [], true),
         ]);
 
         $order->payment->session_id = $session->id;

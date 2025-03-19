@@ -19,7 +19,7 @@ class Cart
         } else {
             $cartItems = self::getCookieCartItems();
 
-            return array_reduce($cartItems, fn($carry, $item) => $carry + $item['quantity'], 0);
+            return self::getCountFromItems($cartItems);
         }
     }
 
@@ -36,7 +36,7 @@ class Cart
 
     public static function getCookieCartItems(): array
     {
-        return json_decode(request()->cookie('cart_items'), true) ?? [];
+        return json_decode(request()->cookie('cart_items', []), true) ?? [];
     }
 
     public static function getCountFromItems(array $cartItems): int

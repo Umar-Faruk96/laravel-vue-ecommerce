@@ -52,12 +52,16 @@ document.addEventListener("alpine:init", async () => {
     }));
 
     Alpine.data("productItem", (product) => {
+        // console.log(product);
+
         return {
             product,
+
             addToCart(quantity = 1) {
                 post(this.product.addToCartUrl, { quantity })
                     .then(result => {
                         this.$dispatch('cart-change', { count: result.count })
+                        
                         this.$dispatch("notify", {
                             message: "The item was added into the cart",
                         });
@@ -66,6 +70,7 @@ document.addEventListener("alpine:init", async () => {
                         console.log(response);
                     })
             },
+
             removeItemFromCart() {
                 post(this.product.removeUrl)
                     .then(result => {
@@ -76,6 +81,7 @@ document.addEventListener("alpine:init", async () => {
                         this.cartItems = this.cartItems.filter(p => p.id !== product.id)
                     })
             },
+
             changeQuantity() {
                 post(this.product.updateQuantityUrl, { quantity: product.quantity })
                     .then(result => {

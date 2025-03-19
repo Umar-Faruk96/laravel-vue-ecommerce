@@ -35,6 +35,7 @@
             <!--/ Product Item -->
         @endforeach
     </div>
+    
     {{-- Product Pagination --}}
     {{ $products->links() }}
 </x-app-layout>

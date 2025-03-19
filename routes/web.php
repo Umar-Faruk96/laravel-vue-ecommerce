@@ -32,6 +32,7 @@ Route::middleware(['guestOrVerified'])->group(function () {
         Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
         Route::post('/checkout/{order}', [CheckoutController::class, 'checkoutOrder'])->name('cart.checkout-order');
         Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
+        Route::get('/checkout/fail', [CheckoutController::class, 'fail'])->name('checkout.fail');
         Route::get('/checkout/cancel', [CheckoutController::class, 'cancel'])->name('checkout.cancel');
         Route::get('/orders', [OrderController::class, 'index'])->name('order.index');
         Route::get('/orders/{order}', [OrderController::class, 'show'])->name('order.show');

@@ -1,6 +1,6 @@
 
-export function request(method, url, data = {}) {
-    return fetch(url, {
+export async function request(method, url, data = {}) {
+    const response = await fetch(url, {
         method,
         headers: {
             'Content-Type': 'application/json',
@@ -9,12 +9,12 @@ export function request(method, url, data = {}) {
             // 'Content-Type': 'application/x-www-form-urlencoded',
         },
         ...(method === 'get' ? {} : { body: JSON.stringify(data) })
-    }).then(async (response) => {
-        if (response.status >= 200 && response.status < 300) {
-            return response.json()
-        }
-        throw await response.json();
-    })
+    });
+    
+    if (response.status >= 200 && response.status < 300) {
+        return response.json();
+    }
+    throw await response.json();
 }
 
 export function get(url) {
