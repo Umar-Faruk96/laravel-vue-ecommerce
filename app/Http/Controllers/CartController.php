@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\Cart;
-use App\Models\{CartItem, Product};
-use Illuminate\{Support\Arr, Support\Facades\Cookie, Http\Request, Http\Response};
+use App\{Models\CartItem, Models\Product, Helpers\Cart};
+use Illuminate\{Support\Facades\Cookie, Http\Request, Http\Response};
 
 class CartController extends Controller
 {
@@ -47,9 +46,10 @@ class CartController extends Controller
                 'count' => Cart::getCartItemsCount()
             ]);
         } else {
-            $cartItems = json_decode($request->cookie('cart_items', '[]'), true);
+            $cartItems = Cart::getCookieCartItems();
 
             $productFound = false;
+
             foreach ($cartItems as &$item) {
                 if ($item['product_id'] === $product->id) {
                     $item['quantity'] += $quantity;
@@ -57,7 +57,7 @@ class CartController extends Controller
                     break;
                 }
             }
-            
+
             if (!$productFound) {
                 $cartItems[] = [
                     'user_id' => null,
@@ -87,14 +87,15 @@ class CartController extends Controller
                 'count' => Cart::getCartItemsCount(),
             ]);
         } else {
-            $cartItems = json_decode($request->cookie('cart_items', '[]'), true);
+            $cartItems = Cart::getCookieCartItems();
+
             foreach ($cartItems as $i => &$item) {
                 if ($item['product_id'] === $product->id) {
                     array_splice($cartItems, $i, 1);
                     break;
                 }
             }
-            
+
             Cookie::queue('cart_items', json_encode($cartItems), 60 * 24 * 30);
 
             return response(['count' => Cart::getCountFromItems($cartItems)]);
@@ -113,7 +114,8 @@ class CartController extends Controller
                 'count' => Cart::getCartItemsCount(),
             ]);
         } else {
-            $cartItems = json_decode($request->cookie('cart_items', '[]'), true);
+            $cartItems = Cart::getCookieCartItems();
+
             foreach ($cartItems as &$item) {
                 if ($item['product_id'] === $product->id) {
                     $item['quantity'] = $quantity;

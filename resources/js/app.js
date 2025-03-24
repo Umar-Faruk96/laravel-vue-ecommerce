@@ -2,7 +2,7 @@ import './bootstrap';
 
 import Alpine from 'alpinejs';
 import collapse from '@alpinejs/collapse'
-import { get, post } from "./http.js";
+import { post } from "./http.js";
 
 Alpine.plugin(collapse)
 
@@ -17,10 +17,12 @@ document.addEventListener("alpine:init", async () => {
         interval: null,
         timeout: null,
         message: null,
+
         close() {
             this.visible = false;
             clearInterval(this.interval);
         },
+
         show(message) {
             this.visible = true;
             this.message = message;
@@ -29,6 +31,7 @@ document.addEventListener("alpine:init", async () => {
                 clearInterval(this.interval);
                 this.interval = null;
             }
+
             if (this.timeout) {
                 clearTimeout(this.timeout);
                 this.timeout = null;
@@ -38,11 +41,15 @@ document.addEventListener("alpine:init", async () => {
                 this.visible = false;
                 this.timeout = null;
             }, this.delay);
+
             const startDate = Date.now();
             const futureDate = Date.now() + this.delay;
+
             this.interval = setInterval(() => {
                 const date = Date.now();
+
                 this.percent = ((date - startDate) * 100) / (futureDate - startDate);
+
                 if (this.percent >= 100) {
                     clearInterval(this.interval);
                     this.interval = null;
@@ -57,40 +64,45 @@ document.addEventListener("alpine:init", async () => {
         return {
             product,
 
-            addToCart(quantity = 1) {
-                post(this.product.addToCartUrl, { quantity })
-                    .then(result => {
-                        this.$dispatch('cart-change', { count: result.count })
-                        
-                        this.$dispatch("notify", {
-                            message: "The item was added into the cart",
-                        });
-                    })
-                    .catch(response => {
-                        console.log(response);
-                    })
+            addToCart: async function (quantity = 1) {
+                try {
+                    const result = await post(this.product.addToCartUrl, { quantity });
+
+                    this.$dispatch('cart-change', { count: result.count });
+                    this.$dispatch("notify", {
+                        message: "The item was added into the cart",
+                    });
+                } catch (response) {
+                    console.log(response);
+                }
             },
 
-            removeItemFromCart() {
-                post(this.product.removeUrl)
-                    .then(result => {
-                        this.$dispatch("notify", {
-                            message: "The item was removed from cart",
-                        });
-                        this.$dispatch('cart-change', { count: result.count })
-                        this.cartItems = this.cartItems.filter(p => p.id !== product.id)
-                    })
+            removeItemFromCart: async function () {
+                try {
+                    const result = await post(this.product.removeUrl);
+
+                    this.$dispatch('cart-change', { count: result.count });
+                    this.$dispatch("notify", {
+                        message: "The item was removed from cart",
+                    });
+                    this.cartItems = this.cartItems.filter(p => p.id !== product.id);
+                } catch (response) {
+                    console.log(response);
+                }
             },
 
-            changeQuantity() {
-                post(this.product.updateQuantityUrl, { quantity: product.quantity })
-                    .then(result => {
-                        this.$dispatch('cart-change', { count: result.count })
-                        this.$dispatch("notify", {
-                            message: "The item quantity was updated",
-                        });
-                    })
-            },
+            changeQuantity: async function () {
+                try {
+                    const result = await post(this.product.updateQuantityUrl, { quantity: product.quantity });
+
+                    this.$dispatch('cart-change', { count: result.count });
+                    this.$dispatch("notify", {
+                        message: "The item quantity was updated",
+                    });
+                } catch (response) {
+                    console.log(response);
+                }
+            }
         };
     });
 });

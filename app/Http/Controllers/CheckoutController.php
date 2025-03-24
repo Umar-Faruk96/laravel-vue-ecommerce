@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Stripe\{Stripe, Customer, Checkout\Session};
 use App\Helpers\Cart;
-use App\Models\{Order, Payment, CartItem, OrderItem};
-use Illuminate\{View\View, Http\Request, Routing\Redirector, Http\RedirectResponse};
+use Illuminate\Support\Facades\Redirect;
 use App\Enums\{OrderStatus, PaymentStatus};
+use App\Models\{Order, Payment, CartItem, OrderItem};
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\{View\View, Http\Request, Routing\Redirector, Http\RedirectResponse, Support\Facades\Session};
 
 class CheckoutController extends Controller
 {
@@ -36,35 +36,14 @@ class CheckoutController extends Controller
         [$products, $cartItems] = Cart::getProductsAndCartItems();
 
         $orderItems = [];
-        $lineItems = [];
         $totalPrice = 0;
 
+        // dump($products);
+
         foreach ($products as $product) {
+
             $quantity = $cartItems[$product->id]['quantity'];
             $totalPrice += $product->price * $quantity;
-
-            // initial setup for aamarPay
-            $lineItems[] = [
-                'store_id' => $store_id,
-                'tran_id' => $tran_id,
-                'success_url' => route('checkout.success', [], true),
-                'fail_url' => route('checkout.fail', [], true),
-                'cancel_url' => route('checkout.cancel', [], true),
-                'amount' => $product->price,
-                'currency' => $currency,
-                'signature_key' => $signature_key,
-                'desc' => $product->title,
-                'cus_name' => $user->customer->first_name,
-                'cus_email' => $user->customer->email,
-                'cus_add1' => $user->customer->shippingAddress->present_address,
-                'cus_add2' => $user->customer->billingAddress->present_address,
-                'cus_city' => $user->customer->shippingAddress->city,
-                'cus_state' => $user->customer->shippingAddress->state,
-                'cus_postcode' => $user->customer->shippingAddress->zip_code,
-                'cus_country' => $user->customer->shippingAddress->country_code,
-                'cus_phone' => $user->customer->phone,
-                'type' => 'json'
-            ];
 
             $orderItems[] = [
                 'product_id' => $product->id,
@@ -73,8 +52,10 @@ class CheckoutController extends Controller
             ];
         }
 
+
         $curl = curl_init();
 
+        // initial setup for aamarPay payment gateway
         curl_setopt_array($curl, [
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
@@ -84,15 +65,36 @@ class CheckoutController extends Controller
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => json_encode(is_array($lineItems) ? $lineItems[0] : [$lineItems][0]),
+            CURLOPT_POSTFIELDS => json_encode([
+                'store_id' => $store_id,
+                'tran_id' => $tran_id,
+                'success_url' => route('checkout.success', [], true),
+                'fail_url' => route('checkout.fail', [], true),
+                'cancel_url' => route('checkout.cancel', [], true),
+                'amount' => $totalPrice,
+                'currency' => $currency,
+                'signature_key' => $signature_key,
+                'desc' => 'Payment for ' . $user->customer->first_name . ' ' . $user->customer->last_name,
+                'cus_name' => $user->customer->first_name . ' ' . $user->customer->last_name,
+                'cus_email' => $user->customer->email,
+                'cus_add1' => $user->customer->shippingAddress->present_address,
+                'cus_add2' => $user->customer->billingAddress->present_address,
+                'cus_city' => $user->customer->shippingAddress->city,
+                'cus_state' => $user->customer->shippingAddress->state,
+                'cus_postcode' => $user->customer->shippingAddress->zip_code,
+                'cus_country' => $user->customer->shippingAddress->country_code,
+                'cus_phone' => $user->customer->phone,
+                'type' => 'json'
+            ]),
             CURLOPT_HTTPHEADER => [
-                'Content-Type: application/json'
+                'Content-Type: application/json',
             ],
         ]);
 
         $response = curl_exec($curl);
         curl_close($curl);
-        dump($response);
+
+        // dump($response);
 
         // Create Order
         $orderData = [
@@ -125,32 +127,33 @@ class CheckoutController extends Controller
         CartItem::where(['user_id' => $user->id])->delete();
 
         $responseObj = json_decode($response);
+
         // dd($responseObj);
 
         if (!isset($responseObj->payment_url) && empty($responseObj->payment_url)) {
             echo $response;
         }
 
-        $paymentUrl = $responseObj->payment_url;
-        dd($paymentUrl);
+        // dd($responseObj->payment_url);
 
-        return redirect()->away($paymentUrl);
+        return redirect()->away($responseObj->payment_url);
     }
 
     public function success(Request $request): View
     {
+        dd($request);
+
         $user = $request->user();
-        Stripe::setApiKey(config('stripe.secret_key'));
 
         try {
-            $session_id = $request->get('session_id');
-            $session = Session::retrieve($session_id);
-            if (!$session) {
+            $tran_id = $request->get('session_id');
+
+            if (!$tran_id) {
                 return view('checkout.failure', ['message' => 'Invalid Session ID']);
             }
 
             $payment = Payment::query()
-                ->where(['session_id' => $session_id])
+                ->where(['session_id' => $tran_id])
                 ->whereIn('status', [PaymentStatus::Pending, PaymentStatus::Paid])
                 ->first();
 
@@ -162,7 +165,6 @@ class CheckoutController extends Controller
                 $this->updateOrderAndSession($payment);
             }
 
-            $customer = Customer::retrieve($session->customer);
 
             return view('checkout.success', compact('customer'));
         } catch (NotFoundHttpException $e) {
@@ -172,19 +174,17 @@ class CheckoutController extends Controller
         }
     }
 
-    public function cancel(Request $request): View
+    public function cancel(Request $request)
     {
-        return view('checkout.failure', ['message' => ""]);
+        return $request;
     }
     public function fail(Request $request)
     {
-        return $request;
+        return view('checkout.failure', ['message' => ""]);
     }
 
     public function checkoutOrder(Order $order, Request $request)
     {
-        Stripe::setApiKey(config('stripe.secret_key'));
-
         $lineItems = [];
 
         foreach ($order->items as $item) {

@@ -4,14 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\{User, Customer};
 use App\Helpers\Cart;
-use Illuminate\View\View;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rules;
+use Illuminate\{View\View, Http\Request, Support\Facades\Auth, Support\Facades\Hash, Http\RedirectResponse, Auth\Events\Registered, Validation\Rules\Password};
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Auth\Events\Registered;
 
 class RegisteredUserController extends Controller
 {
@@ -32,8 +26,8 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+            'password' => ['required', 'confirmed', Password::defaults()],
         ]);
 
         $user = User::create([

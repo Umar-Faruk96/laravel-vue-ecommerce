@@ -1,5 +1,7 @@
 
 export async function request(method, url, data = {}) {
+    // console.log('request', method, url, data);
+
     const response = await fetch(url, {
         method,
         headers: {
@@ -14,6 +16,7 @@ export async function request(method, url, data = {}) {
     if (response.status >= 200 && response.status < 300) {
         return response.json();
     }
+    
     throw await response.json();
 }
 

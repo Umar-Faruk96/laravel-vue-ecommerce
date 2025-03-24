@@ -2,27 +2,11 @@
 
 namespace App\Helpers;
 
-use App\Models\Product;
-use App\Models\CartItem;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
+use App\Models\{Product, CartItem};
+use Illuminate\{Database\Eloquent\Collection as EloquentCollection, Support\Arr, Support\Collection};
 
 class Cart
 {
-    public static function getCartItemsCount(): int
-    {
-        $user = request()->user();
-
-        if ($user) {
-            return CartItem::where('user_id', $user->id)->sum('quantity');
-        } else {
-            $cartItems = self::getCookieCartItems();
-
-            return self::getCountFromItems($cartItems);
-        }
-    }
-
     public static function getCartItems(): Collection|array
     {
         $user = request()->user();
@@ -36,7 +20,20 @@ class Cart
 
     public static function getCookieCartItems(): array
     {
-        return json_decode(request()->cookie('cart_items', []), true) ?? [];
+        return json_decode(request()->cookie('cart_items', []), true);
+    }
+
+    public static function getCartItemsCount(): int
+    {
+        $user = request()->user();
+
+        if ($user) {
+            return CartItem::where('user_id', $user->id)->sum('quantity');
+        } else {
+            $cartItems = self::getCookieCartItems();
+
+            return self::getCountFromItems($cartItems);
+        }
     }
 
     public static function getCountFromItems(array $cartItems): int
@@ -71,9 +68,13 @@ class Cart
     public static function getProductsAndCartItems(): array|EloquentCollection
     {
         $cartItems = self::getCartItems();
+
+        // dump($cartItems);
+
+        $cartItems = Arr::keyBy($cartItems, 'product_id');
+
         $ids = Arr::pluck($cartItems, 'product_id');
         $products = Product::query()->whereIn('id', $ids)->get();
-        $cartItems = Arr::keyBy($cartItems, 'product_id');
 
         return [$products, $cartItems];
     }

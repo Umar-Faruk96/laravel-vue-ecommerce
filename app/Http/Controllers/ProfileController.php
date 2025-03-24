@@ -2,18 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Country;
-use Illuminate\View\View;
-use App\Enums\AddressType;
-use Illuminate\Http\Request;
-use App\Models\CustomerAddress;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\ProfileRequest;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Redirect;
-use App\Http\Requests\ProfileUpdateRequest;
-use App\Http\Requests\PasswordUpdateRequest;
-use Illuminate\Support\Facades\Hash;
+use App\{Models\Country, Models\CustomerAddress, Enums\AddressType, Http\Requests\ProfileRequest, Http\Requests\PasswordUpdateRequest};
+use Illuminate\{Http\Request, Support\Facades\Redirect, Support\Facades\Hash};
 
 class ProfileController extends Controller
 {
@@ -21,9 +11,13 @@ class ProfileController extends Controller
     {
         $user = $request->user();
         $customer = $user->customer;
+
         // dd($customer);
+
         $shippingAddress = $customer->shippingAddress ?: new CustomerAddress(['type' => AddressType::Shipping]);
+
         $billingAddress = $customer->billingAddress ?: new CustomerAddress(['type' => AddressType::Billing]);
+
         $countries = Country::query()->orderBy('name')->get();
 
         return view('profile.show', compact('user', 'customer', 'shippingAddress', 'billingAddress', 'countries'));
@@ -32,12 +26,16 @@ class ProfileController extends Controller
     public function store(ProfileRequest $request)
     {
         $customerData = $request->validated();
+
+        // dd($customerData);
+
         $shippingData = $customerData['shipping'];
         $billingData = $customerData['billing'];
 
         // dd($shippingData, $billingData);
 
         $customer = $request->user()->customer;
+        $request->user()->update(['email' => $customerData['email'], 'name' => $customerData['first_name'] . ' ' . $customerData['last_name']]);
         $customer->update($customerData);
 
         $customer->shippingAddress()->updateOrCreate(['customer_id' => $customer->user_id, 'type' => AddressType::Shipping], $shippingData);
@@ -58,9 +56,7 @@ class ProfileController extends Controller
             CustomerAddress::create($billingData);
         } */
 
-        $request->session()->flash('profile_message', 'Your profile has updated successfully!');
-
-        return Redirect::route('profile.show');
+        return Redirect::route('profile.show')->with('profile_message', 'Your profile has updated successfully!');
     }
 
     public function updatePassword(PasswordUpdateRequest $request)
@@ -72,9 +68,7 @@ class ProfileController extends Controller
         $user->password = Hash::make($passwordData['new_password']);
         $user->save();
 
-        $request->session()->flash('profile_message', 'Your password has updated successfully!');
-
-        return Redirect::route('profile.show');
+        return Redirect::route('profile.show')->with('profile_message', 'Your password has updated successfully!');
     }
 
     /**

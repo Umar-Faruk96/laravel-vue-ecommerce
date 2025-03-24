@@ -1,7 +1,9 @@
 <x-app-layout>
     <div class="container mx-auto lg:w-2/3 xl:w-2/3">
         <h1 class="mb-6 text-3xl font-bold">Your Cart Items</h1>
+
         {{-- @dump($cartItems) --}}
+
         <div x-data="{
             cartItems: {{ json_encode(
                 $products->map(
@@ -11,7 +13,7 @@
                         'image' => $product->image,
                         'title' => $product->title,
                         'price' => $product->price,
-                        'quantity' => $cartItems[$product->id]['quantity'],
+                        'quantity' => $cartItems[$product->id]['quantity'] ?? 1,
                         'href' => route('product.show', $product->slug),
                         'removeUrl' => route('cart.remove', $product),
                         'updateQuantityUrl' => route('cart.update-quantity', $product),
@@ -56,11 +58,10 @@
                                 </div>
                             </div>
 
-                            <!--/ Product Item -->
                             <hr class="my-5" />
                         </div>
                     </template>
-                    <!-- Product Item -->
+                    <!--/ Product Item -->
 
                     <div class="border-t border-gray-300 pt-4">
                         <div class="flex justify-between">
@@ -71,6 +72,7 @@
                         <p class="mb-6 text-gray-500">
                             Shipping and taxes calculated at checkout.
                         </p>
+
                         <form action="{{ route('checkout') }}" method="POST">
                             @csrf
                             <button type="submit" class="btn-primary w-full py-3 text-lg">
@@ -81,6 +83,7 @@
                 </div>
                 <!--/ Product Items -->
             </template>
+
             <template x-if="!cartItems.length">
                 <div class="py-8 text-center text-gray-500">
                     You don't have any items in cart

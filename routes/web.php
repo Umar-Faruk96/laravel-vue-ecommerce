@@ -31,6 +31,7 @@ Route::middleware(['guestOrVerified'])->group(function () {
         Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
         Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
         Route::post('/checkout/{order}', [CheckoutController::class, 'checkoutOrder'])->name('cart.checkout-order');
+        
         Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
         Route::get('/checkout/fail', [CheckoutController::class, 'fail'])->name('checkout.fail');
         Route::get('/checkout/cancel', [CheckoutController::class, 'cancel'])->name('checkout.cancel');
@@ -38,5 +39,5 @@ Route::middleware(['guestOrVerified'])->group(function () {
         Route::get('/orders/{order}', [OrderController::class, 'show'])->name('order.show');
     });
 });
-
+Route::post('/checkout/success-post', [CheckoutController::class, 'successPost'])->name('checkout.success.post');
 require __DIR__ . '/auth.php';

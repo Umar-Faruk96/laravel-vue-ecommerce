@@ -11,22 +11,25 @@
             <div class="rounded-lg bg-white p-3 shadow md:col-span-2">
                 <form x-data="{
                     countries: {{ json_encode($countries) }},
+                    
                     billingAddress: {{ json_encode([
-                        'present_address' => old('billing.present_address', $billingAddress->present_address),
-                        'permanent_address' => old('billing.permanent_address', $billingAddress->permanent_address),
+                        'house_number' => old('billing.house_number', $billingAddress->house_number),
+                        'area' => old('billing.area', $billingAddress->area),
                         'city' => old('billing.city', $billingAddress->city),
                         'state' => old('billing.state', $billingAddress->state),
                         'country_code' => old('billing.country_code', $billingAddress->country_code),
                         'zip_code' => old('billing.zip_code', $billingAddress->zip_code),
                     ]) }},
+
                     shippingAddress: {{ json_encode([
-                        'present_address' => old('shipping.present_address', $shippingAddress->present_address),
-                        'permanent_address' => old('shipping.permanent_address', $shippingAddress->permanent_address),
+                        'house_number' => old('shipping.house_number', $shippingAddress->house_number),
+                        'area' => old('shipping.area', $shippingAddress->area),
                         'city' => old('shipping.city', $shippingAddress->city),
                         'state' => old('shipping.state', $shippingAddress->state),
                         'country_code' => old('shipping.country_code', $shippingAddress->country_code),
                         'zip_code' => old('shipping.zip_code', $shippingAddress->zip_code),
                     ]) }},
+
                     get billingCountryStates() {
                         const country = this.countries.find(c => c.code === this.billingAddress.country_code)
                         if (country && country.states) {
@@ -34,6 +37,7 @@
                         }
                         return null;
                     },
+
                     get shippingCountryStates() {
                         const country = this.countries.find(c => c.code === this.shippingAddress.country_code)
                         if (country && country.states) {
@@ -67,13 +71,13 @@
 
                     <div class="mb-3 grid grid-cols-2 gap-3">
                         <div>
-                            <x-text-input name="billing[present_address]"
-                                x-model="billingAddress.present_address" placeholder="Address 1" />
+                            <x-text-input name="billing[house_number]"
+                                x-model="billingAddress.house_number" placeholder="Address 1" />
                         </div>
 
                         <div>
-                            <x-text-input name="billing[permanent_address]"
-                                x-model="billingAddress.permanent_address" placeholder="Address 2" />
+                            <x-text-input name="billing[area]"
+                                x-model="billingAddress.area" placeholder="Address 2" />
                         </div>
                     </div>
 
@@ -124,6 +128,7 @@
 
                     <div class="mb-2 mt-6 flex justify-between">
                         <h2 class="text-xl font-semibold">Shipping Address</h2>
+
                         <label for="sameAsBillingAddress" class="text-gray-700">
                             <input @change="$event.target.checked ? shippingAddress = {...billingAddress} : ''"
                                 id="sameAsBillingAddress" type="checkbox"
@@ -133,13 +138,13 @@
 
                     <div class="mb-3 grid grid-cols-2 gap-3">
                         <div>
-                            <x-text-input name="shipping[present_address]"
-                                x-model="shippingAddress.present_address" placeholder="Address 1" />
+                            <x-text-input name="shipping[house_number]"
+                                x-model="shippingAddress.house_number" placeholder="Address 1" />
                         </div>
 
                         <div>
-                            <x-text-input name="shipping[permanent_address]"
-                                x-model="shippingAddress.permanent_address" placeholder="Address 2" />
+                            <x-text-input name="shipping[area]"
+                                x-model="shippingAddress.area" placeholder="Address 2" />
                         </div>
                     </div>
 

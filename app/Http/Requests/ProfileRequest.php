@@ -26,18 +26,18 @@ class ProfileRequest extends FormRequest
         return [
             'first_name' => ['required'],
             'last_name' => ['required'],
-            'phone' => ['required', 'min:7'],
+            'phone' => ['required', 'max:11', 'min:11'],
             'email' => ['required', 'email'],
 
-            'shipping.present_address' => ['required'],
-            'shipping.permanent_address' => ['required'],
+            'shipping.house_number' => ['required'],
+            'shipping.area' => ['required'],
             'shipping.city' => ['required'],
             'shipping.state' => ['required'],
             'shipping.zip_code' => ['required'],
             'shipping.country_code' => ['required', 'exists:countries,code'],
 
-            'billing.present_address' => ['required'],
-            'billing.permanent_address' => ['required'],
+            'billing.house_number' => ['required'],
+            'billing.area' => ['required'],
             'billing.city' => ['required'],
             'billing.state' => ['required'],
             'billing.zip_code' => ['required'],
@@ -49,14 +49,14 @@ class ProfileRequest extends FormRequest
     public function attributes()
     {
         return [
-            'billing.present_address' => 'Billing Present Address',
-            'billing.permanent_address' => 'Billing Permanent Address',
+            'billing.house_number' => 'Billing Present Address',
+            'billing.area' => 'Billing Permanent Address',
             'billing.city' => 'city',
             'billing.state' => 'state',
             'billing.zip_code' => 'zip code',
             'billing.country_code' => 'country',
-            'shipping.present_address' => 'Shipping Present Address',
-            'shipping.permanent_address' => 'Shipping Permanent Address',
+            'shipping.house_number' => 'Shipping Present Address',
+            'shipping.area' => 'Shipping Permanent Address',
             'shipping.city' => 'city',
             'shipping.state' => 'state',
             'shipping.zip_code' => 'zip code',
