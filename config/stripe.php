@@ -12,6 +12,6 @@ return [
     |
     */
 
-    'key' => env('STRIPE_PUBLISHABLE_KEY'),
-    'secret_key' => env('STRIPE_SECRET_KEY'),
+    'stripe_pk' => env('STRIPE_TEST_PK'),
+    'stripe_sk' => env('STRIPE_TEST_SK'),
 ];

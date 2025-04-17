@@ -30,13 +30,13 @@
                             <td class="px-2 py-1">
                                 <small
                                     class="{{ $order->isPaid() ? 'bg-emerald-500' : 'bg-gray-400' }} rounded px-2 py-1 text-white">
-                                    {{ $order->status }}
+                                    {{ Str::ucfirst($order->status) }}
                                 </small>
                             </td>
 
                             <td class="px-2 py-1">${{ $order->total_price }}</td>
 
-                            <td class="whitespace-nowrap px-2 py-1">{{ $order->items()->count() }} item(s)</td>
+                            <td class="whitespace-nowrap px-2 py-1">{{ $order->items()->count() }} {{ Str::plural('item', $order->items()->count()) }}</td>
                             
                             <td class="flex w-[100px] gap-2 px-2 py-1">
                                 @if (!$order->isPaid())
