@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Stripe\{Stripe, Customer, Checkout\Session};
+use Stripe\{Customer, StripeClient};
 use App\Helpers\Cart;
 use App\Models\{Order, Payment, CartItem, OrderItem};
 use Illuminate\{View\View, Http\Request, Routing\Redirector, Http\RedirectResponse};
@@ -15,7 +15,7 @@ class CheckoutController extends Controller
     {
         $user = $request->user();
 
-        Stripe::setApiKey(config('stripe.stripe_sk'));
+        $stripe = new StripeClient(config('stripe.stripe_sk'));
 
         [$products, $cartItems] = Cart::getProductsAndCartItems();
 
@@ -48,7 +48,7 @@ class CheckoutController extends Controller
         }
 
         // stripe setup
-        $session = Session::create([
+        $checkout_session = $stripe->checkout->sessions->create([
             'line_items' => $lineItems,
             'customer_email' => $user->email,
             'mode' => 'payment',
@@ -80,13 +80,13 @@ class CheckoutController extends Controller
             'type' => 'cc',
             'created_by' => $user->id,
             'updated_by' => $user->id,
-            'session_id' => $session->id
+            'session_id' => $checkout_session->id
         ];
         Payment::create($paymentData);
 
         CartItem::where(['user_id' => $user->id])->delete();
 
-        return redirect($session->url);
+        return redirect($checkout_session->url);
     }
 
     public function success(Request $request): View
@@ -94,11 +94,11 @@ class CheckoutController extends Controller
         // dd($request->all());
 
         $user = $request->user();
-        Stripe::setApiKey(config('stripe.stripe_sk'));
+        $stripe = new StripeClient(config('stripe.stripe_sk'));
 
         try {
             $session_id = $request->get('session_id');
-            $session = Session::retrieve($session_id);
+            $session = $stripe->checkout->sessions->retrieve($session_id);
             if (!$session) {
                 return view('checkout.failure', ['message' => 'Invalid Session ID']);
             }
@@ -117,11 +117,12 @@ class CheckoutController extends Controller
                 $this->updateOrderAndSession($payment);
             }
 
-            // dd($session->customer);
-            // $customer = Customer::retrieve($session->customer);
+            // dd($session->customer_details->name);
+            // $customer = $stripe->customers->retrieve($session->customer);
+            $customer = $session->customer_details;
             // dd($customer);
 
-            return view('checkout.success', compact('user'));
+            return view('checkout.success', compact('customer'));
         } catch (NotFoundHttpException $e) {
             throw $e;
         } catch (\Exception $e) {
@@ -136,7 +137,7 @@ class CheckoutController extends Controller
 
     public function checkoutOrder(Order $order, Request $request)
     {
-        Stripe::setApiKey(config('stripe.stripe_sk'));
+        $stripe = new StripeClient(config('stripe.stripe_sk'));
 
         $lineItems = [];
 
@@ -153,18 +154,18 @@ class CheckoutController extends Controller
             ];
         }
 
-        $session = Session::create([
+        $checkout_session = $stripe->checkout->sessions->create([
             'line_items' => $lineItems,
             'mode' => 'payment',
             'success_url' => route('checkout.success', [], true) . '?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => route('checkout.cancel', [], true),
         ]);
 
-        $order->payment->session_id = $session->id;
+        $order->payment->session_id = $checkout_session->id;
         $order->payment->save();
 
 
-        return redirect($session->url);
+        return redirect($checkout_session->url);
     }
 
     private function updateOrderAndSession(Payment $payment)
