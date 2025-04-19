@@ -1,7 +1,7 @@
 <x-app-layout>
 
     <div class="container mx-auto p-5 lg:w-2/3">
-        <h1 class="mb-2 text-3xl font-bold">Order #{{ $order->id }}</h1>
+        <h1 class="mb-2 text-3xl font-bold dark:text-gray-200">Order #{{ $order->id }}</h1>
         <div class="rounded-lg bg-white p-3">
             <table>
                 <tbody>

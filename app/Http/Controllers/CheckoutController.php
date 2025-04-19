@@ -156,6 +156,7 @@ class CheckoutController extends Controller
 
         $checkout_session = $stripe->checkout->sessions->create([
             'line_items' => $lineItems,
+            'customer_email' => $request->user()->email,
             'mode' => 'payment',
             'success_url' => route('checkout.success', [], true) . '?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => route('checkout.cancel', [], true),
