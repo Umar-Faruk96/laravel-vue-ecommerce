@@ -15,7 +15,7 @@
             name="per-page"
             id="per-page"
             title="per-page"
-            @change="getProducts()"
+            @change="getOrders()"
             v-model="perPage"
             class="appearance-none forced-colors:appearance-auto row-start-1 col-start-1 relative block w-24 px-3 py-2 border border-black/20 placeholder-black/60 bg-black/10 text-black/60 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
           >
@@ -30,8 +30,8 @@
         </div>
         <!--/ Per Page Input -->
 
-        <!-- Product Total Output -->
-        <span class="ml-3 text-black/60">Found {{ products.total }} products</span>
+        <!-- Order Total Output -->
+        <span class="ml-3 text-black/60">Found {{ orders.total }} orders</span>
       </section>
 
       <!-- Search -->
@@ -45,9 +45,9 @@
           type="text"
           name="search"
           id="search"
-          placeholder="Type to Search Products"
+          placeholder="Type to Search Orders"
           v-model="search"
-          @change="getProducts()"
+          @change="getOrders()"
           class="appearance-none forced-colors:appearance-auto row-start-1 col-start-1 relative block px-3 py-2 border border-black/20 placeholder-black/60 bg-black/10 text-black/60 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
         />
       </section>
@@ -58,7 +58,7 @@
       <thead>
         <tr>
           <TableHeaderCell
-            @sort="sortProducts"
+            @sort="sortOrders"
             field="id"
             :sortField
             :sortDirection
@@ -66,22 +66,27 @@
             >ID</TableHeaderCell
           >
 
-          <TableHeaderCell field="" class="border-b-2 p-2 text-left"
-            >Image</TableHeaderCell
-          >
-
           <TableHeaderCell
-            @sort="sortProducts"
-            field="title"
+            @sort="sortOrders"
+            field="created_by"
             :sortField
             :sortDirection
             class="border-b-2 p-2 text-left"
-            >Title</TableHeaderCell
+            >Customer</TableHeaderCell
           >
 
           <TableHeaderCell
-            @sort="sortProducts"
-            field="price"
+            @sort="sortOrders"
+            field="status"
+            :sortField
+            :sortDirection
+            class="border-b-2 p-2 text-left"
+            >Status</TableHeaderCell
+          >
+
+          <TableHeaderCell
+            @sort="sortOrders"
+            field="total_price"
             :sortField
             :sortDirection
             class="border-b-2 p-2 text-left"
@@ -89,13 +94,15 @@
           >
 
           <TableHeaderCell
-            @sort="sortProducts"
-            field="updated_at"
+            @sort="sortOrders"
+            field="created_at"
             :sortField
             :sortDirection
             class="border-b-2 p-2 text-left"
-            >Last Updated At</TableHeaderCell
+            >Created At</TableHeaderCell
           >
+
+          <TableHeaderCell field="number_of_items">Items</TableHeaderCell>
 
           <TableHeaderCell field="actions" class="border-b-2 p-2 text-left"
             >Actions</TableHeaderCell
@@ -103,40 +110,42 @@
         </tr>
       </thead>
 
-      <!-- Products Loading or No Products -->
-      <tbody v-if="products.loading || !products.data.length">
+      <!-- Orders Loading or No Orders -->
+      <tbody v-if="orders.loading || !orders.data.length">
         <tr>
           <td colspan="6">
-            <Spinner v-if="products.loading" />
-            <p v-else class="text-center py-8 text-gray-700">There are no products</p>
+            <Spinner v-if="orders.loading" />
+            <p v-else class="text-center py-8 text-gray-700">There are no orders</p>
           </td>
         </tr>
       </tbody>
-      <!--/ Products Loading or No Products -->
+      <!--/ Orders Loading or No Orders -->
 
-      <!-- Products Data -->
+      <!-- Orders Data -->
       <tbody v-else>
         <tr
-          v-for="(product, index) of products.data"
+          v-for="(order, index) of orders.data"
           :key="index"
           class="animate-fade-in-down"
           :style="{ animationDelay: `${index * 0.1}s` }"
         >
-          <td class="border-b-2 p-2">{{ product.id }}</td>
+          <td class="border-b-2 p-2">{{ order.id }}</td>
 
           <td class="border-b-2 p-2">
-            <img :src="product.image_url" :alt="product.title" class="w-16" />
+            {{ order.customer.first_name }} {{ order.customer.last_name }}
           </td>
 
           <td
             class="border-b-2 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis"
           >
-            {{ product.title }}
+            {{ order.status.toUpperCase() }}
           </td>
 
-          <td class="border-b-2 p-2">{{ product.price }}</td>
+          <td class="border-b-2 p-2">${{ order.total_price }}</td>
 
-          <td class="border-b-2 p-2">{{ product.updated_at }}</td>
+          <td class="border-b-2 p-2">{{ order.created_at }}</td>
+
+          <td class="border-b-2 p-2">{{ order.number_of_items }}</td>
 
           <td class="border-b-2 p-2">
             <Menu as="section" class="relative inline-block text-left">
@@ -163,14 +172,14 @@
                       class="absolute z-10 right-0 mt-2 w-32 origin-top-right divide-y divide-white/80 rounded-md bg-white/90 shadow-lg ring-1 ring-black/90 ring-opacity-5 focus:outline-none"
                     >
                       <div class="px-1 py-1">
-                        <!-- Edit Product -->
+                        <!-- Edit Order -->
                         <MenuItem as="span" v-slot="{ active }">
                           <button
                             :class="[
                               active ? 'bg-indigo-600 text-white/90' : 'text-black/80',
                               'group flex items-center w-full px-4 py-2 text-sm rounded-md',
                             ]"
-                            @click="editProduct(product)"
+                            @click="showOrder(order)"
                           >
                             <PencilIcon
                               class="w-5 h-5 mr-2 text-black/60 group-hover:text-black/80"
@@ -179,16 +188,16 @@
                             Edit
                           </button>
                         </MenuItem>
-                        <!--/ Edit Product -->
+                        <!--/ Edit Order -->
 
-                        <!-- Delete Product -->
+                        <!-- Delete Order -->
                         <MenuItem as="span" v-slot="{ active }">
                           <button
                             :class="[
                               active ? 'bg-indigo-600 text-white/90' : 'text-black/80',
                               'group flex items-center w-full px-4 py-2 text-sm rounded-md',
                             ]"
-                            @click="deleteProduct(product.id)"
+                            @click="deleteOrder(order.id)"
                           >
                             <TrashIcon
                               class="w-5 h-5 mr-2 text-black/60 group-hover:text-black/80"
@@ -197,7 +206,7 @@
                             Delete
                           </button>
                         </MenuItem>
-                        <!--/ Delete Product -->
+                        <!--/ Delete Order -->
                       </div>
                     </MenuItems>
                   </transition>
@@ -207,22 +216,20 @@
           </td>
         </tr>
       </tbody>
-      <!--/ Products Data -->
+      <!--/ Orders Data -->
     </table>
 
     <!-- Pagination -->
-    <section v-if="!products.loading" class="flex justify-between items-center mt-5">
-      <span class="text-black/40"
-        >Showing from {{ products.from }} to {{ products.to }}</span
-      >
+    <section v-if="!orders.loading" class="flex justify-between items-center mt-5">
+      <span class="text-black/40">Showing from {{ orders.from }} to {{ orders.to }}</span>
 
       <nav
-        v-if="products.total > products.limit"
+        v-if="orders.total > orders.limit"
         class="relative z-10 inline-flex justify-center rounded-md shadow-sm -space-x-px"
       >
         <button
           type="button"
-          v-for="(link, index) in products.links"
+          v-for="(link, index) in orders.links"
           :key="index"
           :disabled="!link.url"
           @click.prevent="paginate(link)"
@@ -233,7 +240,7 @@
               ? 'z-10 bg-indigo-200 border-indigo-500 text-indigo-600'
               : 'bg-black/10 border-black/10 text-black/60 hover:bg-white/10',
             index === 0 ? 'rounded-l-md' : '',
-            index === products.links.length - 1 ? 'rounded-r-md' : '',
+            index === orders.links.length - 1 ? 'rounded-r-md' : '',
             !link.url ? 'pointer-events-none bg-black/10 text-black/10' : '',
           ]"
           v-html="link.label"
@@ -260,11 +267,11 @@ import TableHeaderCell from "../../components/core/ProductsTable/TableHeaderCell
 
 const perPage = ref(PRODUCTS_PER_PAGE);
 const search = ref("");
-const sortField = ref("updated_at");
+const sortField = ref("created_at");
 const sortDirection = ref("desc");
 
-const getProducts = (url = null) => {
-  store.dispatch("getProducts", {
+const getOrders = (url = null) => {
+  store.dispatch("getOrders", {
     url,
     search: search.value,
     per_page: perPage.value,
@@ -274,38 +281,38 @@ const getProducts = (url = null) => {
 };
 
 onMounted(() => {
-  getProducts();
+  getOrders();
 });
 
 const paginate = (link) => {
   if (link.url && !link.active) {
-    getProducts(link.url);
+    getOrders(link.url);
   }
 };
 
-const sortProducts = (field) => {
+const sortOrders = (field) => {
   if (field === sortField.value) {
     sortDirection.value = sortDirection.value === "asc" ? "desc" : "asc";
   } else {
     sortField.value = field;
     sortDirection.value = "asc";
   }
-  getProducts();
+  getOrders();
 };
 
-const emit = defineEmits(["edit-product"]);
+const emit = defineEmits(["edit-order"]);
 
-const editProduct = (product) => {
-  emit("edit-product", product);
+const showOrder = (order) => {
+  emit("show-order", order);
 };
 
-const deleteProduct = (id) => {
-  if (!confirm("Are you sure you want to delete this product?")) return;
+const deleteOrder = (id) => {
+  if (!confirm("Are you sure you want to delete this order?")) return;
 
-  store.dispatch("deleteProduct", id).then(() => {
-    getProducts();
+  store.dispatch("deleteOrder", id).then(() => {
+    getOrders();
   });
 };
 
-const products = computed(() => store.state.products);
+const orders = computed(() => store.state.orders);
 </script>

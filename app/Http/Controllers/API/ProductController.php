@@ -3,14 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use Exception;
-use App\Models\Api\Product;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
-use App\Http\Requests\ProductRequest;
-use Illuminate\Support\Facades\{Storage, URL};
-use App\Http\Controllers\Controller;
-use App\Http\Resources\{ProductListResource, ProductResource};
+use Illuminate\{Support\Str, Http\Request, Http\UploadedFile, Support\Facades\Storage, Support\Facades\URL};
+use App\{Models\Api\Product, Http\Requests\ProductRequest, Http\Controllers\Controller, Http\Resources\ProductListResource, Http\Resources\ProductResource};
 
 class ProductController extends Controller
 {
@@ -33,6 +27,7 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         $productData = $request->validated();
+
         $productData['created_by'] = request()->user()->id;
         $productData['updated_by'] = request()->user()->id;
 
@@ -54,6 +49,7 @@ class ProductController extends Controller
     public function update(ProductRequest $request, Product $product)
     {
         $productData = $request->validated();
+
         $productData['updated_by'] = request()->user()->id;
 
         $productImage = $productData['image'] ?? null;
@@ -68,6 +64,7 @@ class ProductController extends Controller
         }
 
         $product->update($productData);
+
         return ProductResource::make($product);
     }
 
@@ -76,8 +73,9 @@ class ProductController extends Controller
         if ($product->image) {
             Storage::deleteDirectory('images/' . dirname($product->image));
         }
-        
+
         $product->delete();
+        
         return response()->noContent();
     }
 
@@ -100,8 +98,11 @@ class ProductController extends Controller
     {
         if ($image) {
             $relativePath = $this->storeImage(image: $image);
-            $productData['image'] = URL::to(Storage::url($relativePath));
+
+            $productData['image'] = URL::to(Storage::url($relativePath) /* add /storage in the URL */); // make URL absolute
+
             $productData['image_mime'] = $image->getClientMimeType();
+
             $productData['image_size'] = $image->getSize();
         }
 

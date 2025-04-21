@@ -1,80 +1,3 @@
-<script setup>
-import {
-  TransitionRoot,
-  TransitionChild,
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-} from "@headlessui/vue";
-import { onUpdated, ref } from "vue";
-import { XMarkIcon } from "@heroicons/vue/24/solid";
-import Spinner from "../../components/core/Spinner.vue";
-import store from "../../store/index.js";
-import CustomInputNew from "../../components/core/CustomInputNew.vue";
-
-const formModal = defineModel("formModal");
-const loading = ref(false);
-
-const props = defineProps({
-  product: {
-    type: Object,
-    required: true,
-  },
-});
-
-const product = ref({
-  id: props.product.id,
-  title: props.product.title,
-  description: props.product.description,
-  price: props.product.price,
-  image: props.product.image,
-});
-
-const emit = defineEmits(["close"]);
-
-function closeProductForm() {
-  formModal.value = false;
-  emit("close");
-}
-
-onUpdated(() => {
-  product.value = {
-    id: props.product.id,
-    title: props.product.title,
-    description: props.product.description,
-    price: props.product.price,
-    image: props.product.image,
-  };
-});
-
-function submit() {
-  loading.value = true;
-
-  if (product.value.id) {
-    store.dispatch("updateProduct", product.value).then((response) => {
-      loading.value = false;
-
-      if (response.status === 200) {
-        // TODO: Show update success message
-        store.dispatch("getProducts");
-        closeProductForm();
-      }
-    });
-  } else {
-    store.dispatch("createProduct", product.value).then((response) => {
-      loading.value = false;
-      console.log("response", response);
-
-      if (response.status === 201) {
-        // TODO: Show create success message
-        store.dispatch("getProducts");
-        closeProductForm();
-      }
-    });
-  }
-}
-</script>
-
 <template>
   <TransitionRoot appear :show="formModal" as="template">
     <Dialog as="div" @close="closeProductForm" class="relative z-10">
@@ -182,3 +105,86 @@ function submit() {
     </Dialog>
   </TransitionRoot>
 </template>
+
+<script setup>
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/vue";
+import { onUpdated, ref } from "vue";
+import { XMarkIcon } from "@heroicons/vue/24/solid";
+import Spinner from "../../components/core/Spinner.vue";
+import store from "../../store/index.js";
+import CustomInputNew from "../../components/core/CustomInputNew.vue";
+
+const props = defineProps({
+  product: {
+    type: Object,
+    required: true,
+  },
+});
+
+const product = ref({
+  id: props.product.id,
+  title: props.product.title,
+  description: props.product.description,
+  price: props.product.price,
+  image: props.product.image,
+});
+
+onUpdated(() => {
+  product.value = {
+    id: props.product.id,
+    title: props.product.title,
+    description: props.product.description,
+    price: props.product.price,
+    image: props.product.image,
+  };
+});
+
+const formModal = defineModel("formModal");
+const emit = defineEmits(["close"]);
+
+function closeProductForm() {
+  formModal.value = false;
+  emit("close");
+}
+
+const loading = ref(false);
+
+function submit() {
+  loading.value = true;
+
+  if (product.value.id) {
+    store.dispatch("updateProduct", product.value).then((response) => {
+      loading.value = false;
+
+      if (response.status === 200) {
+        // TODO: Show update success message
+        store.dispatch("getProducts");
+        closeProductForm();
+      }
+    });
+  } else {
+    store
+      .dispatch("createProduct", product.value)
+      .then((response) => {
+        loading.value = false;
+        // console.log("response", response);
+
+        if (response.status === 201) {
+          // TODO: Show create success message
+          store.dispatch("getProducts");
+          closeProductForm();
+        }
+      })
+      .catch((error) => {
+        loading.value = false;
+        console.error("Error creating product:", error);
+      });
+  }
+}
+</script>

@@ -21,18 +21,22 @@ export const logout = async ({ commit }) => {
     return response;
 }
 
-export const getProducts = async ({ commit }, { perPage, search, pageUrl = null, sortField, sortDirection } = {}) => {
-    commit('setProducts', { loading: true, products: [] });
+export const getProducts = async ({ commit, state }, { url = null, search = '', per_page, sort_by, sort_to } = {}) => {
+    commit('setProducts', [true]);
 
-    pageUrl = pageUrl || '/products';
+    url = url || '/products';
+
+    const params = {
+        per_page: state.products.limit,
+    }
 
     try {
-        const { data } = await axiosClient.get(pageUrl, { params: { per_page: perPage, search, sort_by: sortField, sort_to: sortDirection } });
-
-        commit('setProducts', { loading: false, products: data });
+        const { data } = await axiosClient.get(url, { params: { ...params, per_page, search, sort_by, sort_to } });
+        // console.log(data);
+        commit('setProducts', [false, data]);
         return data;
     } catch (error) {
-        commit('setProducts', { loading: false, products: [] });
+        commit('setProducts', [false]);
         // console.log(error);
     }
 }
@@ -75,4 +79,24 @@ export const updateProduct = async ({ commit }, product) => {
 
 export const deleteProduct = async ({ commit }, id) => {
     return await axiosClient.delete(`/products/${id}`);
+}
+
+export const getOrders = async ({ commit, state }, { url = null, search = '', per_page, sort_by, sort_to } = {}) => {
+    commit('setOrders', [true]);
+
+    url = url || '/orders';
+
+    const params = {
+        per_page: state.orders.limit,
+    }
+
+    try {
+        const { data } = await axiosClient.get(url, { params: { ...params, per_page, search, sort_by, sort_to } });
+        // console.log(data);
+        commit('setOrders', [false, data]);
+        return data;
+    } catch (error) {
+        commit('setOrders', [false]);
+        // console.log(error);
+    }
 }

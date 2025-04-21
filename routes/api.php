@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\{AuthController, ProductController};
+use App\Http\Controllers\API\{AuthController, ProductController, OrderController};
 
 
 
@@ -13,6 +13,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
     // Products routes
     Route::apiResource('products', ProductController::class);
+    Route::apiResource('orders', OrderController::class)->only(['index', 'show']);  
 });
 
 Route::post('/login', [AuthController::class, 'login']);
