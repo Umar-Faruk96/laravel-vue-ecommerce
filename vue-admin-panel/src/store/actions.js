@@ -100,3 +100,7 @@ export const getOrders = async ({ commit, state }, { url = null, search = '', pe
         // console.log(error);
     }
 }
+
+export const getOrder = async ({ commit }, id) => {
+    return await axiosClient.get(`/orders/${id}`);
+}

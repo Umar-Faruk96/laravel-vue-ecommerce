@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use Illuminate\{Http\Request};
-use App\{Models\Order, Http\Controllers\Controller, Http\Resources\OrderListResource, Http\Resources\ProductResource};
+use App\{Models\Order, Http\Controllers\Controller, Http\Resources\OrderListResource, Http\Resources\OrderResource};
 
 class OrderController extends Controller
 {
@@ -22,8 +22,8 @@ class OrderController extends Controller
         return OrderListResource::collection($query->paginate($perPage));
     }
 
-    public function show(Order $product)
+    public function show(Order $order)
     {
-        return ProductResource::make($product);
+        return OrderResource::make($order);
     }
 }

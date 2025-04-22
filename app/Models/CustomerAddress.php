@@ -12,6 +12,11 @@ class CustomerAddress extends Model
 
     public function customer(): BelongsTo
     {
-        return $this->belongsTo(Customer::class, 'user_id', 'customer_id');
+        return $this->belongsTo(Customer::class, 'customer_id', 'user_id');
+    }
+
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class, 'country_code', 'code');
     }
 }

@@ -3,13 +3,19 @@
     <h1 class="text-black/60 text-3xl font-semibold">Orders</h1>
   </div>
 
-  <OrdersTable />
+  Order Details
 </template>
 
 <script setup>
-import OrdersTable from "./OrdersTable.vue";
-// import { computed, ref } from "vue";
-// import store from "../../store/index.js";
+import { useRoute } from "vue-router";
+import { onMounted, ref } from "vue";
+import store from "../../store/index.js";
+
+const route = useRoute();
+
+onMounted(() => {
+  store.dispatch("getOrder", route.params.id);
+});
 
 // const orders = computed(() => store.state.orders);
 </script>
