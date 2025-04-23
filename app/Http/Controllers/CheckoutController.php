@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Stripe\{Customer, StripeClient};
+use App\Models\User;
 use App\Helpers\Cart;
-use App\Models\{Order, Payment, CartItem, OrderItem};
-use Illuminate\{View\View, Http\Request, Routing\Redirector, Http\RedirectResponse};
+use App\Mail\CreateOrderEmail;
+use Illuminate\Support\Facades\Mail;
+use Stripe\{Customer, StripeClient};
 use App\Enums\{OrderStatus, PaymentStatus};
+use App\Models\{Order, Payment, CartItem, OrderItem};
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\{View\View, Http\Request, Routing\Redirector, Http\RedirectResponse};
 
 class CheckoutController extends Controller
 {
@@ -178,5 +181,11 @@ class CheckoutController extends Controller
 
         $order->status = OrderStatus::Paid;
         $order->update();
+
+        $adminUsers = User::where('is_admin', 1)->get();
+
+        foreach ([...$adminUsers, $order->user] as $user) {
+            Mail::to($user)->send(new CreateOrderEmail($order, (bool)$user->is_admin));
+        }
     }
 }
