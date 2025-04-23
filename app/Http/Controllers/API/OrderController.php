@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
-use Illuminate\{Http\Request};
-use App\{Models\Order, Http\Controllers\Controller, Http\Resources\OrderListResource, Http\Resources\OrderResource};
+use Illuminate\Support\Facades\Mail;
+use Illuminate\{Http\Request, Http\JsonResponse};
+use App\{Models\Order, Http\Controllers\Controller, Http\Resources\OrderListResource, Http\Resources\OrderResource, Enums\OrderStatus};
 
 class OrderController extends Controller
 {
@@ -26,4 +27,34 @@ class OrderController extends Controller
     {
         return OrderResource::make($order);
     }
+
+    public function getOrderStatuses(): JsonResponse
+    {
+        return response()->json([
+            'statuses' => OrderStatus::getStatuses(),
+        ]);
+    }
+
+    public function changeOrderStatus(Order $order, Request $request): JsonResponse
+    {
+       $validatedStatus = $request->validate([
+            'status' => 'required|in:' . implode(',', OrderStatus::getStatuses()),
+        ]);
+
+        $order->update(['status' => $validatedStatus['status']]);
+
+        return response()->json([
+            'message' => "Order status updated successfully to '{$validatedStatus['status']}'",
+        ]);
+    }
+
+    // public function changeStatus(Order $order, $status)
+    // {
+    //     $order->status = $status;
+    //     $order->save();
+
+    //     Mail::to($order->user)->send(new OrderUpdateEmail($order));
+
+    //     return response('', 200);
+    // }
 }

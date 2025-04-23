@@ -23,6 +23,14 @@ const state = {
         limit: null,
         total: null
     },
+    toast: {
+        visible: false,
+        delay: 5000,
+        percent: 0,
+        interval: null,
+        timeout: null,
+        message: null,
+    },
 };
 
 export default state;

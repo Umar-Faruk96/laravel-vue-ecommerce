@@ -138,7 +138,7 @@
           <td
             class="border-b-2 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis"
           >
-            {{ order.status.toUpperCase() }}
+            <OrderStatus :order="order" />
           </td>
 
           <td class="border-b-2 p-2">${{ order.total_price }}</td>
@@ -201,6 +201,7 @@ import Spinner from "../../components/core/Spinner.vue";
 import store from "../../store/index.js";
 import { PRODUCTS_PER_PAGE } from "../../utils/constants.js";
 import TableHeaderCell from "../../components/core/ProductsTable/TableHeaderCell.vue";
+import OrderStatus from "./OrderStatus.vue";
 
 const perPage = ref(PRODUCTS_PER_PAGE);
 const search = ref("");

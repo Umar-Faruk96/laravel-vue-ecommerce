@@ -13,6 +13,9 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
     // Products routes
     Route::apiResource('products', ProductController::class);
+    Route::get('/orders/statuses', [OrderController::class, 'getOrderStatuses']);
+    Route::post('/orders/change-status/{order}', [OrderController::class, 'changeOrderStatus']);
+    // Route::post('/orders/change-status/{order}/{status}', [OrderController::class, 'changeStatus']);
     Route::apiResource('orders', OrderController::class)->only(['index', 'show']);
 });
 
