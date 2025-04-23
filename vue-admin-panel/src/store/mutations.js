@@ -50,3 +50,16 @@ export const setOrders = (state, [loading, data = null]) => {
 
     state.orders.loading = loading;
 }
+
+export const showToast = (state, message) => {
+    state.toast.visible = true;
+    state.toast.message = message;
+}
+
+export const closeToast = (state) => {
+    state.toast.visible = false;
+    state.toast.timeout = null;
+    state.toast.percent = 0;
+    clearInterval(state.toast.interval);
+    state.toast.message = '';
+}

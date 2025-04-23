@@ -150,7 +150,7 @@
 <script setup>
 import axiosClient from "../../utils/axios";
 import { useRoute } from "vue-router";
-import { computed, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import store from "../../store/index.js";
 import OrderStatus from "./OrderStatus.vue";
 
@@ -168,14 +168,15 @@ onMounted(() => {
   });
 });
 
-const toast = computed(() => store.state.toast);
-
 const changeStatus = (e) => {
   const status = e.target.value;
   axiosClient
     .post(`/orders/change-status/${order.value.id}`, { status })
     .then(({ data }) => {
-      console.log(data);
+      store.commit(
+        "showToast",
+        data.message || `Order status was successfully changed into "${status}"`
+      );
     })
     .catch((err) => {
       console.error(err);
@@ -184,7 +185,7 @@ const changeStatus = (e) => {
   // axiosClient
   //   .post(`/orders/change-status/${order.value.id}/${order.value.status}`)
   //   .then(({ data }) => {
-  //     console.log(data);
+  //     store.commit('showToast', `Order status was successfully changed into "${order.value.status}"`)
   //   });
 };
 </script>

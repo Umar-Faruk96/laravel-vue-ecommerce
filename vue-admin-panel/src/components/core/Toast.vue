@@ -1,15 +1,10 @@
 <template>
   <!-- Toast -->
   <div
-    v-show="visible"
-    x-data="toast"
-    x-show="visible"
-    x-transition
-    x-cloak
-    @notify.window="show($event.detail.message)"
+    v-show="toast.visible"
     class="fixed left-1/2 top-16 -ml-[200px] w-[400px] bg-emerald-500 px-4 py-2 pb-4 text-white"
   >
-    <div class="font-semibold" x-text="message"></div>
+    <div class="font-semibold">{{ toast.message }}</div>
 
     <button
       @click="close"
@@ -38,4 +33,49 @@
   <!--/ Toast -->
 </template>
 
-<script setup></script>
+<script setup>
+import { computed, watch } from "vue";
+import store from "../../store";
+
+const toast = computed(() => store.state.toast);
+
+const percent = computed(() => {
+  if (toast.value.interval) {
+    return toast.value.percent;
+  }
+});
+
+watch(
+  () => toast.value.visible,
+  (newValue) => {
+    if (newValue) {
+      if (toast.value.interval) {
+        clearInterval(toast.value.interval);
+        toast.value.interval = null;
+      }
+
+      if (toast.value.timeout) {
+        clearTimeout(toast.value.timeout);
+        toast.value.timeout = null;
+      }
+
+      toast.value.timeout = setTimeout(() => {
+        close();
+      }, toast.value.delay);
+
+      toast.value.interval = setInterval(() => {
+        if (toast.value.percent >= 100) {
+          clearInterval(toast.value.interval);
+          toast.value.interval = null;
+        } else {
+          toast.value.percent += 1;
+        }
+      }, toast.value.delay / 100);
+    }
+  }
+);
+
+const close = () => {
+  store.commit("closeToast");
+};
+</script>
