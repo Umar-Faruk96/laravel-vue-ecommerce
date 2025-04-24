@@ -10,14 +10,14 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class CreateOrderEmail extends Mailable
+class OrderCreated extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(public Order $order, public $forAdmin = true)
+    public function __construct(public Order $order, public bool $admin = true)
     {
         //
     }
@@ -28,7 +28,7 @@ class CreateOrderEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Create Order Email',
+            subject: 'Order Created Email',
         );
     }
 
@@ -38,7 +38,7 @@ class CreateOrderEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'view.mail.order-created',
         );
     }
 

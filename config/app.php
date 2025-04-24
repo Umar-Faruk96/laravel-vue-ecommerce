@@ -56,6 +56,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Admin URL
+    |--------------------------------------------------------------------------
+    |
+    | This URL is used for the admin panel of the application. It is used to
+    | generate URLs for the admin panel.
+    |
+    */
+    'admin_url' => env('APP_ADMIN_URL', 'http://localhost/admin'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |

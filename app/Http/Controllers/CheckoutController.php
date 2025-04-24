@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Helpers\Cart;
-use App\Mail\CreateOrderEmail;
+use App\Mail\OrderCreated;
 use Illuminate\Support\Facades\Mail;
 use Stripe\{Customer, StripeClient};
 use App\Enums\{OrderStatus, PaymentStatus};
@@ -185,7 +185,7 @@ class CheckoutController extends Controller
         $adminUsers = User::where('is_admin', 1)->get();
 
         foreach ([...$adminUsers, $order->user] as $user) {
-            Mail::to($user)->send(new CreateOrderEmail($order, (bool)$user->is_admin));
+            Mail::to($user)->send(new OrderCreated($order, (bool)$user->is_admin));
         }
     }
 }
