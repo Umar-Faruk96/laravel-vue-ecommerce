@@ -14,6 +14,7 @@ class ProductController extends Controller
         $search = $request->get('search', '');
         $sortBy = $request->get('sort_by', 'updated_at');
         $sortTo = $request->get('sort_to', 'desc');
+
         $query = Product::query()->orderBy($sortBy, $sortTo);
 
         if ($search) {
@@ -75,8 +76,8 @@ class ProductController extends Controller
         }
 
         $product->delete();
-        
-        return response()->noContent();
+
+        return response()->json(['message' => 'Product deleted successfully']);
     }
 
     private function storeImage(UploadedFile $image)

@@ -2,8 +2,10 @@
 
 namespace App\Models\Api;
 
+use App\Models\Product as MainProduct;
 
-class Product extends \App\Models\Product
+
+class Product extends MainProduct
 {
     public function getRouteKeyName()
     {
