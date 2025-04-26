@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Mail\UpdateOrderEmail;
+use App\Mail\OrderUpdated;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\{Http\Request, Http\JsonResponse};
 use App\{Models\Order, Http\Controllers\Controller, Http\Resources\OrderListResource, Http\Resources\OrderResource, Enums\OrderStatus};
@@ -44,7 +44,7 @@ class OrderController extends Controller
 
         $order->update(['status' => $validatedStatus['status']]);
 
-        Mail::to($order->user)->send(new UpdateOrderEmail($order));
+        Mail::to($order->user)->send(new OrderUpdated($order));
 
         return response()->json([
             'message' => "Order status updated successfully to '{$validatedStatus['status']}'",

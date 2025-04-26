@@ -36,10 +36,11 @@
 
                             <td class="px-2 py-1">${{ $order->total_price }}</td>
 
-                            <td class="whitespace-nowrap px-2 py-1">{{ $order->items()->count() }} {{ Str::plural('item', $order->items()->count()) }}</td>
-                            
+                            <td class="whitespace-nowrap px-2 py-1">{{ $order->items()->count() }}
+                                {{ Str::plural('item', $order->items()->count()) }}</td>
+
                             <td class="flex w-[100px] gap-2 px-2 py-1">
-                                @if (!$order->isPaid())
+                                @if (!$order->isPaid() && !$order->isShipped() && !$order->isCompleted())
                                     <form action="{{ route('cart.checkout-order', $order) }}" method="POST">
                                         @csrf
                                         <button class="btn-primary flex items-center whitespace-nowrap py-1">

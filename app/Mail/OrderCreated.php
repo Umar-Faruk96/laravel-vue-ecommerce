@@ -38,7 +38,7 @@ class OrderCreated extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.mail.order-created',
+            view: 'mail.order-created',
         );
     }
 

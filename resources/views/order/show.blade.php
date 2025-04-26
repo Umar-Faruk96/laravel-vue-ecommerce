@@ -61,7 +61,7 @@
                 <hr class="my-3" />
             @endforeach
 
-            @if (!$order->isPaid())
+            @if (!$order->isPaid() && $order->status !== 'shipped' && $order->status !== 'completed')
                 <form action="{{ route('cart.checkout-order', $order) }}" method="POST">
                     @csrf
                     <button class="btn-primary mt-3 flex w-full items-center justify-center">

@@ -12,9 +12,19 @@ class Order extends Model
 
     protected $fillable = ['status', 'total_price', 'created_by', 'updated_by'];
 
-    public function isPaid()
+    public function isPaid(): bool
     {
         return $this->status === OrderStatus::Paid->value;
+    }
+
+    public function isShipped(): bool
+    {
+        return $this->status === OrderStatus::Shipped->value;
+    }
+
+    public function isCompleted(): bool
+    {
+        return $this->status === OrderStatus::Completed->value;
     }
 
     public function payment(): HasOne
