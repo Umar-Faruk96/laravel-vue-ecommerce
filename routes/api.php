@@ -8,7 +8,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/user', [AuthController::class, 'getUser']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::apiResource('users', UserController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::apiResource('users', UserController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
 
     // Products routes
     Route::apiResource('products', ProductController::class);

@@ -31,6 +31,8 @@ const props = defineProps({
 const title = defineModel("title");
 const textarea = defineModel("textarea");
 const number = defineModel("number");
+const email = defineModel("email");
+const password = defineModel("password");
 
 const inputClasses = computed(() => {
   const classes = [
@@ -90,8 +92,27 @@ const emit = defineEmits(["change"]);
           :required="required"
           v-model="number"
           :class="inputClasses"
+        />
+      </template>
+
+      <template v-else-if="type === 'email'">
+        <input
+          :type="type"
+          :name="name"
+          :required="required"
+          v-model="email"
+          :class="inputClasses"
           :placeholder="label"
-          step="0.01"
+        />
+      </template>
+      
+      <template v-else-if="type === 'password'">
+        <input
+          :type="type"
+          :name="name"
+          :required="required"
+          v-model="password"
+          :class="inputClasses"
         />
       </template>
 

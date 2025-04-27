@@ -5,12 +5,14 @@ export const login = async ({ commit }, user) => {
     // console.log(data);
     commit('setUser', data.user);
     commit('setToken', data.token);
+
     return data;
 }
 
 export const getUser = async ({ commit }) => {
     const { data } = await axiosClient.get('/user');
     commit('setUser', data);
+
     return data;
 }
 
@@ -18,6 +20,7 @@ export const logout = async ({ commit }) => {
     const response = await axiosClient.post('/logout');
     commit('setUser', {});
     commit('setToken', null);
+
     return response;
 }
 
@@ -34,6 +37,7 @@ export const getProducts = async ({ commit, state }, { url = null, search = '', 
         const { data } = await axiosClient.get(url, { params: { ...params, per_page, search, sort_by, sort_to } });
         // console.log(data);
         commit('setProducts', [false, data]);
+
         return data;
     } catch (error) {
         commit('setProducts', [false]);
@@ -55,6 +59,7 @@ export const createProduct = ({ commit }, product) => {
         formData.append('price', product.price);
         product = formData;
     }
+
     return axiosClient.post('/products', product);
 }
 
@@ -94,6 +99,7 @@ export const getOrders = async ({ commit, state }, { url = null, search = '', pe
         const { data } = await axiosClient.get(url, { params: { ...params, per_page, search, sort_by, sort_to } });
         // console.log(data);
         commit('setOrders', [false, data]);
+
         return data;
     } catch (error) {
         commit('setOrders', [false]);
@@ -103,4 +109,27 @@ export const getOrders = async ({ commit, state }, { url = null, search = '', pe
 
 export const getOrder = async ({ commit }, id) => {
     return await axiosClient.get(`/orders/${id}`);
+}
+
+export const getUsers = async ({ commit, state }, { url = null, search = '', per_page, sort_by, sort_to } = {}) => {
+    commit('setUsers', [true]);
+
+    url = url || '/users';
+
+    const params = {
+        per_page: state.users.limit,
+    }
+
+    try {
+        const { data } = await axiosClient.get(url, { params: { ...params, per_page, search, sort_by, sort_to } });
+        commit('setUsers', [false, data]);
+
+        return data;
+    } catch (error) {
+        commit('setUsers', [false])
+    }
+}
+
+export const getSelectedUser = async ({ commit }, id) => {
+    return await axiosClient.get(`/users/${id}`);
 }

@@ -4,12 +4,13 @@ namespace App\Http\Controllers\API;
 
 use App\Mail\OrderUpdated;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\{Http\Request, Http\JsonResponse};
 use App\{Models\Order, Http\Controllers\Controller, Http\Resources\OrderListResource, Http\Resources\OrderResource, Enums\OrderStatus};
 
 class OrderController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): JsonResource
     {
         $perPage = $request->get('per_page', 10);
         $search = $request->get('search', '');
@@ -24,7 +25,7 @@ class OrderController extends Controller
         return OrderListResource::collection($query->paginate($perPage));
     }
 
-    public function show(Order $order)
+    public function show(Order $order): JsonResource
     {
         return OrderResource::make($order);
     }
@@ -38,7 +39,7 @@ class OrderController extends Controller
 
     public function changeOrderStatus(Order $order, Request $request): JsonResponse
     {
-       $validatedStatus = $request->validate([
+        $validatedStatus = $request->validate([
             'status' => 'required|in:' . implode(',', OrderStatus::getStatuses()),
         ]);
 

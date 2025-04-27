@@ -199,11 +199,11 @@ import { ChevronDownIcon, MagnifyingGlassIcon, EyeIcon } from "@heroicons/vue/24
 import { Menu, MenuButton } from "@headlessui/vue";
 import Spinner from "../../components/core/Spinner.vue";
 import store from "../../store/index.js";
-import { PRODUCTS_PER_PAGE } from "../../utils/constants.js";
+import { ORDERS_PER_PAGE } from "../../utils/constants.js";
 import TableHeaderCell from "../../components/core/ProductsTable/TableHeaderCell.vue";
 import OrderStatus from "./OrderStatus.vue";
 
-const perPage = ref(PRODUCTS_PER_PAGE);
+const perPage = ref(ORDERS_PER_PAGE);
 const search = ref("");
 const sortField = ref("created_at");
 const sortDirection = ref("desc");

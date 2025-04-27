@@ -9,10 +9,12 @@ use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): JsonResource
     {
         $perPage = $request->get('per_page', 10);
         $search = $request->get('search', '');
@@ -29,7 +31,12 @@ class UserController extends Controller
         return UserResource::collection($query->paginate($perPage));
     }
 
-    public function store(CreateUserRequest $request)
+    public function show(User $user): JsonResource
+    {
+        return UserResource::make($user);
+    }
+
+    public function store(CreateUserRequest $request): JsonResource
     {
         $userData = $request->validated();
 
@@ -44,7 +51,7 @@ class UserController extends Controller
         return UserResource::make($user);
     }
 
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(UpdateUserRequest $request, User $user): JsonResource
     {
         $userData = $request->validated();
 
@@ -59,7 +66,7 @@ class UserController extends Controller
         return UserResource::make($user);
     }
 
-    public function destroy(User $user)
+    public function destroy(User $user): JsonResponse
     {
         $user->delete();
 
