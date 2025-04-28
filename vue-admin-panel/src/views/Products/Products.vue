@@ -45,10 +45,11 @@ const DEFAULT_PRODUCT = {
 const productData = ref({ ...DEFAULT_PRODUCT });
 
 const editProductForm = (product) => {
-  store.dispatch("getProduct", product.id).then(({ data }) => {
-    productData.value = data;
+  // store.dispatch("getProduct", product.id).then(({ data }) => {
+  //   productData.value = data;
+    productData.value = product;
     openProductFormModal();
-  });
+  // });
 };
 
 const clearProductForm = () => {
