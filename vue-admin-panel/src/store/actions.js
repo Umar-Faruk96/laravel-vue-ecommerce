@@ -146,3 +146,34 @@ export const updateUser = async ({commit}, user) => {
 export const deleteUser = async ({commit}, id) => {
     return axiosClient.delete(`/users/${id}`)
 }
+
+export const getCustomers = async ({commit, state}, {url = null, search = '', per_page, sort_by, sort_to} = {}) => {
+    commit('setCustomers', [true]);
+
+    url = url || '/customers';
+
+    const params = {
+        per_page: state.customers.limit,
+    }
+
+    try {
+        const {data} = await axiosClient.get(url, {params: {...params, per_page, search, sort_by, sort_to}});
+        commit('setCustomers', [false, data]);
+
+        return data;
+    } catch (error) {
+        commit('setCustomers', [false])
+    }
+}
+
+export const createCustomer = async ({commit}, customer) => {
+    return axiosClient.post('/customers', customer)
+}
+
+export const updateCustomer = async ({commit}, customer) => {
+    return axiosClient.put(`/customers/${customer.id}`, customer)
+}
+
+export const deleteCustomer = async ({commit}, id) => {
+    return axiosClient.delete(`/customers/${id}`)
+}

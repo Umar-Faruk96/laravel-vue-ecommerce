@@ -1,7 +1,7 @@
 <template>
   <section class="bg-black/10 p-4 rounded-lg shadow animate-fade-in-down">
     <!-- Sorting & Search -->
-    <div v-if="users.data.length" class="flex justify-between border-b-2 pb-3">
+    <div v-if="customers.data.length" class="flex justify-between border-b-2 pb-3">
       <section class="flex items-center">
         <span class="whitespace-nowrap mr-3 text-black/60">Per Page</span>
 
@@ -16,7 +16,7 @@
               name="per-page"
               id="per-page"
               title="per-page"
-              @change="getUsers()"
+              @change="getCustomers()"
               v-model="perPage"
               class="appearance-none forced-colors:appearance-auto row-start-1 col-start-1 relative block w-24 px-3 py-2 border border-black/20 placeholder-black/60 bg-black/10 text-black/60 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
           >
@@ -31,8 +31,8 @@
         </div>
         <!--/ Per Page Input -->
 
-        <!-- User Total Output -->
-        <span class="ml-3 text-black/60">Found {{ users.total }} users</span>
+        <!-- Customer Total Output -->
+        <span class="ml-3 text-black/60">Found {{ customers.total }} customers</span>
       </section>
 
       <!-- Search -->
@@ -46,9 +46,9 @@
             type="text"
             name="search"
             id="search"
-            placeholder="Type to Search Users"
+            placeholder="Type to Search Customers"
             v-model="search"
-            @change="getUsers()"
+            @change="getCustomers()"
             class="appearance-none forced-colors:appearance-auto row-start-1 col-start-1 relative block px-3 py-2 border border-black/20 placeholder-black/60 bg-black/10 text-black/60 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
         />
       </section>
@@ -56,12 +56,12 @@
     </div>
     <!--/ Sorting & Search -->
 
-    <!-- Users Table -->
+    <!-- Customers Table -->
     <table class="table-auto w-full text-black/60">
       <thead>
       <tr>
         <TableHeaderCell
-            @sort="sortUsers"
+            @sort="sortCustomers"
             field="id"
             :sortField
             :sortDirection
@@ -71,7 +71,7 @@
         >
 
         <TableHeaderCell
-            @sort="sortUsers"
+            @sort="sortCustomers"
             field="name"
             :sortField
             :sortDirection
@@ -81,7 +81,7 @@
         >
 
         <TableHeaderCell
-            @sort="sortUsers"
+            @sort="sortCustomers"
             field="email"
             :sortField
             :sortDirection
@@ -91,7 +91,25 @@
         >
 
         <TableHeaderCell
-            @sort="sortUsers"
+            @sort="sortCustomers"
+            field="phone"
+            class="border-b-2 p-2 text-left"
+        >Phone
+        </TableHeaderCell
+        >
+
+        <TableHeaderCell
+            @sort="sortCustomers"
+            field="status"
+            :sortField
+            :sortDirection
+            class="border-b-2 p-2 text-left"
+        >Status
+        </TableHeaderCell
+        >
+
+        <TableHeaderCell
+            @sort="sortCustomers"
             field="created_at"
             :sortField
             :sortDirection
@@ -107,36 +125,40 @@
       </tr>
       </thead>
 
-      <!-- Users Loading or No Users -->
-      <tbody v-if="users.loading || !users.data.length">
+      <!-- Customers Loading or No Customers -->
+      <tbody v-if="customers.loading || !customers.data.length">
       <tr>
-        <td colspan="6">
-          <Spinner v-if="users.loading" />
-          <p v-else class="text-center py-8 text-gray-700">There are no users</p>
+        <td colspan="7">
+          <Spinner v-if="customers.loading" />
+          <p v-else class="text-center py-8 text-gray-700">There are no customers</p>
         </td>
       </tr>
       </tbody>
-      <!--/ Users Loading or No Users -->
+      <!--/ Customers Loading or No Customers -->
 
-      <!-- Users Data -->
+      <!-- Customers Data -->
       <tbody v-else>
       <tr
-          v-for="(user, index) of users.data"
+          v-for="(customer, index) of customers.data"
           :key="index"
           class="animate-fade-in-down"
           :style="{ animationDelay: `${index * 0.1}s` }"
       >
-        <td class="border-b-2 p-2">{{ user.id }}</td>
+        <td class="border-b-2 p-2">{{ customer.id }}</td>
 
         <td
             class="border-b-2 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis"
         >
-          {{ user.name }}
+          {{ customer.first_name }} {{ customer.last_name }}
         </td>
 
-        <td class="border-b-2 p-2">{{ user.email }}</td>
+        <td class="border-b-2 p-2">{{ customer.email }}</td>
 
-        <td class="border-b-2 p-2">{{ user.created_at }}</td>
+        <td class="border-b-2 p-2">{{ customer.phone }}</td>
+
+        <td class="border-b-2 p-2">{{ customer.status }}</td>
+
+        <td class="border-b-2 p-2">{{ customer.created_at }}</td>
 
         <td class="border-b-2 p-2">
           <Menu as="section" class="relative inline-block text-left">
@@ -163,14 +185,14 @@
                       class="absolute z-10 right-0 mt-2 w-32 origin-top-right divide-y divide-white/80 rounded-md bg-white/90 shadow-lg ring-1 ring-black/90 ring-opacity-5 focus:outline-none"
                   >
                     <div class="px-1 py-1">
-                      <!-- Edit User -->
+                      <!-- Edit Customer -->
                       <MenuItem as="span" v-slot="{ active }">
                         <button
                             :class="[
                               active ? 'bg-indigo-600 text-white/90' : 'text-black/80',
                               'group flex items-center w-full px-4 py-2 text-sm rounded-md',
                             ]"
-                            @click="editUser(user)"
+                            @click="editCustomer(customer)"
                         >
                           <PencilIcon
                               class="w-5 h-5 mr-2 text-black/60 group-hover:text-black/80"
@@ -179,16 +201,16 @@
                           Edit
                         </button>
                       </MenuItem>
-                      <!--/ Edit User -->
+                      <!--/ Edit Customer -->
 
-                      <!-- Delete User -->
+                      <!-- Delete Customer -->
                       <MenuItem as="span" v-slot="{ active }">
                         <button
                             :class="[
                               active ? 'bg-indigo-600 text-white/90' : 'text-black/80',
                               'group flex items-center w-full px-4 py-2 text-sm rounded-md',
                             ]"
-                            @click="deleteUser(user.id)"
+                            @click="deleteCustomer(customer.id)"
                         >
                           <TrashIcon
                               class="w-5 h-5 mr-2 text-black/60 group-hover:text-black/80"
@@ -197,7 +219,7 @@
                           Delete
                         </button>
                       </MenuItem>
-                      <!--/ Delete User -->
+                      <!--/ Delete Customer -->
                     </div>
                   </MenuItems>
                 </transition>
@@ -207,23 +229,23 @@
         </td>
       </tr>
       </tbody>
-      <!--/ Users Data -->
+      <!--/ Customers Data -->
     </table>
-    <!--/ Users Table -->
+    <!--/ Customers Table -->
 
     <!-- Pagination -->
-    <section v-if="!users.loading && users.data.length" class="flex justify-between items-center mt-5">
+    <section v-if="!customers.loading && customers.data.length" class="flex justify-between items-center mt-5">
       <span class="text-black/40"
-      >Showing from {{ users.from }} to {{ users.to }}</span
+      >Showing from {{ customers.from }} to {{ customers.to }}</span
       >
 
       <nav
-          v-if="users.total > users.limit"
+          v-if="customers.total > customers.limit"
           class="relative z-10 inline-flex justify-center rounded-md shadow-sm -space-x-px"
       >
         <button
             type="button"
-            v-for="(link, index) in users.links"
+            v-for="(link, index) in customers.links"
             :key="index"
             :disabled="!link.url"
             @click.prevent="paginate(link)"
@@ -234,7 +256,7 @@
               ? 'z-10 bg-indigo-200 border-indigo-500 text-indigo-600'
               : 'bg-black/10 border-black/10 text-black/60 hover:bg-white/10',
             index === 0 ? 'rounded-l-md' : '',
-            index === users.links.length - 1 ? 'rounded-r-md' : '',
+            index === customers.links.length - 1 ? 'rounded-r-md' : '',
             !link.url ? 'pointer-events-none bg-black/10 text-black/10' : '',
           ]"
             v-html="link.label"
@@ -257,16 +279,16 @@ import {
 import {Menu, MenuButton, MenuItems, MenuItem} from "@headlessui/vue";
 import Spinner from "../../components/core/Spinner.vue";
 import store from "../../store/index.js";
-import {USERS_PER_PAGE} from "../../utils/constants.js";
+import {CUSTOMERS_PER_PAGE} from "../../utils/constants.js";
 import TableHeaderCell from "../../components/core/ProductsTable/TableHeaderCell.vue";
 
-const perPage = ref(USERS_PER_PAGE);
+const perPage = ref(CUSTOMERS_PER_PAGE);
 const search = ref("");
 const sortField = ref("created_at");
 const sortDirection = ref("desc");
 
-const getUsers = (url = null) => {
-  store.dispatch("getUsers", {
+const getCustomers = (url = null) => {
+  store.dispatch("getCustomers", {
     url,
     search: search.value,
     per_page: perPage.value,
@@ -276,38 +298,38 @@ const getUsers = (url = null) => {
 };
 
 onMounted(() => {
-  getUsers();
+  getCustomers();
 });
 
 const paginate = (link) => {
   if (link.url && !link.active) {
-    getUsers(link.url);
+    getCustomers(link.url);
   }
 };
 
-const sortUsers = (field) => {
+const sortCustomers = (field) => {
   if (field === sortField.value) {
     sortDirection.value = sortDirection.value === "asc" ? "desc" : "asc";
   } else {
     sortField.value = field;
     sortDirection.value = "asc";
   }
-  getUsers();
+  getCustomers();
 };
 
-const emit = defineEmits(["edit-user"]);
+const emit = defineEmits(["edit-customer"]);
 
-const editUser = (user) => {
-  emit("edit-user", user);
+const editCustomer = (customer) => {
+  emit("edit-customer", customer);
 };
 
-const deleteUser = (id) => {
-  if (!confirm("Are you sure you want to delete this user?")) return;
+const deleteCustomer = (id) => {
+  if (!confirm("Are you sure you want to delete this customer?")) return;
 
-  store.dispatch("deleteUser", id).then(() => {
-    getUsers();
+  store.dispatch("deleteCustomer", id).then(() => {
+    getCustomers();
   });
 };
 
-const users = computed(() => store.state.users);
+const customers = computed(() => store.state.customers);
 </script>
