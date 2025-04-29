@@ -34,7 +34,7 @@
 
               <header class="py-3 px-4 flex justify-between items-center">
                 <DialogTitle as="h3" class="text-lg font-medium leading-6 text-black/90">
-                  {{ customer.id ? `Edit Customer: "${props.customer.first_name + " " + props.customer.last_name}"` : "Create new Customer" }}
+                  {{ customer.user_id ? `Edit Customer: "${props.customer.first_naem + " " + props.customer.last_name}"` : "Create new Customer" }}
                 </DialogTitle>
 
                 <button
@@ -124,7 +124,7 @@ const props = defineProps({
 });
 
 const customer = ref({
-  id: props.customer.id,
+  user_id: props.customer.user_id,
   first_name: props.customer.first_name,
   last_name: props.customer.last_name,
   email: props.customer.email,
@@ -133,7 +133,7 @@ const customer = ref({
 
 onUpdated(() => {
   customer.value = {
-    id: props.customer.id,
+    user_id: props.customer.id,
     first_name: props.customer.first_name,
     last_name: props.customer.last_name,
     email: props.customer.email,

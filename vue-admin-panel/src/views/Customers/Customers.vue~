@@ -32,7 +32,7 @@ const openCustomerFormModal = () => {
 };
 
 const DEFAULT_CUSTOMER = {
-  user_id: "",
+  id: "",
   first_name: "",
   last_name: "",
   phone: "",

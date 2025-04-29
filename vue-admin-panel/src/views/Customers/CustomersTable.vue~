@@ -1,5 +1,6 @@
 <template>
   <section class="bg-black/10 p-4 rounded-lg shadow animate-fade-in-down">
+    {{ customers }}
     <!-- Sorting & Search -->
     <div v-if="customers.data.length" class="flex justify-between border-b-2 pb-3">
       <section class="flex items-center">
@@ -49,7 +50,7 @@
             placeholder="Type to Search Customers"
             v-model="search"
             @change="getCustomers()"
-            class="appearance-none forced-colors:appearance-auto row-start-1 col-start-1 relative block px-6 py-2 border border-black/20 placeholder-black/60 bg-black/10 text-black/60 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            class="appearance-none forced-colors:appearance-auto row-start-1 col-start-1 relative block px-3 py-2 border border-black/20 placeholder-black/60 bg-black/10 text-black/60 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
         />
       </section>
       <!--/ Search -->

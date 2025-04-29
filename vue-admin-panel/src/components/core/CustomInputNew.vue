@@ -10,76 +10,45 @@
       >
 
       <template v-if="type === 'textarea'">
-        <textarea
-            :name
-            :required
-            v-model="textarea"
-            :class="inputClasses"
-            :placeholder="label"
+        <textarea :name :required v-model="textarea" :class="inputClasses" :placeholder="label"
         ></textarea>
       </template>
 
       <template v-else-if="type === 'file'">
-        <input
-            :type
-            :name
-            :required
-            :class="inputClasses"
-            @change="($event) => emit('change', $event.target.files[0])"
+        <input :type :name :required :class="inputClasses" @change="($event) => emit('change', $event.target.files[0])"
         />
       </template>
 
       <template v-else-if="type === 'number'">
-        <input
-            :type
-            :name
-            :required
-            v-model="number"
-            :class="inputClasses"
+        <input :type :name :required v-model="number" :class="inputClasses"
         />
       </template>
 
       <template v-else-if="type === 'email'">
-        <input
-            :type
-            :name
-            :required
-            v-model="email"
-            :class="inputClasses"
-            :placeholder="label"
+        <input :type :name :required v-model="email" :class="inputClasses" :placeholder="label"
         />
       </template>
 
       <template v-else-if="type === 'password'">
-          <input
-              :type
-              :name
-              :required
-              v-model="password"
-              :class="inputClasses"
-              :placeholder="label"
-          />
-      </template>
-
-      <template v-else-if="name === 'password_confirmation'">
-        <input
-            type="password"
-            :name
-            :required
-            v-model="confirmPassword"
-            :class="inputClasses"
-            :placeholder="label"
+        <input :type :name :required v-model="password" :class="inputClasses" :placeholder="label"
         />
       </template>
 
+      <template v-else-if="name === 'password_confirmation'">
+        <input type="password" :name :required v-model="confirmPassword" :class="inputClasses" :placeholder="label"
+        />
+      </template>
+
+      <template v-else-if="name === 'first_name'">
+        <input :type :name :required v-model="firstName" :class="inputClasses" :placeholder="label" />
+      </template>
+
+      <template v-else-if="name === 'last_name'">
+        <input :type :name :required v-model="lastName" :class="inputClasses" :placeholder="label" />
+      </template>
+
       <template v-else>
-        <input
-            :type="type"
-            :name="name"
-            :required="required"
-            v-model="title"
-            :class="inputClasses"
-            :placeholder="label"
+        <input :type="type" :name="name" :required="required" v-model="title" :class="inputClasses" :placeholder="label"
         />
       </template>
 
@@ -100,7 +69,7 @@ import {computed} from "vue";
 const props = defineProps({
   label: {
     type: String,
-    required: true,
+    default: "",
   },
   type: {
     type: String,
@@ -129,6 +98,8 @@ const props = defineProps({
 });
 
 const title = defineModel("title");
+const firstName = defineModel("first-name");
+const lastName = defineModel("last-name");
 const textarea = defineModel("textarea");
 const number = defineModel("number");
 const email = defineModel("email");

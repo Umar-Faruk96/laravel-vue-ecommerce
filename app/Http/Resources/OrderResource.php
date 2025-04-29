@@ -33,7 +33,7 @@ class OrderResource extends JsonResource
                 'quantity' => $item->quantity,
                 'unit_price' => $item->unit_price,
             ]),
-            'customer' => CustomerResource::make($this->user),
+            'customer' => CustomerResource::make($this->user->customer),
             'created_at' => (new DateTime($this->created_at))->format('Y-m-d H:i:s'),
             'updated_at' => (new DateTime($this->updated_at))->format('Y-m-d H:i:s'),
         ];
