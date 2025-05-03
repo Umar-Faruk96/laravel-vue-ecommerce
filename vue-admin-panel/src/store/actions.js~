@@ -159,7 +159,7 @@ export const getCustomers = async ({commit, state}, {url = null, search = '', pe
     try {
         const {data} = await axiosClient.get(url, {params: {...params, per_page, search, sort_by, sort_to}});
         commit('setCustomers', [false, data]);
-        // console.log(data);
+        console.log(data);
 
         return data;
     } catch (error) {

@@ -11,7 +11,7 @@
     </button>
   </section>
 
-  <CreateCustomerForm
+  <CustomerForm
       v-model:form-modal="customerForm"
       :customer="customerData"
       @close="clearCustomerForm"
@@ -23,7 +23,8 @@
 <script setup>
 import {ref} from "vue";
 import CustomersTable from "./CustomersTable.vue";
-import CreateCustomerForm from "./CreateCustomerForm.vue";
+import CustomerForm from "./CustomerForm.vue";
+import store from "../../store/index.js";
 
 const customerForm = ref(false);
 
@@ -32,7 +33,7 @@ const openCustomerFormModal = () => {
 };
 
 const DEFAULT_CUSTOMER = {
-  user_id: "",
+  id: "",
   first_name: "",
   last_name: "",
   phone: "",
@@ -43,8 +44,10 @@ const DEFAULT_CUSTOMER = {
 const customerData = ref({...DEFAULT_CUSTOMER});
 
 const editCustomerForm = (customer) => {
-  customerData.value = customer;
-  openCustomerFormModal();
+  store.dispatch('getCustomer', customer.id).then(({data}) => {
+    customerData.value = data;
+    openCustomerFormModal();
+  });
 };
 
 const clearCustomerForm = () => {

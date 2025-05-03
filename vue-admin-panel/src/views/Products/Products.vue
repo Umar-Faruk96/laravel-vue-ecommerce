@@ -3,9 +3,9 @@
     <h1 class="text-black/60 text-3xl font-semibold">Products</h1>
 
     <button
-      @click="openProductFormModal"
-      type="button"
-      class="flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white/80 bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        @click="openProductFormModal"
+        type="button"
+        class="flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white/80 bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
     >
       Add New Product
     </button>
@@ -13,16 +13,16 @@
 
   <!-- <CreateProductForm v-model:form-modal="productForm" :product="product" /> -->
   <CreateProductFormNew
-    v-model:form-modal="productForm"
-    :product="productData"
-    @close="clearProductForm"
+      v-model:form-modal="productForm"
+      :product="productData"
+      @close="clearProductForm"
   />
 
   <ProductsTable @edit-product="editProductForm" />
 </template>
 
 <script setup>
-import { ref } from "vue";
+import {ref} from "vue";
 import ProductsTable from "./ProductsTable.vue";
 // import CreateProductForm from './CreateProductForm.vue';
 import CreateProductFormNew from "./CreateProductFormNew.vue";
@@ -42,17 +42,16 @@ const DEFAULT_PRODUCT = {
   image: "",
 };
 
-const productData = ref({ ...DEFAULT_PRODUCT });
+const productData = ref({...DEFAULT_PRODUCT});
 
 const editProductForm = (product) => {
-  // store.dispatch("getProduct", product.id).then(({ data }) => {
-  //   productData.value = data;
-    productData.value = product;
+  store.dispatch("getProduct", product.id).then(({data}) => {
+    productData.value = data;
     openProductFormModal();
-  // });
+  });
 };
 
 const clearProductForm = () => {
-  productData.value = { ...DEFAULT_PRODUCT };
+  productData.value = {...DEFAULT_PRODUCT};
 };
 </script>
