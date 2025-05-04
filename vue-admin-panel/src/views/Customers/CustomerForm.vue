@@ -54,102 +54,110 @@
                     <h2 class="text-lg font-semibold dark:text-gray-600">Customer Info</h2>
 
                     <div class="flex gap-3 flex-1">
-                      <CustomInputNew
-                          v-model:first-name="customer.firstName"
-                          label="First Name"
-                          name="first_name"
-                          required :errors="errors['first_name']"
+                      <CustomInputNew v-model:first-name="customer.first_name" label="First Name" name="first_name"
+                                      required :errors="errors['first_name']"
                       />
 
-                      <CustomInputNew
-                          v-model:last-name="customer.lastName"
-                          label="Last Name"
-                          name="last_name"
-                          required :errors="errors['last_name']"
+                      <CustomInputNew v-model:last-name="customer.last_name" label="Last Name" name="last_name" required
+                                      :errors="errors['last_name']"
                       />
                     </div>
 
-                    <CustomInputNew
-                        type="email"
-                        v-model:email="customer.email"
-                        label="Email"
-                        name="email"
-                        required :errors="errors['email']"
+                    <CustomInputNew type="email" v-model:email="customer.email" label="Email" name="email" required
+                                    :errors="errors['email']"
                     />
 
-                    <input
-                        type="number"
-                        v-model="customer.phone"
-                        name="phone"
-                        required
-                        class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
-                        placeholder="Phone Number"
-                    />
-                    <small v-if="errors['phone'] && errors['phone'][0]" class="text-red-600">{{
-                        errors['phone'][0]
-                      }}</small>
+                    <div class="flex gap-3 items-center">
+                      <div class="w-3/4">
+                        <input type="text" v-model="customer.phone" name="phone" required
+                               class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                               placeholder="Phone Number"
+                        />
+                        <small v-if="errors['phone'] && errors['phone'][0]" class="text-red-600">{{
+                            errors['phone'][0]
+                          }}</small>
+                      </div>
+
+                      <CustomInputNew type="checkbox" v-model:status="customer.status" name="status" required
+                                      :errors="errors['status']" :id="customer.id === '' ? 1 : customer.id"
+                      />
+                    </div>
                   </section>
 
                   <section>
                     <h3 class="text-lg font-semibold dark:text-gray-600">Billing Address</h3>
 
                     <div class="flex gap-3 flex-1">
-                      <input
-                          type="text"
-                          v-model="customer.billingAddress.house_number"
-                          name="house_number"
-                          required
-                          class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
-                          placeholder="House Number"
-                      />
+                      <div class="w-1/2">
+                        <input type="text" v-model="customer.billingAddress.house_number" name="house_number" required
+                               class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                               placeholder="House Number"
+                        />
+                        <small v-if="errors['billingAddress.house_number'] && errors['billingAddress.house_number'][0]"
+                               class="text-red-600">{{
+                            errors['billingAddress.house_number'][0]
+                          }}</small>
+                      </div>
 
-                      <input
-                          type="text"
-                          v-model="customer.billingAddress.area"
-                          name="area"
-                          required
-                          class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
-                          placeholder="Area"
-                      />
+                      <div class="w-1/2">
+                        <input type="text" v-model="customer.billingAddress.area" name="area" required
+                               class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                               placeholder="Area"
+                        />
+                        <small v-if="errors['billingAddress.area'] && errors['billingAddress.area'][0]"
+                               class="text-red-600">{{
+                            errors['billingAddress.area'][0]
+                          }}</small>
+                      </div>
                     </div>
 
                     <div class="flex gap-3 flex-1">
-                      <input
-                          type="text"
-                          v-model="customer.billingAddress.city"
-                          name="city"
-                          required
-                          class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
-                          placeholder="City"
-                      />
+                      <div class="w-1/2">
+                        <input type="text" v-model="customer.billingAddress.city" name="city" required
+                               class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                               placeholder="City"
+                        />
 
-                      <input
-                          type="text"
-                          v-model="customer.billingAddress.state"
-                          name="state"
-                          required
-                          class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
-                          placeholder="State"
-                      />
+                        <small v-if="errors['billingAddress.city'] && errors['billingAddress.city'][0]"
+                               class="text-red-600">{{
+                            errors['billingAddress.city'][0]
+                          }}</small>
+                      </div>
+
+                      <div class="w-1/2">
+                        <input type="text" v-model="customer.billingAddress.state" name="state" required
+                               class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                               placeholder="State"
+                        />
+                        <small v-if="errors['billingAddress.state'] && errors['billingAddress.state'][0]"
+                               class="text-red-600">{{
+                            errors['billingAddress.state'][0]
+                          }}</small>
+                      </div>
                     </div>
                     <div class="flex gap-3 flex-1">
-                      <input
-                          type="text"
-                          v-model="customer.billingAddress.zip_code"
-                          name="zip_code"
-                          required
-                          class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
-                          placeholder="Zip Code"
-                      />
+                      <div class="w-1/2">
+                        <input type="text" v-model="customer.billingAddress.zip_code" name="zip_code" required
+                               class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                               placeholder="Zip Code"
+                        />
+                        <small v-if="errors['billingAddress.zip_code'] && errors['billingAddress.zip_code'][0]"
+                               class="text-red-600">{{
+                            errors['billingAddress.zip_code'][0]
+                          }}</small>
+                      </div>
 
-                      <input
-                          type="text"
-                          v-model="customer.billingAddress.country_code"
-                          name="country_code"
-                          required
-                          class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
-                          placeholder="Country Code"
-                      />
+                      <div class="w-1/2">
+                        <input type="text" v-model="customer.billingAddress.country_code" name="country_code" required
+                               class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                               placeholder="Country Code"
+                        />
+                        <small
+                            v-if="errors['billingAddress.country_code'] && errors['billingAddress.country_code'][0]"
+                            class="text-red-600">{{
+                            errors['billingAddress.country_code'][0]
+                          }}</small>
+                      </div>
                     </div>
                   </section>
 
@@ -157,86 +165,82 @@
                     <h3 class="text-lg font-semibold dark:text-gray-600">Shipping Address</h3>
 
                     <div class="flex gap-3 flex-1">
-                      <input
-                          type="text"
-                          v-model="customer.shippingAddress.house_number"
-                          name="house_number"
-                          required
-                          class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
-                          placeholder="House Number"
-                      />
+                      <div class="w-1/2">
+                        <input type="text" v-model="customer.shippingAddress.house_number" name="house_number" required
+                               class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                               placeholder="House Number"
+                        />
 
-                      <small v-if="errors['house_number'] && errors['house_number'][0]" class="text-red-600">{{
-                          errors['house_number'][0]
-                        }}</small>
+                        <small
+                            v-if="errors['shippingAddress.house_number'] && errors['shippingAddress.house_number'][0]"
+                            class="text-red-600">{{
+                            errors['shippingAddress.house_number'][0]
+                          }}</small>
+                      </div>
 
-                      <input
-                          type="text"
-                          v-model="customer.shippingAddress.area"
-                          name="area"
-                          required
-                          class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
-                          placeholder="Area"
-                      />
+                      <div class="w-1/2">
+                        <input type="text" v-model="customer.shippingAddress.area" name="area" required
+                               class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                               placeholder="Area"
+                        />
 
-                      <small v-if="errors['area'] && errors['area'][0]" class="text-red-600">{{
-                          errors['area'][0]
-                        }}</small>
+                        <small v-if="errors['shippingAddress.area'] && errors['shippingAddress.area'][0]"
+                               class="text-red-600">{{
+                            errors['shippingAddress.area'][0]
+                          }}</small>
+                      </div>
                     </div>
 
                     <div class="flex gap-3 flex-1">
-                      <input
-                          type="text"
-                          v-model="customer.shippingAddress.city"
-                          name="city"
-                          required
-                          class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
-                          placeholder="City"
-                      />
+                      <div class="w-1/2">
+                        <input type="text" v-model="customer.shippingAddress.city" name="city" required
+                               class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                               placeholder="City"
+                        />
 
-                      <small v-if="errors['city'] && errors['city'][0]" class="text-red-600">{{
-                          errors['city'][0]
-                        }}</small>
+                        <small v-if="errors['shippingAddress.city'] && errors['shippingAddress.city'][0]"
+                               class="text-red-600">{{
+                            errors['shippingAddress.city'][0]
+                          }}</small>
+                      </div>
 
-                      <input
-                          type="text"
-                          v-model="customer.shippingAddress.state"
-                          name="state"
-                          required
-                          class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
-                          placeholder="State"
-                      />
+                      <div class="w-1/2">
+                        <input type="text" v-model="customer.shippingAddress.state" name="state" required
+                               class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                               placeholder="State"
+                        />
 
-                      <small v-if="errors['state'] && errors['state'][0]" class="text-red-600">{{
-                          errors['state'][0]
-                        }}</small>
+                        <small v-if="errors['shippingAddress.state'] && errors['shippingAddress.state'][0]"
+                               class="text-red-600">{{
+                            errors['shippingAddress.state'][0]
+                          }}</small>
+                      </div>
                     </div>
+
                     <div class="flex gap-3 flex-1">
-                      <input
-                          type="text"
-                          v-model="customer.shippingAddress.zip_code"
-                          name="zip_code"
-                          required
-                          class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
-                          placeholder="Zip Code"
-                      />
+                      <div class="w-1/2">
+                        <input type="text" v-model="customer.shippingAddress.zip_code" name="zip_code" required
+                               class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                               placeholder="Zip Code" />
 
-                      <small v-if="errors['zip_code'] && errors['zip_code'][0]" class="text-red-600">{{
-                          errors['zip_code'][0]
-                        }}</small>
+                        <small v-if="errors['shippingAddress.zip_code'] && errors['shippingAddress.zip_code'][0]"
+                               class="text-red-600">{{
+                            errors['shippingAddress.zip_code'][0]
+                          }}</small>
+                      </div>
 
-                      <input
-                          type="text"
-                          v-model="customer.shippingAddress.country_code"
-                          name="country_code"
-                          required
-                          class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
-                          placeholder="Country Code"
-                      />
+                      <div class="w-1/2">
+                        <input type="text" v-model="customer.shippingAddress.country_code" name="country_code" required
+                               class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                               placeholder="Country Code"
+                        />
 
-                      <small v-if="errors['country_code'] && errors['country_code'][0]" class="text-red-600">{{
-                          errors['country_code'][0]
-                        }}</small>
+                        <small
+                            v-if="errors['shippingAddress.country_code'] && errors['shippingAddress.country_code'][0]"
+                            class="text-red-600">{{
+                            errors['shippingAddress.country_code'][0]
+                          }}</small>
+                      </div>
                     </div>
                   </section>
                 </main>
@@ -289,10 +293,11 @@ const props = defineProps({
 
 const customer = ref({
   id: props.customer.id,
-  firstName: props.customer.first_name,
-  lastName: props.customer.last_name,
+  first_name: props.customer.first_name,
+  last_name: props.customer.last_name,
   email: props.customer.email,
   phone: props.customer.phone,
+  status: props.customer.status,
   billingAddress: {
     ...props.customer.billing_address
   },
@@ -304,10 +309,11 @@ const customer = ref({
 onUpdated(() => {
   customer.value = {
     id: props.customer.id,
-    firstName: props.customer.first_name,
-    lastName: props.customer.last_name,
+    first_name: props.customer.first_name,
+    last_name: props.customer.last_name,
     email: props.customer.email,
     phone: props.customer.phone,
+    status: props.customer.status,
     billingAddress: {
       ...props.customer.billing_address
     },

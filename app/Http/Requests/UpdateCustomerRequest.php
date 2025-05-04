@@ -27,39 +27,39 @@ class UpdateCustomerRequest extends FormRequest
 			'last_name' => ['required', 'string', 'min:3', 'max:50'],
 			'phone' => ['required', 'numeric', 'digits_between:7,11'],
 			'email' => ['required', 'email'],
+			'status' => ['required', 'boolean',],
 			
-			'shipping.house_number' => ['required'],
-			'shipping.area' => ['required'],
-			'shipping.city' => ['required'],
-			'shipping.state' => ['required'],
-			'shipping.zip_code' => ['required'],
-			'shipping.country_code' => ['required', 'exists:countries,code'],
+			'shippingAddress.house_number' => ['required'],
+			'shippingAddress.area' => ['required'],
+			'shippingAddress.city' => ['required'],
+			'shippingAddress.state' => ['required'],
+			'shippingAddress.zip_code' => ['required'],
+			'shippingAddress.country_code' => ['required', 'exists:countries,code'],
 			
-			'billing.house_number' => ['required'],
-			'billing.area' => ['required'],
-			'billing.city' => ['required'],
-			'billing.state' => ['required'],
-			'billing.zip_code' => ['required'],
-			'billing.country_code' => ['required', 'exists:countries,code'],
-		
+			'billingAddress.house_number' => ['required'],
+			'billingAddress.area' => ['required'],
+			'billingAddress.city' => ['required'],
+			'billingAddress.state' => ['required'],
+			'billingAddress.zip_code' => ['required'],
+			'billingAddress.country_code' => ['required', 'exists:countries,code'],
 		];
 	}
 	
 	public function attributes() : array
 	{
 		return [
-			'billing.house_number' => 'Billing Present Address',
-			'billing.area' => 'Billing Permanent Address',
-			'billing.city' => 'Billing City',
-			'billing.state' => 'Billing State',
-			'billing.zip_code' => 'Billing Zip Code',
-			'billing.country_code' => 'Billing Country',
-			'shipping.house_number' => 'Shipping Present Address',
-			'shipping.area' => 'Shipping Permanent Address',
-			'shipping.city' => 'Shipping City',
-			'shipping.state' => 'Shipping State',
-			'shipping.zip_code' => 'Shipping Zip Code',
-			'shipping.country_code' => 'Shipping Country',
+			'billingAddress.house_number' => 'Billing House Number',
+			'billingAddress.area' => 'Billing Area',
+			'billingAddress.city' => 'Billing City',
+			'billingAddress.state' => 'Billing State',
+			'billingAddress.zip_code' => 'Billing Zip Code',
+			'billingAddress.country_code' => 'Billing Country',
+			'shippingAddress.house_number' => 'Shipping House Number',
+			'shippingAddress.area' => 'Shipping Area',
+			'shippingAddress.city' => 'Shipping City',
+			'shippingAddress.state' => 'Shipping State',
+			'shippingAddress.zip_code' => 'Shipping Zip Code',
+			'shippingAddress.country_code' => 'Shipping Country',
 		];
 	}
 }

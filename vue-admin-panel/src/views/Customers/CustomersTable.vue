@@ -195,7 +195,7 @@
                             @click="editCustomer(customer)"
                         >
                           <PencilIcon
-                              class="w-5 h-5 mr-2 text-black/60 group-hover:text-black/80"
+                              :class="[ active ? 'text-white/90' : 'text-black/60 group-hover:text-black/80', 'w-5 h-5 mr-2']"
                               aria-hidden="true"
                           />
                           Edit
@@ -213,7 +213,7 @@
                             @click="deleteCustomer(customer.id)"
                         >
                           <TrashIcon
-                              class="w-5 h-5 mr-2 text-black/60 group-hover:text-black/80"
+                              :class="[ active ? 'text-white/90' : 'text-black/60 group-hover:text-black/80', 'w-5 h-5 mr-2']"
                               aria-hidden="true"
                           />
                           Delete

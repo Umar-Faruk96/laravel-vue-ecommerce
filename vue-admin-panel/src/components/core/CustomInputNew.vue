@@ -1,8 +1,8 @@
 <template>
   <div>
-    <label :for="label.replace(' ', '_')" class="sr-only">{{ label }}</label>
+    <label v-if="label" :for="label.replace(' ', '_')" class="sr-only">{{ label }}</label>
 
-    <div class="mt-3 flex rounded-md shadow-sm">
+    <div class="mt-3 flex rounded-md shadow-sm items-center">
       <span
           v-if="prepend"
           class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-black/30 bg-black/10 text-black/80 text-sm"
@@ -20,7 +20,7 @@
       </template>
 
       <template v-else-if="type === 'number'">
-        <input :type :name :required v-model="number" :class="inputClasses"
+        <input :type :name :required v-model="number" :class="inputClasses" :placeholder="label"
         />
       </template>
 
@@ -32,6 +32,14 @@
       <template v-else-if="type === 'password'">
         <input :type :name :required v-model="password" :class="inputClasses" :placeholder="label"
         />
+      </template>
+
+      <template v-else-if="type === 'checkbox'">
+        <input :id="`${name}-${id}`" :type :name :required v-model="status" class="w-5 h-5"
+        />
+        <label :for="`${name}-${id}`" class="ml-2 block text-gray-900 dark:text-gray-600 capitalize">{{
+            name
+          }}</label>
       </template>
 
       <template v-else-if="name === 'password_confirmation'">
@@ -94,6 +102,10 @@ const props = defineProps({
   errors: {
     type: Array,
     required: false
+  },
+  id: {
+    type: Number,
+    default: 0
   }
 });
 
@@ -105,6 +117,7 @@ const number = defineModel("number");
 const email = defineModel("email");
 const password = defineModel("password");
 const confirmPassword = defineModel("confirm-password");
+const status = defineModel("status");
 
 const inputClasses = computed(() => {
   const classes = [
