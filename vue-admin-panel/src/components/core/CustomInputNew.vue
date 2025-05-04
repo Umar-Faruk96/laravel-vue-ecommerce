@@ -35,9 +35,10 @@
       </template>
 
       <template v-else-if="type === 'checkbox'">
-        <input :id="`${name}-${id}`" :type :name :required v-model="status" class="w-5 h-5"
+        <input :id="`${name}-${id}`" :type :name :required checked v-model="status"
+               class="w-5 h-5 appearance-none bg-gray-300 hover:bg-gray-500 dark:bg-gray-700 dark:hover:bg-gray-500 rounded checked:bg-indigo-700 checked:hover:bg-indigo-700 checked:focus:ring-2 checked:ring-indigo-700 checked:ring-offset-2 relative checked:after:absolute checked:after:top-1/2 checked:after:left-1/2 checked:after:content-['✔'] checked:after:-translate-x-1/2 checked:after:-translate-y-1/2 transition-all"
         />
-        <label :for="`${name}-${id}`" class="ml-2 block text-gray-900 dark:text-gray-600 capitalize">{{
+        <label :for="`${name}-${id}`" class="ml-2 block text-gray-900 font-medium dark:text-gray-600 capitalize">{{
             name
           }}</label>
       </template>

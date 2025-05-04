@@ -23,8 +23,8 @@ class CreateUserRequest extends FormRequest
 	public function rules() : array
 	{
 		return [
-			'name' => 'required|string|min:3|max:50',
-			'email' => 'required|email|unique:users',
+			'name' => ['required', 'string', 'min:3', 'max:50'],
+			'email' => ['required', 'email', 'string', 'lowercase', 'max:255', 'unique:users'],
 			// 'password' => ['required', Password::min(8)->letters()->numbers()->symbols()],
 			'password' => ['required', 'confirmed', Password::min(8)],
 			'password_confirmation' => ['required_with:password', Password::min(8)]

@@ -148,10 +148,11 @@
                       </div>
 
                       <div class="w-1/2">
-                        <input type="text" v-model="customer.billingAddress.country_code" name="country_code" required
-                               class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
-                               placeholder="Country Code"
-                        />
+                        <select v-model="customer.billingAddress.country_code"
+                                class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md">
+                          <option v-for="country of countries" :value="country.code">{{ country.name }}</option>
+                        </select>
+
                         <small
                             v-if="errors['billingAddress.country_code'] && errors['billingAddress.country_code'][0]"
                             class="text-red-600">{{
@@ -230,10 +231,10 @@
                       </div>
 
                       <div class="w-1/2">
-                        <input type="text" v-model="customer.shippingAddress.country_code" name="country_code" required
-                               class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
-                               placeholder="Country Code"
-                        />
+                        <select v-model="customer.shippingAddress.country_code"
+                                class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md">
+                          <option v-for="country of countries" :value="country.code">{{ country.name }}</option>
+                        </select>
 
                         <small
                             v-if="errors['shippingAddress.country_code'] && errors['shippingAddress.country_code'][0]"
@@ -278,7 +279,7 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/vue";
-import {onUpdated, ref} from "vue";
+import {computed, onUpdated, ref} from "vue";
 import {XMarkIcon} from "@heroicons/vue/24/solid";
 import Spinner from "../../components/core/Spinner.vue";
 import store from "../../store/index.js";
@@ -299,7 +300,7 @@ const customer = ref({
   phone: props.customer.phone,
   status: props.customer.status,
   billingAddress: {
-    ...props.customer.billing_address
+    ...props.customer.billing_address,
   },
   shippingAddress: {
     ...props.customer.shipping_address
@@ -370,4 +371,6 @@ function submit() {
         });
   }
 }
+
+const countries = computed(() => store.state.countries);
 </script>

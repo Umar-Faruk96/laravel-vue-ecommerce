@@ -85,6 +85,12 @@ export const setCustomers = (state, [loading, data = null]) => {
     state.customers.loading = loading;
 }
 
+export const setCountries = (state, data = null) => {
+    if (data) {
+        state.countries = data;
+    }
+}
+
 export const showToast = (state, message) => {
     state.toast.visible = true;
     state.toast.message = message;

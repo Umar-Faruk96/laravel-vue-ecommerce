@@ -32,7 +32,8 @@ const state = {
         page: 1,
         limit: null,
         total: null
-    }, customers: {
+    },
+    customers: {
         loading: false,
         data: [],
         links: [],
@@ -42,6 +43,7 @@ const state = {
         limit: null,
         total: null
     },
+    countries: [],
     toast: {
         visible: false,
         delay: 5000,

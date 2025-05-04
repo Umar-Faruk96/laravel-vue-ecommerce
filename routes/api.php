@@ -12,6 +12,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function() {
 	
 	// Customers routes
 	Route::apiResource('customers', CustomerController::class)->only(['index', 'show', 'store', 'update', 'destroy']);
+	Route::get('/countries', [CustomerController::class, 'getCountries']);
 	
 	// Products routes
 	Route::apiResource('products', ProductController::class);

@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\CustomerStatus;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Rule;
 
 class CreateCustomerRequest extends FormRequest
 {
@@ -23,24 +24,24 @@ class CreateCustomerRequest extends FormRequest
 	public function rules() : array
 	{
 		return [
-			'first_name' => 'required|string|min:3|max:50',
-			'last_name' => 'required|string|min:3|max:50',
-			'email' => 'required|email|unique:users',
-			'phone' => 'required|numeric|digits_between:7,11',
-			'status' => ['required', 'boolean',],
+			'first_name' => ['required', 'string', 'min:3', 'max:50'],
+			'last_name' => ['required', 'string', 'min:3', 'max:50'],
+			'email' => ['required', 'string', 'email', 'lowercase', 'max:255', 'unique:users'],
+			'phone' => ['required', 'numeric', 'digits_between:7,11'],
+			'status' => ['required', 'boolean', Rule::enum(CustomerStatus::class)],
 			
-			'shippingAddress.house_number' => ['required'],
-			'shippingAddress.area' => ['required'],
-			'shippingAddress.city' => ['required'],
-			'shippingAddress.state' => ['required'],
-			'shippingAddress.zip_code' => ['required'],
+			'shippingAddress.house_number' => ['required', 'string'],
+			'shippingAddress.area' => ['required', 'string'],
+			'shippingAddress.city' => ['required', 'string'],
+			'shippingAddress.state' => ['required', 'string'],
+			'shippingAddress.zip_code' => ['required', 'string'],
 			'shippingAddress.country_code' => ['required', 'exists:countries,code'],
 			
-			'billingAddress.house_number' => ['required'],
-			'billingAddress.area' => ['required'],
-			'billingAddress.city' => ['required'],
-			'billingAddress.state' => ['required'],
-			'billingAddress.zip_code' => ['required'],
+			'billingAddress.house_number' => ['required', 'string'],
+			'billingAddress.area' => ['required', 'string'],
+			'billingAddress.city' => ['required', 'string'],
+			'billingAddress.state' => ['required', 'string'],
+			'billingAddress.zip_code' => ['required', 'string'],
 			'billingAddress.country_code' => ['required', 'exists:countries,code'],
 		];
 	}

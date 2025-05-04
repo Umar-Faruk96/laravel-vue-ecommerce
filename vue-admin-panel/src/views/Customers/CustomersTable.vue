@@ -156,7 +156,9 @@
 
         <td class="border-b-2 p-2">{{ customer.phone }}</td>
 
-        <td class="border-b-2 p-2">{{ customer.status }}</td>
+        <td :class="[customer.status === '1' ? 'text-indigo-600 font-medium' : 'text-gray-500', 'border-b-2 p-2 capitalize']">
+          {{ customer.status === '1' ? 'active' : 'inactive' }}
+        </td>
 
         <td class="border-b-2 p-2">{{ customer.created_at }}</td>
 

@@ -45,7 +45,7 @@ export const getProducts = async ({commit, state}, {url = null, search = '', per
     }
 }
 
-export const getProduct = async ({ commit }, id) => {
+export const getProduct = async ({commit}, id) => {
     return await axiosClient.get(`/products/${id}`);
 }
 
@@ -167,7 +167,7 @@ export const getCustomers = async ({commit, state}, {url = null, search = '', pe
     }
 }
 
-export const getCustomer = async ({ commit }, id) => {
+export const getCustomer = async ({commit}, id) => {
     return await axiosClient.get(`/customers/${id}`);
 }
 
@@ -181,4 +181,11 @@ export const updateCustomer = async ({commit}, customer) => {
 
 export const deleteCustomer = async ({commit}, id) => {
     return axiosClient.delete(`/customers/${id}`)
+}
+
+export const getCountries = async ({commit}) => {
+    return axiosClient.get('/countries').then(({data}) => {
+        // console.log(data);
+        commit('setCountries', data);
+    })
 }

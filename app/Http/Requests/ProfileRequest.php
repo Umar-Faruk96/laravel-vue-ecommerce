@@ -27,7 +27,7 @@ class ProfileRequest extends FormRequest
 			'first_name' => ['required', 'string', 'min:3', 'max:50'],
 			'last_name' => ['required', 'string', 'min:3', 'max:50'],
 			'phone' => ['required', 'numeric', 'digits_between:7,11'],
-			'email' => ['required', 'email'],
+			'email' => ['required', 'email', 'string', 'lowercase', 'max:255', 'unique:App\Models\User'],
 			
 			'shipping.house_number' => ['required'],
 			'shipping.area' => ['required'],

@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from "vue";
+import {ref, onMounted, onUnmounted, computed} from "vue";
 
 import Sidebar from "./Sidebar.vue";
 import Navbar from "./Navbar.vue";
@@ -47,6 +47,7 @@ const makeSidebarResponsive = () => {
 
 onMounted(() => {
   store.dispatch("getUser");
+  store.dispatch('getCountries');
   makeSidebarResponsive();
   window.addEventListener("resize", makeSidebarResponsive);
 });

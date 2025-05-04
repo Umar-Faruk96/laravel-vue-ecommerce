@@ -32,9 +32,8 @@ class CustomerResource extends JsonResource
 				'city' => $shipping?->city,
 				'state' => $shipping?->state,
 				'zip_code' => $shipping?->zip_code,
-				'country' => [
-					'name' => $shipping?->country->name,
-				],
+				'country_code' => $shipping?->country_code,
+				'country' => $shipping?->country
 			],
 			'billing_address' => [
 				'id' => $billing?->id,
@@ -43,9 +42,8 @@ class CustomerResource extends JsonResource
 				'city' => $billing?->city,
 				'state' => $billing?->state,
 				'zip_code' => $billing?->zip_code,
-				'country' => [
-					'name' => $billing?->country->name,
-				],
+				'country_code' => $shipping?->country_code,
+				'country' => $shipping?->country
 			],
 		];
 	}
