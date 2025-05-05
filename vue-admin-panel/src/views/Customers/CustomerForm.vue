@@ -13,17 +13,17 @@
         <div class="fixed inset-0 bg-black/60" />
       </TransitionChild>
 
-      <div class="fixed inset-0 overflow-y-auto">
-        <div class="flex min-h-full items-center justify-center p-4 text-center">
-          <TransitionChild
-              as="template"
-              enter="duration-300 ease-out"
-              enter-from="opacity-0 scale-95"
-              enter-to="opacity-100 scale-100"
-              leave="duration-200 ease-in"
-              leave-from="opacity-100 scale-100"
-              leave-to="opacity-0 scale-95"
-          >
+      <TransitionChild
+          as="template"
+          enter="duration-300 ease-out"
+          enter-from="opacity-0 scale-95"
+          enter-to="opacity-100 scale-100"
+          leave="duration-200 ease-in"
+          leave-from="opacity-100 scale-100"
+          leave-to="opacity-0 scale-95"
+      >
+        <div class="fixed inset-0 overflow-y-auto">
+          <div class="flex min-h-full items-center justify-center p-4 text-center">
             <DialogPanel
                 class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white/90 p-4 text-left align-middle shadow-xl transition-all"
             >
@@ -51,6 +51,12 @@
               <form @submit.prevent="submit">
                 <main class="bg-white/80 px-4 pt-5 pb-4 space-y-4">
                   <section>
+                    <!--<pre class="dark:text-gray-600">{{ customer }}</pre>-->
+                    <!--<pre class="dark:text-gray-600">{{ customer.status }}</pre>-->
+                    <!--<pre class="dark:text-gray-600">{{ countries }}</pre>-->
+                    <!--<pre class="dark:text-gray-600">{{ billingCountry.states }}</pre>-->
+                    <!--<pre class="dark:text-gray-600">{{ billingStates }}</pre>-->
+
                     <h2 class="text-lg font-semibold dark:text-gray-600">Customer Info</h2>
 
                     <div class="flex gap-3 flex-1">
@@ -78,7 +84,8 @@
                           }}</small>
                       </div>
 
-                      <CustomInputNew type="checkbox" v-model:status="customer.status" name="status" required
+                      <CustomInputNew type="checkbox" v-model:status="customer.status"
+                                      :name="customer.status ? 'active' : 'inactive'" required
                                       :errors="errors['status']" :id="customer.id === '' ? 1 : customer.id"
                       />
                     </div>
@@ -125,18 +132,6 @@
                       </div>
 
                       <div class="w-1/2">
-                        <input type="text" v-model="customer.billingAddress.state" name="state" required
-                               class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
-                               placeholder="State"
-                        />
-                        <small v-if="errors['billingAddress.state'] && errors['billingAddress.state'][0]"
-                               class="text-red-600">{{
-                            errors['billingAddress.state'][0]
-                          }}</small>
-                      </div>
-                    </div>
-                    <div class="flex gap-3 flex-1">
-                      <div class="w-1/2">
                         <input type="text" v-model="customer.billingAddress.zip_code" name="zip_code" required
                                class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
                                placeholder="Zip Code"
@@ -146,9 +141,10 @@
                             errors['billingAddress.zip_code'][0]
                           }}</small>
                       </div>
-
+                    </div>
+                    <div class="flex gap-3 flex-1">
                       <div class="w-1/2">
-                        <select v-model="customer.billingAddress.country_code"
+                        <select v-model="customer.billingAddress.country_code" required
                                 class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md">
                           <option v-for="country of countries" :value="country.code">{{ country.name }}</option>
                         </select>
@@ -157,6 +153,29 @@
                             v-if="errors['billingAddress.country_code'] && errors['billingAddress.country_code'][0]"
                             class="text-red-600">{{
                             errors['billingAddress.country_code'][0]
+                          }}</small>
+                      </div>
+
+                      <div class="w-1/2">
+                        <template v-if="billingCountry && !billingCountry.states">
+                          <input type="text" v-model="customer.billingAddress.state"
+                                 name="state"
+                                 required
+                                 class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                                 placeholder="State"
+                          />
+                        </template>
+
+                        <template v-else>
+                          <select v-model="customer.billingAddress.state" required
+                                  class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md">
+                            <option v-for="state of billingStates" :value="state.key">{{ state.value }}</option>
+                          </select>
+                        </template>
+
+                        <small v-if="errors['billingAddress.state'] && errors['billingAddress.state'][0]"
+                               class="text-red-600">{{
+                            errors['billingAddress.state'][0]
                           }}</small>
                       </div>
                     </div>
@@ -206,20 +225,6 @@
                       </div>
 
                       <div class="w-1/2">
-                        <input type="text" v-model="customer.shippingAddress.state" name="state" required
-                               class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
-                               placeholder="State"
-                        />
-
-                        <small v-if="errors['shippingAddress.state'] && errors['shippingAddress.state'][0]"
-                               class="text-red-600">{{
-                            errors['shippingAddress.state'][0]
-                          }}</small>
-                      </div>
-                    </div>
-
-                    <div class="flex gap-3 flex-1">
-                      <div class="w-1/2">
                         <input type="text" v-model="customer.shippingAddress.zip_code" name="zip_code" required
                                class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
                                placeholder="Zip Code" />
@@ -229,7 +234,9 @@
                             errors['shippingAddress.zip_code'][0]
                           }}</small>
                       </div>
+                    </div>
 
+                    <div class="flex gap-3 flex-1">
                       <div class="w-1/2">
                         <select v-model="customer.shippingAddress.country_code"
                                 class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md">
@@ -240,6 +247,27 @@
                             v-if="errors['shippingAddress.country_code'] && errors['shippingAddress.country_code'][0]"
                             class="text-red-600">{{
                             errors['shippingAddress.country_code'][0]
+                          }}</small>
+                      </div>
+
+                      <div class="w-1/2">
+                        <template v-if="shippingCountry && !shippingCountry.states">
+                          <input type="text" v-model="customer.shippingAddress.state" name="state" required
+                                 class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                                 placeholder="State"
+                          />
+                        </template>
+
+                        <template v-else>
+                          <select v-model="customer.shippingAddress.state" required
+                                  class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md">
+                            <option v-for="state of shippingStates" :value="state.key">{{ state.value }}</option>
+                          </select>
+                        </template>
+
+                        <small v-if="errors['shippingAddress.state'] && errors['shippingAddress.state'][0]"
+                               class="text-red-600">{{
+                            errors['shippingAddress.state'][0]
                           }}</small>
                       </div>
                     </div>
@@ -264,21 +292,15 @@
                 </footer>
               </form>
             </DialogPanel>
-          </TransitionChild>
+          </div>
         </div>
-      </div>
+      </TransitionChild>
     </Dialog>
   </TransitionRoot>
 </template>
 
 <script setup>
-import {
-  TransitionRoot,
-  TransitionChild,
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-} from "@headlessui/vue";
+import {Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot,} from "@headlessui/vue";
 import {computed, onUpdated, ref} from "vue";
 import {XMarkIcon} from "@heroicons/vue/24/solid";
 import Spinner from "../../components/core/Spinner.vue";
@@ -300,10 +322,10 @@ const customer = ref({
   phone: props.customer.phone,
   status: props.customer.status,
   billingAddress: {
-    ...props.customer.billing_address,
+    ...props.customer.billing_address ?? {}
   },
   shippingAddress: {
-    ...props.customer.shipping_address
+    ...props.customer.shipping_address ?? {}
   }
 });
 
@@ -316,10 +338,10 @@ onUpdated(() => {
     phone: props.customer.phone,
     status: props.customer.status,
     billingAddress: {
-      ...props.customer.billing_address
+      ...props.customer.billing_address ?? {}
     },
     shippingAddress: {
-      ...props.customer.shipping_address
+      ...props.customer.shipping_address ?? {}
     }
   };
 });
@@ -373,4 +395,20 @@ function submit() {
 }
 
 const countries = computed(() => store.state.countries);
+
+const billingCountry = computed(() => store.state.countries.find(country => country.code === customer.value.billingAddress.country_code));
+const billingStates = computed(() => {
+  return billingCountry.value.states !== null ? Object.entries(billingCountry.value.states).map(state => ({
+    key: state[0],
+    value: state[1]
+  })) : {}
+});
+
+const shippingCountry = computed(() => store.state.countries.find(country => country.code === customer.value.shippingAddress.country_code));
+const shippingStates = computed(() => {
+  return shippingCountry.value.states !== null ? Object.entries(shippingCountry.value.states).map(state => ({
+    key: state[0],
+    value: state[1]
+  })) : {}
+});
 </script>

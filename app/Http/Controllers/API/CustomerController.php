@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Enums\CustomerStatus;
 use App\Http\Requests\CreateCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
+use App\Http\Resources\CountryResource;
 use App\Http\Resources\CustomerListResource;
 use App\Http\Resources\CustomerResource;
 use App\Models\Country;
 use App\Models\Customer;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\DB;
 
 class CustomerController extends Controller
 {
@@ -26,8 +29,10 @@ class CustomerController extends Controller
 		$query = Customer::query()->orderBy($sortBy, $sortTo);
 		
 		if($search) {
-			$query->where('name', 'like', "%{$search}%")
-				->orWhere('email', 'like', "%{$search}%");
+			$query->where(DB::raw("CONCAT(first_name, ' ', last_name )"), 'like', "%{$search}%")
+				->orWhere('email', 'like', "%{$search}%")
+				->orWhere('phone', 'like', "%{$search}%")
+				->orWhere('status', 'like', "%{$search}%");
 		}
 		
 		return CustomerListResource::collection($query->paginate($perPage));
@@ -54,6 +59,7 @@ class CustomerController extends Controller
 	{
 		$customerData = $request->validated();
 		
+		$customerData['status'] = $customerData['status'] ? CustomerStatus::Active->value : CustomerStatus::Disabled->value;
 		$customerData['updated_by'] = request()->user()->id;
 		
 		$customer->update($customerData);
@@ -70,8 +76,8 @@ class CustomerController extends Controller
 		]);
 	}
 	
-	public function getCountries() : Collection
+	public function getCountries() : AnonymousResourceCollection
 	{
-		return Country::query()->orderBy('name', 'asc')->get();
+		return CountryResource::collection(Country::query()->orderBy('name', 'asc')->get());
 	}
 }

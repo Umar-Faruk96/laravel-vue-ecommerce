@@ -87,7 +87,7 @@ export const setCustomers = (state, [loading, data = null]) => {
 
 export const setCountries = (state, data = null) => {
     if (data) {
-        state.countries = data;
+        state.countries = data.data;
     }
 }
 

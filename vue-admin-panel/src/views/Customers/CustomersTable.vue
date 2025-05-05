@@ -1,7 +1,7 @@
 <template>
   <section class="bg-black/10 p-4 rounded-lg shadow animate-fade-in-down">
     <!-- Sorting & Search -->
-    <div v-if="customers.data.length" class="flex justify-between border-b-2 pb-3">
+    <div class="flex justify-between border-b-2 pb-3">
       <section class="flex items-center">
         <span class="whitespace-nowrap mr-3 text-black/60">Per Page</span>
 
@@ -156,8 +156,8 @@
 
         <td class="border-b-2 p-2">{{ customer.phone }}</td>
 
-        <td :class="[customer.status === '1' ? 'text-indigo-600 font-medium' : 'text-gray-500', 'border-b-2 p-2 capitalize']">
-          {{ customer.status === '1' ? 'active' : 'inactive' }}
+        <td :class="[customer.status ? 'text-indigo-600 font-medium' : 'text-gray-500', 'border-b-2 p-2 capitalize']">
+          {{ customer.status ? 'active' : 'inactive' }}
         </td>
 
         <td class="border-b-2 p-2">{{ customer.created_at }}</td>
