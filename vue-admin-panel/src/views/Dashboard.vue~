@@ -108,11 +108,7 @@ axios.get('/dashboard/paid-orders').then(({data}) => {
 });
 
 axios.get('/dashboard/total-sale').then(({data}) => {
-  totalSale.value = new Intl.NumberFormat('en-BD', {
-    style: 'currency',
-    currency: 'BDT',
-    maximumFractionDigits: 0
-  }).format(data.total_sale);
+  totalSale.value = new Intl.NumberFormat('en-BD', {style: 'currency', currency: 'BDT', }).format(data.total_sale);
   // totalSale.value = data.total_sale;
   loading.value.totalSale = false;
 });
