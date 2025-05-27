@@ -24,8 +24,8 @@ class UserController extends Controller
         $query = User::query()->orderBy($sortBy, $sortTo);
 
         if ($search) {
-            $query->where('name', 'like', "%{$search}%")
-                ->orWhere('email', 'like', "%{$search}%");
+            $query->where('name', 'like', "%$search%")
+                ->orWhere('email', 'like', "%$search%");
         }
 
         return UserResource::collection($query->paginate($perPage));

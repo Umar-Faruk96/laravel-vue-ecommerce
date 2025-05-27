@@ -29,10 +29,10 @@ class CustomerController extends Controller
 		$query = Customer::query()->orderBy($sortBy, $sortTo);
 		
 		if($search) {
-			$query->where(DB::raw("CONCAT(first_name, ' ', last_name )"), 'like', "%{$search}%")
-				->orWhere('email', 'like', "%{$search}%")
-				->orWhere('phone', 'like', "%{$search}%")
-				->orWhere('status', 'like', "%{$search}%");
+			$query->where(DB::raw("CONCAT_WS(' ', first_name, last_name )"), 'like', "%$search%")
+				->orWhere('email', 'like', "%$search%")
+				->orWhere('phone', 'like', "%$search%")
+				->orWhere('status', 'like', "%$search%");
 		}
 		
 		return CustomerListResource::collection($query->paginate($perPage));

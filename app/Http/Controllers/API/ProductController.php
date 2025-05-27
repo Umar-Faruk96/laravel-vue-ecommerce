@@ -3,12 +3,18 @@
 namespace App\Http\Controllers\API;
 
 use Exception;
-use Illuminate\{Support\Str, Http\Request, Http\UploadedFile, Support\Facades\Storage, Support\Facades\URL};
+use Illuminate\{Http\JsonResponse,
+	Http\Resources\Json\AnonymousResourceCollection,
+	Support\Str,
+	Http\Request,
+	Http\UploadedFile,
+	Support\Facades\Storage,
+	Support\Facades\URL};
 use App\{Models\Api\Product, Http\Requests\ProductRequest, Http\Controllers\Controller, Http\Resources\ProductListResource, Http\Resources\ProductResource};
 
 class ProductController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request) : AnonymousResourceCollection
     {
         $perPage = $request->get('per_page', 10);
         $search = $request->get('search', '');
@@ -18,14 +24,17 @@ class ProductController extends Controller
         $query = Product::query()->orderBy($sortBy, $sortTo);
 
         if ($search) {
-            $query->where('title', 'like', "%{$search}%")
-                ->orWhere('description', 'like', "%{$search}%");
+            $query->where('title', 'like', "%$search%")
+                ->orWhere('description', 'like', "%$search%");
         }
 
         return ProductListResource::collection($query->paginate($perPage));
     }
-
-    public function store(ProductRequest $request)
+	
+	/**
+	 * @throws Exception
+	 */
+	public function store(ProductRequest $request) : ProductResource
     {
         $productData = $request->validated();
 
@@ -42,12 +51,15 @@ class ProductController extends Controller
         return ProductResource::make($product);
     }
 
-    public function show(Product $product)
+    public function show(Product $product) : ProductResource
     {
         return ProductResource::make($product);
     }
-
-    public function update(ProductRequest $request, Product $product)
+	
+	/**
+	 * @throws Exception
+	 */
+	public function update(ProductRequest $request, Product $product) : ProductResource
     {
         $productData = $request->validated();
 
@@ -69,7 +81,7 @@ class ProductController extends Controller
         return ProductResource::make($product);
     }
 
-    public function destroy(Product $product)
+    public function destroy(Product $product) : JsonResponse
     {
         if ($product->image) {
             Storage::deleteDirectory('images/' . dirname($product->image));
@@ -79,8 +91,11 @@ class ProductController extends Controller
 
         return response()->json(['message' => 'Product deleted successfully']);
     }
-
-    private function storeImage(UploadedFile $image)
+	
+	/**
+	 * @throws Exception
+	 */
+	private function storeImage(UploadedFile $image) : string
     {
         $path = 'images/' . Str::random();
 
@@ -94,8 +109,11 @@ class ProductController extends Controller
 
         return $path . '/' . $image->getClientOriginalName();
     }
-
-    public function checkProductImage(UploadedFile $image, array $productData)
+	
+	/**
+	 * @throws Exception
+	 */
+	public function checkProductImage(UploadedFile $image, array $productData) : array
     {
         if ($image) {
             $relativePath = $this->storeImage(image: $image);

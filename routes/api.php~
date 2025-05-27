@@ -33,7 +33,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function() {
 	Route::get('/dashboard/active-products', [DashboardController::class, 'activeProducts']);
 	Route::get('/dashboard/paid-orders', [DashboardController::class, 'paidOrders']);
 	Route::get('/dashboard/total-sale', [DashboardController::class, 'totalSale']);
-	Route::get('/dashboard/orders-by-country', [DashboardController::class, 'ordersByCountry']);
+	Route::get('/dashboard/order-by-country', [DashboardController::class, 'ordersByCountry']);
 });
 
 Route::post('/login', [AuthController::class, 'login']);

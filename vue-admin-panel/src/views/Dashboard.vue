@@ -84,6 +84,7 @@ const activeCustomers = ref(0);
 const activeProducts = ref(0);
 const paidOrders = ref(0);
 const totalSale = ref(0);
+const ordersByCountry = ref({});
 
 const loading = ref({
   activeCustomers: true,
@@ -108,6 +109,7 @@ axios.get('/dashboard/paid-orders').then(({data}) => {
 });
 
 axios.get('/dashboard/total-sale').then(({data}) => {
+  // Format the total sale value to BDT currency format
   totalSale.value = new Intl.NumberFormat('en-BD', {
     style: 'currency',
     currency: 'BDT',
@@ -116,5 +118,9 @@ axios.get('/dashboard/total-sale').then(({data}) => {
   // totalSale.value = data.total_sale;
   loading.value.totalSale = false;
 });
+
+axios.get('/dashboard/orders-by-country').then(({data}) => {
+  ordersByCountry.value = data.orders_by_country;
+})
 
 </script>

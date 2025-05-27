@@ -37,4 +37,11 @@ class DashboardController extends Controller
 		
 		return response()->json(['total_sale' => $totalSale]);
 	}
+	
+	public function ordersByCountry() : JsonResponse
+	{
+		$orders = Order::whereIn('status', [OrderStatus::Paid->value, OrderStatus::Shipped->value, OrderStatus::Completed->value])->get();
+		// $orders = Order::where('status', OrderStatus::Paid->value)->get();
+		return response()->json(['orders_by_country' => $orders]);
+	}
 }

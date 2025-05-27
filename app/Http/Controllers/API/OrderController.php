@@ -19,7 +19,7 @@ class OrderController extends Controller
         $query = Order::query()->orderBy($sortBy, $sortTo);
 
         if ($search) {
-            $query->where('id', 'like', "%{$search}%");
+            $query->where('id', 'like', "%$search%");
         }
 
         return OrderListResource::collection($query->paginate($perPage));
