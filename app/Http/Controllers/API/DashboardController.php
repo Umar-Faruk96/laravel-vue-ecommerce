@@ -45,8 +45,8 @@ class DashboardController extends Controller
 			->join('users', 'created_by', '=', 'users.id')
 			->join('customer_addresses AS ca', 'ca.customer_id', '=', 'users.id')
 			->join('countries AS c', 'ca.country_code', '=', 'c.code')
-			->selectRaw('c.name AS country, count(orders.id) AS count')
-			->groupBy('country')
+			->selectRaw('c.name AS countryName, count(orders.id) AS count')
+			->groupBy('countryName')
 			->whereIn('status', [OrderStatus::Paid->value, OrderStatus::Shipped->value, OrderStatus::Completed->value])
 			->where('ca.type', AddressType::Shipping->value)
 			->get();

@@ -53,7 +53,7 @@
     <!--/    Total Income -->
   </section>
 
-  <section class="grid grid-rows-1 md:grid-rows-2 grid-flow-col grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+  <section class="grid grid-rows-1 md:grid-rows-2 grid-flow-col grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 dark:text-gray-500">
     <div
         class="md:row-span-2 lg:col-span-2 flex flex-col justify-center items-center bg-lime-50 border border-cyan-100 px-6 py-4 rounded shadow space-y-2">
       <h4 class="text-2xl font-semibold text-center">Latest Orders</h4>
@@ -61,9 +61,14 @@
     </div>
 
     <div
-        class="flex flex-col justify-center items-center bg-lime-50 border border-cyan-100 px-6 py-4 rounded shadow space-y-2">
-      <h4 class="text-2xl font-semibold text-center">Orders by Country</h4>
-      <!--<DoughnutChart :data="0" />-->
+        class="flex flex-col justify-center items-center lg:h-64 bg-lime-50 border border-cyan-100 px-6 py-4 rounded shadow overflow-y-scroll space-y-2">
+      <h4 class="text-2xl font-semibold text-center mt-4">Orders by Country</h4>
+
+      <template v-if="!loading.ordersByCountry">
+        <DoughnutChart :chartData="ordersByCountry" />
+      </template>
+
+      <Spinner text="" class="bg-transparent" v-else />
     </div>
 
     <div
@@ -75,7 +80,7 @@
 </template>
 
 <script setup>
-import DoughnutChart from '../components/core/Charts/Doughnut.vue';
+import DoughnutChart from '../components/core/Charts/DoughnutChart.vue';
 import axios from "../utils/axios.js";
 import {ref} from "vue";
 import Spinner from "../components/core/Spinner.vue";
@@ -90,7 +95,8 @@ const loading = ref({
   activeCustomers: true,
   activeProducts: true,
   paidOrders: true,
-  totalSale: true
+  totalSale: true,
+  ordersByCountry: true
 });
 
 axios.get('/dashboard/active-customers').then(({data}) => {
@@ -120,7 +126,25 @@ axios.get('/dashboard/total-sale').then(({data}) => {
 });
 
 axios.get('/dashboard/orders-by-country').then(({data}) => {
-  ordersByCountry.value = data.orders_by_country;
+  const countries = data.orders_by_country;
+
+  const chartData = {
+    labels: [],
+    datasets: [
+      {
+        backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
+        data: []
+      }
+    ]
+  }
+
+  countries.forEach((country) => {
+    chartData.labels.push(country.countryName);
+    chartData.datasets[0].data.push(country.count);
+  });
+
+  ordersByCountry.value = chartData;
+  loading.value.ordersByCountry = false;
 })
 
 </script>
