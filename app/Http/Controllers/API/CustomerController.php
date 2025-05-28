@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Enums\AddressType;
 use App\Enums\CustomerStatus;
 use App\Http\Requests\CreateCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
@@ -52,6 +53,18 @@ class CustomerController extends Controller
 		
 		$customer = Customer::create($customerData);
 		
+		$customer->shippingAddress()->create([
+			'customer_id' => $customer->user_id,
+			'type' => AddressType::Shipping,
+			...$customerData['shippingAddress']
+		]);
+		
+		$customer->billingAddress()->create([
+			'customer_id' => $customer->user_id,
+			'type' => AddressType::Billing,
+			...$customerData['billingAddress']
+		]);
+		
 		return CustomerResource::make($customer);
 	}
 	
@@ -60,9 +73,20 @@ class CustomerController extends Controller
 		$customerData = $request->validated();
 		
 		$customerData['status'] = $customerData['status'] ? CustomerStatus::Active->value : CustomerStatus::Disabled->value;
-		$customerData['updated_by'] = request()->user()->id;
+		$customerData['updated_by'] = $customerData['id'] ?? request()->user()->id;
 		
 		$customer->update($customerData);
+		
+		/*$customerData['shippingAddress'] = [
+			'customer_id' => $customer->user_id,
+			'type' => AddressType::Shipping->value,
+			...$customerData['shippingAddress']
+		];*/
+		
+		// $customer->shippingAddress()->update($customerData['shippingAddress']);
+		
+		$customer->shippingAddress()->updateOrCreate(['customer_id' => $customer->user_id, 'type' => AddressType::Shipping], $customerData['shippingAddress']);
+		$customer->billingAddress()->updateOrCreate(['customer_id' => $customer->user_id, 'type' => AddressType::Billing], $customerData['billingAddress']);
 		
 		return CustomerResource::make($customer);
 	}

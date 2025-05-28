@@ -48,7 +48,7 @@ class DashboardController extends Controller
 			->selectRaw('c.name AS country, count(orders.id) AS count')
 			->groupBy('country')
 			->whereIn('status', [OrderStatus::Paid->value, OrderStatus::Shipped->value, OrderStatus::Completed->value])
-			->where('ca.type', AddressType::Shipping->value)
+			->where('a.type', AddressType::Shipping->value)
 			->get();
 		
 		return response()->json(['orders_by_country' => $orders]);

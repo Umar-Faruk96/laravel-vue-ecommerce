@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\{Models\Country, Models\CustomerAddress, Enums\AddressType, Http\Requests\ProfileRequest, Http\Requests\PasswordUpdateRequest};
-use Illuminate\{Http\Request, Support\Facades\Redirect, Support\Facades\Hash};
+use Illuminate\{Http\RedirectResponse, Http\Request, Support\Facades\Redirect, Support\Facades\Hash, View\View};
 
 class ProfileController extends Controller
 {
-    public function show(Request $request)
+    public function show(Request $request): View
     {
         $user = $request->user();
         $customer = $user->customer;
@@ -23,7 +23,7 @@ class ProfileController extends Controller
         return view('profile.show', compact('user', 'customer', 'shippingAddress', 'billingAddress', 'countries'));
     }
 
-    public function store(ProfileRequest $request)
+    public function store(ProfileRequest $request) : RedirectResponse
     {
         $customerData = $request->validated();
 

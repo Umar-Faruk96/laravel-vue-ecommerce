@@ -13,17 +13,17 @@
         <div class="fixed inset-0 bg-black/60" />
       </TransitionChild>
 
-      <TransitionChild
-          as="template"
-          enter="duration-300 ease-out"
-          enter-from="opacity-0 scale-95"
-          enter-to="opacity-100 scale-100"
-          leave="duration-200 ease-in"
-          leave-from="opacity-100 scale-100"
-          leave-to="opacity-0 scale-95"
-      >
-        <div class="fixed inset-0 overflow-y-auto">
-          <div class="flex min-h-full items-center justify-center p-4 text-center">
+      <div class="fixed inset-0 overflow-y-auto">
+        <div class="flex min-h-full items-center justify-center p-4 text-center">
+          <TransitionChild
+              as="template"
+              enter="duration-300 ease-out"
+              enter-from="opacity-0 scale-95"
+              enter-to="opacity-100 scale-100"
+              leave="duration-200 ease-in"
+              leave-from="opacity-100 scale-100"
+              leave-to="opacity-0 scale-95"
+          >
             <DialogPanel
                 class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white/90 p-4 text-left align-middle shadow-xl transition-all"
             >
@@ -157,7 +157,7 @@
                       </div>
 
                       <div class="w-1/2">
-                        <template v-if="billingCountry && !billingCountry.states">
+                        <template v-if="!customer.id">
                           <input type="text" v-model="customer.billingAddress.state"
                                  name="state"
                                  required
@@ -166,17 +166,28 @@
                           />
                         </template>
 
-                        <template v-else>
-                          <select v-model="customer.billingAddress.state" required
-                                  class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md">
-                            <option v-for="state of billingStates" :value="state.key">{{ state.value }}</option>
-                          </select>
-                        </template>
+                        <div v-else>
+                          <template v-if="billingCountry && !billingCountry.states">
+                            <input type="text" v-model="customer.billingAddress.state"
+                                   name="state"
+                                   required
+                                   class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                                   placeholder="State"
+                            />
+                          </template>
 
-                        <small v-if="errors['billingAddress.state'] && errors['billingAddress.state'][0]"
-                               class="text-red-600">{{
-                            errors['billingAddress.state'][0]
-                          }}</small>
+                          <template v-else>
+                            <select v-model="customer.billingAddress.state" required
+                                    class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md">
+                              <option v-for="state of billingStates" :value="state.key">{{ state.value }}</option>
+                            </select>
+                          </template>
+
+                          <small v-if="errors['billingAddress.state'] && errors['billingAddress.state'][0]"
+                                 class="text-red-600">{{
+                              errors['billingAddress.state'][0]
+                            }}</small>
+                        </div>
                       </div>
                     </div>
                   </section>
@@ -251,24 +262,35 @@
                       </div>
 
                       <div class="w-1/2">
-                        <template v-if="shippingCountry && !shippingCountry.states">
-                          <input type="text" v-model="customer.shippingAddress.state" name="state" required
+                        <template v-if="!customer.id">
+                          <input type="text" v-model="customer.billingAddress.state"
+                                 name="state"
+                                 required
                                  class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
                                  placeholder="State"
                           />
                         </template>
 
-                        <template v-else>
-                          <select v-model="customer.shippingAddress.state" required
-                                  class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md">
-                            <option v-for="state of shippingStates" :value="state.key">{{ state.value }}</option>
-                          </select>
-                        </template>
+                        <div v-else>
+                          <template v-if="shippingCountry && !shippingCountry.states">
+                            <input type="text" v-model="customer.shippingAddress.state" name="state" required
+                                   class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                                   placeholder="State"
+                            />
+                          </template>
 
-                        <small v-if="errors['shippingAddress.state'] && errors['shippingAddress.state'][0]"
-                               class="text-red-600">{{
-                            errors['shippingAddress.state'][0]
-                          }}</small>
+                          <template v-else>
+                            <select v-model="customer.shippingAddress.state" required
+                                    class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md">
+                              <option v-for="state of shippingStates" :value="state.key">{{ state.value }}</option>
+                            </select>
+                          </template>
+
+                          <small v-if="errors['shippingAddress.state'] && errors['shippingAddress.state'][0]"
+                                 class="text-red-600">{{
+                              errors['shippingAddress.state'][0]
+                            }}</small>
+                        </div>
                       </div>
                     </div>
                   </section>
@@ -292,9 +314,9 @@
                 </footer>
               </form>
             </DialogPanel>
-          </div>
+          </TransitionChild>
         </div>
-      </TransitionChild>
+      </div>
     </Dialog>
   </TransitionRoot>
 </template>
@@ -363,6 +385,7 @@ function submit() {
   if (customer.value.id) {
     store.dispatch("updateCustomer", customer.value).then((response) => {
       loading.value = false;
+      // console.log("response", response);
 
       if (response.status === 200) {
         // TODO: Show update success message

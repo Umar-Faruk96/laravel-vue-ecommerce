@@ -141,7 +141,6 @@
       <tr
           v-for="(customer, index) of customers.data"
           :key="index"
-          class="animate-fade-in-down"
           :style="{ animationDelay: `${index * 0.1}s` }"
       >
         <td class="border-b-2 p-2">{{ customer.id }}</td>
@@ -173,60 +172,59 @@
                     class="h-6 w-6 text-indigo-500"
                     aria-hidden="true"
                 />
-
-                <transition
-                    enter-active-class="transition duration-100 ease-out"
-                    enter-from-class="transform scale-95 opacity-0"
-                    enter-to-class="transform scale-100 opacity-100"
-                    leave-active-class="transition duration-75 ease-in"
-                    leave-from-class="transform scale-100 opacity-100"
-                    leave-to-class="transform scale-95 opacity-0"
-                >
-                  <MenuItems
-                      as="div"
-                      class="absolute z-10 right-0 mt-2 w-32 origin-top-right divide-y divide-white/80 rounded-md bg-white/90 shadow-lg ring-1 ring-black/90 ring-opacity-5 focus:outline-none"
-                  >
-                    <div class="px-1 py-1">
-                      <!-- Edit Customer -->
-                      <MenuItem as="span" v-slot="{ active }">
-                        <button
-                            :class="[
-                              active ? 'bg-indigo-600 text-white/90' : 'text-black/80',
-                              'group flex items-center w-full px-4 py-2 text-sm rounded-md',
-                            ]"
-                            @click="editCustomer(customer)"
-                        >
-                          <PencilIcon
-                              :class="[ active ? 'text-white/90' : 'text-black/60 group-hover:text-black/80', 'w-5 h-5 mr-2']"
-                              aria-hidden="true"
-                          />
-                          Edit
-                        </button>
-                      </MenuItem>
-                      <!--/ Edit Customer -->
-
-                      <!-- Delete Customer -->
-                      <MenuItem as="span" v-slot="{ active }">
-                        <button
-                            :class="[
-                              active ? 'bg-indigo-600 text-white/90' : 'text-black/80',
-                              'group flex items-center w-full px-4 py-2 text-sm rounded-md',
-                            ]"
-                            @click="deleteCustomer(customer.id)"
-                        >
-                          <TrashIcon
-                              :class="[ active ? 'text-white/90' : 'text-black/60 group-hover:text-black/80', 'w-5 h-5 mr-2']"
-                              aria-hidden="true"
-                          />
-                          Delete
-                        </button>
-                      </MenuItem>
-                      <!--/ Delete Customer -->
-                    </div>
-                  </MenuItems>
-                </transition>
               </MenuButton>
             </div>
+
+            <transition
+                enter-active-class="transition duration-100 ease-out"
+                enter-from-class="transform scale-95 opacity-0"
+                enter-to-class="transform scale-100 opacity-100"
+                leave-active-class="transition duration-75 ease-in"
+                leave-from-class="transform scale-100 opacity-100"
+                leave-to-class="transform scale-95 opacity-0"
+            >
+              <MenuItems
+                  class="absolute right-0 z-10 mt-2 w-32 origin-top-right divide-y divide-white/80 rounded-md bg-white/90 shadow-lg ring-1 ring-black/90 ring-opacity-5 focus:outline-none"
+              >
+                <div class="px-1 py-1">
+                  <!-- Edit Customer -->
+                  <MenuItem as="span" v-slot="{ active }">
+                    <button
+                        :class="[
+                              active ? 'bg-indigo-600 text-white/90' : 'text-black/80',
+                              'group flex items-center w-full px-4 py-2 text-sm rounded-md',
+                            ]"
+                        @click="editCustomer(customer)"
+                    >
+                      <PencilIcon
+                          :class="[ active ? 'text-white/90' : 'text-black/60 group-hover:text-black/80', 'w-5 h-5 mr-2']"
+                          aria-hidden="true"
+                      />
+                      Edit
+                    </button>
+                  </MenuItem>
+                  <!--/ Edit Customer -->
+
+                  <!-- Delete Customer -->
+                  <MenuItem as="span" v-slot="{ active }">
+                    <button
+                        :class="[
+                              active ? 'bg-indigo-600 text-white/90' : 'text-black/80',
+                              'group flex items-center w-full px-4 py-2 text-sm rounded-md',
+                            ]"
+                        @click="deleteCustomer(customer.id)"
+                    >
+                      <TrashIcon
+                          :class="[ active ? 'text-white/90' : 'text-black/60 group-hover:text-black/80', 'w-5 h-5 mr-2']"
+                          aria-hidden="true"
+                      />
+                      Delete
+                    </button>
+                  </MenuItem>
+                  <!--/ Delete Customer -->
+                </div>
+              </MenuItems>
+            </transition>
           </Menu>
         </td>
       </tr>
