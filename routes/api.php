@@ -37,6 +37,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 	Route::get('/dashboard/total-sale', [DashboardController::class, 'totalSale']);
 	Route::get('/dashboard/orders-by-country', [DashboardController::class, 'ordersByCountry']);
 	Route::get('/dashboard/latest-customers', [DashboardController::class, 'latestCustomers']);
+	Route::get('/dashboard/latest-orders', [DashboardController::class, 'latestOrders']);
 });
 
 Route::post('/login', [AuthController::class, 'login']);
