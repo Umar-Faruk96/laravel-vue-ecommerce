@@ -57,7 +57,7 @@ class DashboardController extends Controller
 
 	public function latestCustomers() : JsonResponse
 	{
-		$latestCustomers = Customer::where('status', CustomerStatus::Active->value)->orderBy('created_at', 'desc')->get(['user_id', DB::raw('CONCAT_WS(" ", first_name, last_name) AS full_name'), 'email', 'phone', 'created_at']);
+		$latestCustomers = Customer::where('status', CustomerStatus::Active->value)->orderBy('created_at', 'desc')->limit(5)->get(['user_id', DB::raw('CONCAT_WS(" ", first_name, last_name) AS full_name'), 'email', 'phone', 'created_at']);
 
 		return response()->json(['latest_customers' => $latestCustomers]);
 	}
