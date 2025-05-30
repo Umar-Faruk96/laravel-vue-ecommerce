@@ -1,10 +1,15 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import {createRouter, createWebHistory} from 'vue-router';
 import store from '../store';
 
 const routes = [
     {
+        path: '/',
+        redirect: {name: 'app.dashboard'},
+    },
+    {
         path: '/app',
         name: 'app',
+        redirect: {name: 'app.dashboard'},
         component: () => import('../components/AppLayout.vue'),
         meta: {
             requiresAuth: true,
@@ -84,9 +89,9 @@ const router = createRouter({
 
 router.beforeEach((to, _from, next) => {
     if (to.meta.requiresAuth && !store.state.user.token) {
-        next({ name: 'Login' });
+        next({name: 'Login'});
     } else if (to.meta.requiresGuest && store.state.user.token) {
-        next({ name: 'app.dashboard' });
+        next({name: 'app.dashboard'});
     } else {
         next();
     }
