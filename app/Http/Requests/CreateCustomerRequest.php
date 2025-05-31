@@ -28,7 +28,7 @@ class CreateCustomerRequest extends FormRequest
 			'last_name' => ['required', 'string', 'min:3', 'max:50'],
 			'email' => ['required', 'string', 'email', 'lowercase', 'max:255', 'unique:users'],
 			'phone' => ['required', 'numeric', 'digits_between:7,11'],
-			'status' => ['required', 'boolean', Rule::enum(CustomerStatus::class)],
+			'status' => ['required', 'boolean', /*Rule::enum(CustomerStatus::class)*/],
 			
 			'shippingAddress.house_number' => ['required', 'string'],
 			'shippingAddress.area' => ['required', 'string'],

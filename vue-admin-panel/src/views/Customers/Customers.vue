@@ -12,45 +12,19 @@
   </section>
 
   <CustomerForm
-      v-model:form-modal="customerForm"
-      :customer="customerData"
-      @close="clearCustomerForm"
-  />
+      v-model:form-modal="customerForm" />
 
-  <CustomersTable @edit-customer="editCustomerForm" />
+  <CustomersTable />
 </template>
 
 <script setup>
 import {ref} from "vue";
 import CustomersTable from "./CustomersTable.vue";
 import CustomerForm from "./CustomerForm.vue";
-import store from "../../store/index.js";
 
 const customerForm = ref(false);
 
 const openCustomerFormModal = () => {
   customerForm.value = true;
-};
-
-const DEFAULT_CUSTOMER = {
-  id: "",
-  first_name: "",
-  last_name: "",
-  phone: "",
-  email: "",
-  status: "",
-};
-
-const customerData = ref({...DEFAULT_CUSTOMER});
-
-const editCustomerForm = (customer) => {
-  store.dispatch('getCustomer', customer.id).then(({data}) => {
-    customerData.value = data;
-    openCustomerFormModal();
-  });
-};
-
-const clearCustomerForm = () => {
-  customerData.value = {...DEFAULT_CUSTOMER};
 };
 </script>

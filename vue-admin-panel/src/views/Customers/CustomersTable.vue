@@ -189,19 +189,18 @@
                 <div class="px-1 py-1">
                   <!-- Edit Customer -->
                   <MenuItem as="span" v-slot="{ active }">
-                    <button
-                        :class="[
+                    <router-link :to="{ name: 'app.customers.show', params: { id: customer.id } }"
+                                 :class="[
                               active ? 'bg-indigo-600 text-white/90' : 'text-black/80',
                               'group flex items-center w-full px-4 py-2 text-sm rounded-md',
                             ]"
-                        @click="editCustomer(customer)"
                     >
                       <PencilIcon
                           :class="[ active ? 'text-white/90' : 'text-black/60 group-hover:text-black/80', 'w-5 h-5 mr-2']"
                           aria-hidden="true"
                       />
                       Edit
-                    </button>
+                    </router-link>
                   </MenuItem>
                   <!--/ Edit Customer -->
 
@@ -315,12 +314,6 @@ const sortCustomers = (field) => {
     sortDirection.value = "asc";
   }
   getCustomers();
-};
-
-const emit = defineEmits(["edit-customer"]);
-
-const editCustomer = (customer) => {
-  emit("edit-customer", customer);
 };
 
 const deleteCustomer = (id) => {

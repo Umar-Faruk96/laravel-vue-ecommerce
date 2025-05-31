@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label v-if="label" :for="label.replace(' ', '_')" class="sr-only">{{ label }}</label>
+    <label v-if="label" :for="label.replace(' ', '_').toLowerCase()" class="sr-only">{{ label }}</label>
 
     <div class="mt-3 flex rounded-md shadow-sm items-center">
       <span
@@ -25,7 +25,7 @@
       </template>
 
       <template v-else-if="type === 'email'">
-        <input :type :name :required v-model="email" :class="inputClasses" :placeholder="label"
+        <input :type :name :required :id="idFor" v-model="email" :class="inputClasses" :placeholder="label"
         />
       </template>
 
@@ -53,11 +53,11 @@
       </template>
 
       <template v-else-if="name === 'first_name'">
-        <input :type :name :required v-model="firstName" :class="inputClasses" :placeholder="label" />
+        <input :type :name :required :id="idFor" v-model="firstName" :class="inputClasses" :placeholder="label" />
       </template>
 
       <template v-else-if="name === 'last_name'">
-        <input :type :name :required v-model="lastName" :class="inputClasses" :placeholder="label" />
+        <input :type :name :required :id="idFor" v-model="lastName" :class="inputClasses" :placeholder="label" />
       </template>
 
       <template v-else>
@@ -111,6 +111,10 @@ const props = defineProps({
   id: {
     type: Number,
     default: 0
+  },
+  idFor: {
+    type: String,
+    default: ""
   }
 });
 

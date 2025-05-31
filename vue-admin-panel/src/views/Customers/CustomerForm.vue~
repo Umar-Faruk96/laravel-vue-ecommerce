@@ -360,7 +360,7 @@ function submit() {
 
         if (response.status === 201) {
           // TODO: Show create success message
-          formModal.value = false;
+          store.dispatch("getCustomers");
           router.push({name: "app.customers"});
         }
       })

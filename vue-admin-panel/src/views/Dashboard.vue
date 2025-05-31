@@ -61,6 +61,7 @@
   <section
       class="grid grid-rows-1 md:grid-rows-2 md: grid-flow-col grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 dark:text-gray-500"
   >
+    <!--    Latest Orders -->
     <div
         class="md:row-span-2 lg:col-span-2 flex flex-col justify-center items-center bg-lime-50 border border-cyan-100 px-6 py-4 rounded shadow space-y-2"
     >
@@ -105,9 +106,11 @@
 
       <Spinner text="" class="bg-transparent" v-else />
     </div>
+    <!--/    Latest Orders -->
 
+    <!--    Orders by Country -->
     <div
-        class="flex flex-col justify-center items-center lg:h-[18rem] bg-lime-50 border border-cyan-100 px-6 py-4 rounded shadow overflow-y-scroll space-y-2"
+        class="flex flex-col justify-center items-center lg:h-[20rem] bg-lime-50 border border-cyan-100 px-6 py-4 rounded shadow overflow-y-scroll space-y-2"
     >
       <h4 class="text-2xl font-semibold text-center mt-4">Orders by Country</h4>
 
@@ -117,14 +120,16 @@
 
       <Spinner text="" class="bg-transparent" v-else />
     </div>
+    <!--/    Orders by Country -->
 
+    <!--    Latest Customers -->
     <div
         class="flex flex-col justify-center items-center bg-lime-50 border border-cyan-100 px-6 py-4 rounded shadow space-y-2"
     >
       <h4 class="text-2xl font-semibold text-center">Latest Customers: {{ latestCustomers.length }}</h4>
 
       <template v-if="!loading.latestCustomers">
-        <router-link to="/" v-for="customer in latestCustomers" :key="customer.user_id"
+        <router-link :to="{ name: 'app.customers.show', params: { id: customer.user_id } }" v-for="customer in latestCustomers" :key="customer.user_id"
                      class="flex gap-4  items-center w-2/4 group space-y-2">
           <UserIcon class="w-12 h-12 text-gray-600 bg-slate-300 p-2 rounded-full group-hover:bg-indigo-200" />
           <div class="space-y-1 group-hover:text-indigo-600">
@@ -136,6 +141,7 @@
 
       <Spinner text="" class="bg-transparent" v-else />
     </div>
+    <!--/    Latest Customers -->
   </section>
 </template>
 

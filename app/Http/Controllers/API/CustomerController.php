@@ -48,6 +48,7 @@ class CustomerController extends Controller
 	{
 		$customerData = $request->validated();
 		
+		$customerData['status'] = $customerData['status'] ? CustomerStatus::Active->value : CustomerStatus::Disabled->value;
 		$customerData['created_by'] = request()->user()->id;
 		$customerData['updated_by'] = request()->user()->id;
 		
