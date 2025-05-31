@@ -1,148 +1,152 @@
 <template>
   <h1 class="text-gray-700 text-3xl font-bold">Dashboard</h1>
 
-  <section
-      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-stretch justify-between gap-3 dark:text-gray-500 my-4"
-  >
-    <!--    Active Customers-->
-    <div
-        class="flex flex-col justify-center items-center bg-emerald-50 border border-cyan-100 px-6 py-4 rounded shadow space-y-2"
+  <div class="animate-fade-in-down" style="animation-delay: 0.2s">
+    <section
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-stretch justify-between gap-3 dark:text-gray-500 my-4"
     >
-      <h4 class="text-2xl font-semibold text-center">Active Customers</h4>
+      <!--    Active Customers-->
+      <div
+          class="flex flex-col justify-center items-center bg-emerald-50 border border-cyan-100 px-6 py-4 rounded shadow space-y-2"
+      >
+        <h4 class="text-2xl font-semibold text-center">Active Customers</h4>
 
-      <template v-if="!loading.activeCustomers">
-        <p class="text-xl font-medium">{{ activeCustomers }}</p>
-      </template>
+        <template v-if="!loading.activeCustomers">
+          <p class="text-xl font-medium">{{ activeCustomers }}</p>
+        </template>
 
-      <Spinner text="" class="bg-transparent" v-else />
-    </div>
-    <!--/    Active Customers-->
-    <!--    Active Products -->
-    <div
-        class="flex flex-col justify-center items-center bg-lime-50 border border-cyan-100 px-6 py-4 rounded shadow space-y-2"
+        <Spinner text="" class="bg-transparent" v-else />
+      </div>
+      <!--/    Active Customers-->
+      <!--    Active Products -->
+      <div
+          class="flex flex-col justify-center items-center bg-lime-50 border border-cyan-100 px-6 py-4 rounded shadow space-y-2"
+      >
+        <h4 class="text-2xl font-semibold text-center">Active Orders</h4>
+
+        <template v-if="!loading.activeProducts">
+          <p class="text-xl font-medium">{{ activeProducts }}</p>
+        </template>
+
+        <Spinner text="" class="bg-transparent" v-else />
+      </div>
+      <!--/    Active Products -->
+      <!--    Paid Orders -->
+      <div
+          class="flex flex-col justify-center items-center bg-teal-50 border border-cyan-100 px-6 py-4 rounded shadow space-y-2"
+      >
+        <h4 class="text-2xl font-semibold text-center">Paid Orders</h4>
+
+        <template v-if="!loading.paidOrders">
+          <p class="text-xl font-medium">{{ paidOrders }}</p>
+        </template>
+
+        <Spinner text="" class="bg-transparent" v-else />
+      </div>
+      <!--/    Paid Orders -->
+      <!--    Total Income -->
+      <div
+          class="flex flex-col justify-center items-center bg-green-50 border border-cyan-100 px-6 py-4 rounded shadow space-y-2"
+      >
+        <h4 class="text-2xl font-semibold text-center">Total Sales</h4>
+
+        <template v-if="!loading.totalSale">
+          <p class="text-xl font-medium">{{ totalSale }}</p>
+        </template>
+
+        <Spinner text="" class="bg-transparent" v-else />
+      </div>
+      <!--/    Total Income -->
+    </section>
+
+    <section
+        class="grid grid-rows-1 md:grid-rows-2 md: grid-flow-col grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 dark:text-gray-500"
     >
-      <h4 class="text-2xl font-semibold text-center">Active Orders</h4>
+      <!--    Latest Orders -->
+      <div
+          class="md:row-span-2 lg:col-span-2 flex flex-col justify-center items-center bg-lime-50 border border-cyan-100 px-6 py-4 rounded shadow space-y-2"
+      >
+        <h4 class="text-2xl font-semibold text-center">Latest Orders</h4>
 
-      <template v-if="!loading.activeProducts">
-        <p class="text-xl font-medium">{{ activeProducts }}</p>
-      </template>
+        <template v-if="!loading.latestOrders">
+          <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 shadow">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" class="px-6 py-3">Order ID</th>
+              <th scope="col" class="px-6 py-3">Customer Name</th>
+              <th scope="col" class="px-6 py-3">Order Created At</th>
+              <th scope="col" class="px-6 py-3">Order Items</th>
+              <th scope="col" class="px-6 py-3">Order Total Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="order in latestOrders" :key="order.id"
+                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+              <td class="px-6 py-4 flex items-center gap-3">
+                <span>{{ order.id }}</span>
+                <router-link :to="{ name: 'app.orders.show', params: { id: order.id } }"
+                             class="flex items-center gap-2">
+                  <EyeIcon class="size-6" />
+                </router-link>
+              </td>
+              <td class="px-6 py-4">{{ order.full_name }}</td>
+              <td class="px-6 py-4">{{ order.created_at }}</td>
+              <td class="px-6 py-4">{{ order.items_count }}</td>
+              <!-- make order total price in BD taka-->
+              <td class="px-6 py-4">{{
+                  new Intl.NumberFormat("en-BD", {
+                    style: "currency",
+                    currency: "BDT",
+                    maximumFractionDigits: 0
+                  }).format(order.total_price)
+                }}
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </template>
 
-      <Spinner text="" class="bg-transparent" v-else />
-    </div>
-    <!--/    Active Products -->
-    <!--    Paid Orders -->
-    <div
-        class="flex flex-col justify-center items-center bg-teal-50 border border-cyan-100 px-6 py-4 rounded shadow space-y-2"
-    >
-      <h4 class="text-2xl font-semibold text-center">Paid Orders</h4>
+        <Spinner text="" class="bg-transparent" v-else />
+      </div>
+      <!--/    Latest Orders -->
 
-      <template v-if="!loading.paidOrders">
-        <p class="text-xl font-medium">{{ paidOrders }}</p>
-      </template>
+      <!--    Orders by Country -->
+      <div
+          class="flex flex-col justify-center items-center lg:h-[20rem] bg-lime-50 border border-cyan-100 px-6 py-4 rounded shadow overflow-y-scroll space-y-2"
+      >
+        <h4 class="text-2xl font-semibold text-center mt-4">Orders by Country</h4>
 
-      <Spinner text="" class="bg-transparent" v-else />
-    </div>
-    <!--/    Paid Orders -->
-    <!--    Total Income -->
-    <div
-        class="flex flex-col justify-center items-center bg-green-50 border border-cyan-100 px-6 py-4 rounded shadow space-y-2"
-    >
-      <h4 class="text-2xl font-semibold text-center">Total Sales</h4>
+        <template v-if="!loading.ordersByCountry">
+          <DoughnutChart :chartData="ordersByCountry" />
+        </template>
 
-      <template v-if="!loading.totalSale">
-        <p class="text-xl font-medium">{{ totalSale }}</p>
-      </template>
+        <Spinner text="" class="bg-transparent" v-else />
+      </div>
+      <!--/    Orders by Country -->
 
-      <Spinner text="" class="bg-transparent" v-else />
-    </div>
-    <!--/    Total Income -->
-  </section>
+      <!--    Latest Customers -->
+      <div
+          class="flex flex-col justify-center items-center bg-lime-50 border border-cyan-100 px-6 py-4 rounded shadow space-y-2"
+      >
+        <h4 class="text-2xl font-semibold text-center">Latest Customers: {{ latestCustomers.length }}</h4>
 
-  <section
-      class="grid grid-rows-1 md:grid-rows-2 md: grid-flow-col grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 dark:text-gray-500"
-  >
-    <!--    Latest Orders -->
-    <div
-        class="md:row-span-2 lg:col-span-2 flex flex-col justify-center items-center bg-lime-50 border border-cyan-100 px-6 py-4 rounded shadow space-y-2"
-    >
-      <h4 class="text-2xl font-semibold text-center">Latest Orders</h4>
+        <template v-if="!loading.latestCustomers">
+          <router-link :to="{ name: 'app.customers.show', params: { id: customer.user_id } }"
+                       v-for="customer in latestCustomers" :key="customer.user_id"
+                       class="flex gap-4  items-center w-2/4 group space-y-2">
+            <UserIcon class="w-12 h-12 text-gray-600 bg-slate-300 p-2 rounded-full group-hover:bg-indigo-200" />
+            <div class="space-y-1 group-hover:text-indigo-600">
+              <h6 class="text-lg font-medium">{{ customer.full_name }}</h6>
+              <p class="font-medium">{{ customer.email }}</p>
+            </div>
+          </router-link>
+        </template>
 
-      <template v-if="!loading.latestOrders">
-        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 shadow">
-          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-          <tr>
-            <th scope="col" class="px-6 py-3">Order ID</th>
-            <th scope="col" class="px-6 py-3">Customer Name</th>
-            <th scope="col" class="px-6 py-3">Order Created At</th>
-            <th scope="col" class="px-6 py-3">Order Items</th>
-            <th scope="col" class="px-6 py-3">Order Total Price</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr v-for="order in latestOrders" :key="order.id"
-              class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-            <td class="px-6 py-4 flex items-center gap-3">
-              <span>{{ order.id }}</span>
-              <router-link :to="{ name: 'app.orders.show', params: { id: order.id } }" class="flex items-center gap-2">
-                <EyeIcon class="size-6" />
-              </router-link>
-            </td>
-            <td class="px-6 py-4">{{ order.full_name }}</td>
-            <td class="px-6 py-4">{{ order.created_at }}</td>
-            <td class="px-6 py-4">{{ order.items_count }}</td>
-            <!-- make order total price in BD taka-->
-            <td class="px-6 py-4">{{
-                new Intl.NumberFormat("en-BD", {
-                  style: "currency",
-                  currency: "BDT",
-                  maximumFractionDigits: 0
-                }).format(order.total_price)
-              }}
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </template>
-
-      <Spinner text="" class="bg-transparent" v-else />
-    </div>
-    <!--/    Latest Orders -->
-
-    <!--    Orders by Country -->
-    <div
-        class="flex flex-col justify-center items-center lg:h-[20rem] bg-lime-50 border border-cyan-100 px-6 py-4 rounded shadow overflow-y-scroll space-y-2"
-    >
-      <h4 class="text-2xl font-semibold text-center mt-4">Orders by Country</h4>
-
-      <template v-if="!loading.ordersByCountry">
-        <DoughnutChart :chartData="ordersByCountry" />
-      </template>
-
-      <Spinner text="" class="bg-transparent" v-else />
-    </div>
-    <!--/    Orders by Country -->
-
-    <!--    Latest Customers -->
-    <div
-        class="flex flex-col justify-center items-center bg-lime-50 border border-cyan-100 px-6 py-4 rounded shadow space-y-2"
-    >
-      <h4 class="text-2xl font-semibold text-center">Latest Customers: {{ latestCustomers.length }}</h4>
-
-      <template v-if="!loading.latestCustomers">
-        <router-link :to="{ name: 'app.customers.show', params: { id: customer.user_id } }" v-for="customer in latestCustomers" :key="customer.user_id"
-                     class="flex gap-4  items-center w-2/4 group space-y-2">
-          <UserIcon class="w-12 h-12 text-gray-600 bg-slate-300 p-2 rounded-full group-hover:bg-indigo-200" />
-          <div class="space-y-1 group-hover:text-indigo-600">
-            <h6 class="text-lg font-medium">{{ customer.full_name }}</h6>
-            <p class="font-medium">{{ customer.email }}</p>
-          </div>
-        </router-link>
-      </template>
-
-      <Spinner text="" class="bg-transparent" v-else />
-    </div>
-    <!--/    Latest Customers -->
-  </section>
+        <Spinner text="" class="bg-transparent" v-else />
+      </div>
+      <!--/    Latest Customers -->
+    </section>
+  </div>
 </template>
 
 <script setup>

@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-black/10 p-4 rounded-lg shadow animate-fade-in-down">
+  <section class="bg-black/10 p-4 rounded-lg shadow animate-fade-in-down" style="animation-delay: 0.2s">
     <!-- Sorting & Search -->
     <div v-if="products.data.length" class="flex justify-between border-b-2 pb-3">
       <section class="flex items-center">
@@ -116,7 +116,7 @@
       <tbody v-if="products.loading || !products.data.length">
       <tr>
         <td colspan="6">
-          <Spinner v-if="products.loading" />
+          <Spinner v-if="products.loading" class="mt-4" />
           <p v-else class="text-center py-8 text-gray-700">There are no products</p>
         </td>
       </tr>
