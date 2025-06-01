@@ -6,15 +6,23 @@ use App\Enums\AddressType;
 use App\Enums\OrderStatus;
 use App\Enums\CustomerStatus;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\{Customer, Product, Order};
 
 class DashboardController extends Controller
 {
-	public function activeCustomers() : JsonResponse
+	public function activeCustomers(Request $request) : JsonResponse
 	{
-		$activeCustomers = Customer::where('status', CustomerStatus::Active->value)->count();
+		$filterQuery = $request->get('filterQuery');
+		
+		if($filterQuery) {
+			$activeCustomers = Customer::where('status', CustomerStatus::Active->value)->where('email', 'like', "%$filterQuery%")->count();
+		} else {
+			$activeCustomers = Customer::where('status', CustomerStatus::Active->value)->count();
+		}
+		
 		return response()->json(['active_customers' => $activeCustomers]);
 	}
 	
