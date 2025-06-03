@@ -1,14 +1,14 @@
 <template>
-  <section v-if="loggedInUser.id" class="flex min-h-screen bg-white/75">
+  <section v-if="loggedInUser.id" class="block sm:flex min-h-screen bg-white/75 dark:bg-gray-700">
     <!-- Sidebar -->
-    <Sidebar :class="{ '-ml-44 xl:-ml-60': !showSidebar }" />
+    <Sidebar :class="{ 'hidden xl:-ml-60': !showSidebar }" />
     <!--/ Sidebar -->
 
     <!-- Main Content -->
     <section class="flex-1">
       <Navbar @toggleSidebar="toggleSidebar" />
-      <main class="p-6">
-        <div class="p-4 rounded bg-white/70">
+      <main class="p-3 md:p-6">
+        <div class="p-4 rounded bg-white/70 dark:bg-gray-600">
           <router-view></router-view>
         </div>
       </main>

@@ -1,6 +1,6 @@
 <template>
   <aside class="flex min-h-full justify-center transition-all">
-    <nav class="w-44 xl:w-60 bg-blue-900 text-white/75 px-2 py-4">
+    <nav class="w-full xl:w-60 bg-blue-900 dark:bg-gray-800 text-white/75 px-2 py-4">
       <router-link
           :to="{ name: 'app.dashboard' }"
           class="flex items-center gap-2 py-2 px-4 rounded transition-colors hover:bg-black/30"

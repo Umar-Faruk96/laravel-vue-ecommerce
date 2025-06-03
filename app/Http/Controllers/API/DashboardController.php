@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Enums\AddressType;
 use App\Enums\OrderStatus;
 use App\Enums\CustomerStatus;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,13 +16,7 @@ class DashboardController extends Controller
 {
 	public function activeCustomers(Request $request) : JsonResponse
 	{
-		$filterQuery = $request->get('filterQuery');
-		
-		if($filterQuery) {
-			$activeCustomers = Customer::where('status', CustomerStatus::Active->value)->where('email', 'like', "%$filterQuery%")->count();
-		} else {
-			$activeCustomers = Customer::where('status', CustomerStatus::Active->value)->count();
-		}
+		$activeCustomers = Customer::where('status', '=', CustomerStatus::Active->value)->count();
 		
 		return response()->json(['active_customers' => $activeCustomers]);
 	}
@@ -34,21 +29,27 @@ class DashboardController extends Controller
 		return response()->json(['active_products' => $activeProducts]);
 	}
 	
-	public function paidOrders() : JsonResponse
+	public function paidOrders(Request $request) : JsonResponse
 	{
-		$paidOrders = Order::where('status', OrderStatus::Paid->value)->count();
+		$paidOrders = Order::where([
+			['status', '=', OrderStatus::Paid->value],
+			['created_at', '>=', $this->searchQueryResults($request)]
+		])->count();
 		
 		return response()->json(['paid_orders' => $paidOrders]);
 	}
 	
-	public function totalSale() : JsonResponse
+	public function totalSale(Request $request) : JsonResponse
 	{
-		$totalSale = Order::where('status', OrderStatus::Paid->value)->sum('total_price');
+		$totalSale = Order::where([
+			['status', OrderStatus::Paid->value],
+			['created_at', '>=', $this->searchQueryResults($request)]
+		])->sum('total_price');
 		
 		return response()->json(['total_sale' => $totalSale]);
 	}
 	
-	public function ordersByCountry() : JsonResponse
+	public function ordersByCountry(Request $request) : JsonResponse
 	{
 		$orders = Order::query()
 			->join('users', 'created_by', '=', 'users.id')
@@ -57,7 +58,10 @@ class DashboardController extends Controller
 			->selectRaw('c.name AS countryName, count(orders.id) AS count')
 			->groupBy('countryName')
 			->whereIn('status', [OrderStatus::Paid->value, OrderStatus::Shipped->value, OrderStatus::Completed->value])
-			->where('ca.type', AddressType::Shipping->value)
+			->where([
+				['ca.type', AddressType::Shipping->value],
+				['orders.created_at', '>=', $this->searchQueryResults($request)]
+			])
 			->get();
 		
 		return response()->json(['orders_by_country' => $orders]);
@@ -85,5 +89,23 @@ class DashboardController extends Controller
 		});
 		
 		return response()->json(['latest_orders' => $latestOrders]);
+	}
+	
+	private function searchQueryResults(Request $request)
+	{
+		$queryValue = $request->get('dateQuery') ?? 'all';
+		
+		$queryOptions = [
+			'1d' => Carbon::now()->subDays(),
+			'1w' => Carbon::now()->subWeek(),
+			'2w' => Carbon::now()->subWeeks(2),
+			'1m' => Carbon::now()->subMonth(),
+			'3m' => Carbon::now()->subMonths(3),
+			'6m' => Carbon::now()->subMonths(6),
+			'1y' => Carbon::now()->subYear(),
+			'all' => '0000-00-00'
+		];
+		
+		return $queryOptions[$queryValue];
 	}
 }

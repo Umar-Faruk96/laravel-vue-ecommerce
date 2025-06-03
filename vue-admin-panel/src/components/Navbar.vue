@@ -27,11 +27,11 @@ const logout = () => {
 </script>
 
 <template>
-    <header class="h-16 shadow bg-white/70 flex justify-between items-center px-4">
+    <header class="h-16 shadow bg-white/70 dark:bg-gray-600 flex justify-between items-center px-4">
         <button @click="emit('toggleSidebar')" type="button"
-            class="focus:outline-none hover:bg-black/15 hover:rounded-sm p-0.5 transition-all">
+            class="focus-visible:outline-none active:bg-black/15 rounded-sm p-0.5 transition-all">
             <span class="sr-only">Dropdown</span>
-            <Bars3Icon class="size-6 text-black/60" />
+            <Bars3Icon class="size-6 text-black/60 dark:text-white/70 active:dark:text-white/50" />
         </button>
         <section class="w-56 text-right">
             <Menu as="div" class="relative inline-block text-left">
@@ -40,10 +40,10 @@ const logout = () => {
                         class="inline-flex w-full justify-center items-center px-4 py-2 gap-3 focus:outline-none">
                         <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="avatar"
                             class="size-10 rounded-full">
-                        <span class="text-black/70 hover:text-black/50 font-medium transition-colors">{{
+                        <span class="text-black/70 hover:text-black/50 dark:text-white/70 dark:hover:text-white/50 font-medium transition-colors">{{
                             loggedInUser.name.length > 10 ? loggedInUser.name.substring(0, 10) + '...' :
                             loggedInUser.name }}</span>
-                        <ChevronDownIcon class="size-6 text-black/50 hover:text-black/40 transition-colors"
+                        <ChevronDownIcon class="size-6 text-black/50 hover:text-black/40 dark:text-white/70 dark:hover:text-white/50 transition-colors"
                             aria-hidden="true" />
                     </MenuButton>
                 </div>
