@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center justify-between mb-3">
-    <h1 class="text-black/60 text-3xl font-semibold">Orders</h1>
+    <h1 class="text-black/60 dark:text-white/70 sm:text-3xl font-semibold">Orders</h1>
   </div>
 
   <OrdersTable />

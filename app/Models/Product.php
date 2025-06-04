@@ -18,6 +18,7 @@ class Product extends Model
         'image',
         'image_mime',
         'image_size',
+        'published',
         'created_by',
         'updated_by'
     ];
