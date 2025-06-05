@@ -51,8 +51,21 @@ const routes = [
             },
             {
                 path: 'reports',
+                redirect: {name: 'app.reports.orders'},
                 name: 'app.reports',
-                component: () => import('../views/Reports.vue'),
+                component: () => import('../views/Reports/Reports.vue'),
+                children: [
+                    {
+                        path: 'customers',
+                        name: 'app.reports.customers',
+                        component: () => import('../views/Reports/CustomersReport.vue'),
+                    },
+                    {
+                        path: 'orders',
+                        name: 'app.reports.orders',
+                        component: () => import('../views/Reports/OrdersReport.vue'),
+                    }
+                ]
             },
         ]
     },

@@ -11,9 +11,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\{Customer, Product, Order};
+use App\Traits\ReportTrait;
 
 class DashboardController extends Controller
 {
+	use ReportTrait;
+
 	public function activeCustomers(): JsonResponse
 	{
 		$activeCustomers = Customer::where('status', '=', CustomerStatus::Active->value)->count('user_id');
@@ -95,23 +98,5 @@ class DashboardController extends Controller
 		});
 
 		return response()->json(['latest_orders' => $latestOrders]);
-	}
-
-	private function searchQueryResults(Request $request)
-	{
-		$queryValue = $request->get('dateQuery') ?? 'all';
-
-		$queryOptions = [
-			'1d' => Carbon::now()->subDays(),
-			'1w' => Carbon::now()->subWeek(),
-			'2w' => Carbon::now()->subWeeks(2),
-			'1m' => Carbon::now()->subMonth(),
-			'3m' => Carbon::now()->subMonths(3),
-			'6m' => Carbon::now()->subMonths(6),
-			'1y' => Carbon::now()->subYear(),
-			'all' => '0000-00-00'
-		];
-
-		return $queryOptions[$queryValue];
 	}
 }
