@@ -128,10 +128,10 @@
         <h4 class="text-xl 2xl:text-2xl font-semibold text-center mt-4">Orders by Country</h4>
 
         <template v-if="!loading.ordersByCountry">
-          <div v-if="ordersByCountry.length > 0">
+          <div v-if="ordersByCountry.labels.length > 0">
             <DoughnutChart :chartData="ordersByCountry" />
           </div>
-          <p v-else class="text-xl font-medium">No orders found</p>
+          <p v-else class="text-xl font-medium">{{ ordersByCountry.labels.length }} orders found</p>
         </template>
 
         <Spinner text="" class="bg-transparent" v-else />

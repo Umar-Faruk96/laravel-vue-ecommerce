@@ -22,7 +22,7 @@
     </div>
 
     <div
-      class="bg-black/10 p-4 rounded-lg shadow animate-fade-in-down"
+      class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg shadow animate-fade-in-down"
       style="animation-delay: 0.3s"
     >
       <router-view></router-view>

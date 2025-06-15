@@ -5,7 +5,7 @@
     <!--/ Sidebar -->
 
     <!-- Main Content -->
-    <section class="flex-1">
+    <section class="flex-1 overflow-hidden">
       <Navbar @toggleSidebar="toggleSidebar" />
       <main class="p-3 md:p-6">
         <div class="p-4 rounded bg-white/70 dark:bg-gray-600">
