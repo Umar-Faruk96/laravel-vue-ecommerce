@@ -19,7 +19,9 @@ trait ReportTrait
             '3m' => Carbon::now()->subMonths(3),
             '6m' => Carbon::now()->subMonths(6),
             '1y' => Carbon::now()->subYear(),
-            'all' => '0000-00-00'
+            'all' => Carbon::createFromDate(2025, 1, 1), // Assuming the system started from year 2000
+            // Set 'all' to the unix epoch start date
+            // 'all' => Carbon::createFromTimestamp(0), // Unix epoch start date
         ];
 
         return $queryOptions[$queryValue];

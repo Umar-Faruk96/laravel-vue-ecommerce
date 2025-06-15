@@ -41,4 +41,12 @@ class Order extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    /* public function casts(): array
+    {
+        return [
+            'created_at' => 'date:Y-m-d',
+            'updated_at' => 'date:Y-m-d',
+        ];
+    } */
 }
