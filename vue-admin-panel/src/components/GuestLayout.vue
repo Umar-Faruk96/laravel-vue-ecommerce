@@ -10,7 +10,7 @@ const { title } = defineProps({
 </script>
 
 <template>
-  <section class="flex flex-col min-h-screen bg-gray-200">
+  <section class="flex flex-col min-h-screen bg-gray-200 dark:bg-gray-900">
     <div class="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div class="sm:mx-auto sm:w-full sm:max-w-md">
         <!-- <img
@@ -18,7 +18,7 @@ const { title } = defineProps({
           src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&amp;shade=600"
           class="mx-auto h-10 w-auto"
         /> -->
-        <h2 class="mt-6 text-center text-2xl font-bold tracking-tight text-gray-700">
+        <h2 class="mt-6 text-center text-2xl font-bold tracking-tight text-gray-700 dark:text-gray-200">
           {{ title }}
         </h2>
       </div>
