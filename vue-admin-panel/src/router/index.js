@@ -51,19 +51,19 @@ const routes = [
             },
             {
                 path: 'reports',
-                redirect: {name: 'app.reports.orders'},
+                redirect: {name: 'app.reports.orders', query: {dateQuery: 'all'}},
                 name: 'app.reports',
                 component: () => import('../views/Reports/Reports.vue'),
                 children: [
                     {
-                        path: 'customers',
-                        name: 'app.reports.customers',
-                        component: () => import('../views/Reports/CustomersReport.vue'),
-                    },
-                    {
                         path: 'orders',
                         name: 'app.reports.orders',
                         component: () => import('../views/Reports/OrdersReport.vue'),
+                    },
+                    {
+                        path: 'customers',
+                        name: 'app.reports.customers',
+                        component: () => import('../views/Reports/CustomersReport.vue'),
                     }
                 ]
             },

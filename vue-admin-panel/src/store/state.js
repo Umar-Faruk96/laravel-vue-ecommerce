@@ -44,6 +44,16 @@ const state = {
         total: null
     },
     countries: [],
+    dateOptions: [
+        {key: '1d', value: 'Last Day'},
+        {key: '1w', value: 'Last Week'},
+        {key: '2w', value: 'Last 2 Weeks'},
+        {key: '1m', value: 'Last Month'},
+        {key: '3m', value: 'Last 3 Months'},
+        {key: '6m', value: 'Last 6 Months'},
+        {key: '1y', value: 'Last Year'},
+        {key: 'all', value: 'All Time'},
+    ],
     toast: {
         visible: false,
         delay: 5000,
