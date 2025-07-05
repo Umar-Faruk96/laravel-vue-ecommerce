@@ -1,6 +1,6 @@
 <template>
   <section class="flex items-center justify-center" :class>
-    <main class="flex flex-col items-center text-gray-700">
+    <main class="flex flex-col items-center text-gray-700 dark:text-gray-200">
       <svg class="animate-spin -ml-1 h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
         <path class="opacity-75" fill="currentColor"
