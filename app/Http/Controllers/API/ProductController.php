@@ -80,12 +80,12 @@ class ProductController extends Controller
         $productImage = $productData['image'] ?? null;
 
         if ($productImage) {
-            $productData = $this->checkProductImage($productImage, $productData);
-
             // delete old image
             if ($product->image) {
-                Storage::deleteDirectory('images/' . dirname($product->image));
+                Storage::deleteDirectory('images/' . basename(dirname($product->image), '/'));
             }
+
+            $productData = $this->checkProductImage($productImage, $productData);
         }
 
         $product->update($productData);
@@ -107,30 +107,12 @@ class ProductController extends Controller
     /**
      * @throws Exception
      */
-    private function storeImage(UploadedFile $image): string
-    {
-        $path = 'images/' . Str::random();
-
-        if (!Storage::exists($path)) {
-            Storage::makeDirectory($path);
-        }
-
-        if (!Storage::putFileAs($path, $image, $image->getClientOriginalName())) {
-            throw new Exception('Failed to store image');
-        }
-
-        return $path . '/' . $image->getClientOriginalName();
-    }
-
-    /**
-     * @throws Exception
-     */
     public function checkProductImage(UploadedFile $image, array $productData): array
     {
         if ($image) {
             $relativePath = $this->storeImage(image: $image);
 
-            $productData['image'] = URL::to(Storage::url($relativePath) /* add /storage in the URL */); // make URL absolute
+            $productData['image'] = URL::to(Storage::url($relativePath) /* add storage in the URL */); // make URL absolute
 
             $productData['image_mime'] = $image->getClientMimeType();
 
@@ -138,5 +120,23 @@ class ProductController extends Controller
         }
 
         return $productData;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function storeImage(UploadedFile $image): string
+    {
+        $path = 'images/' . Str::random();
+
+        /* if (!Storage::exists($path)) {
+            Storage::makeDirectory($path);
+        } */
+
+        if (!Storage::putFileAs($path, $image, $image->getClientOriginalName())) {
+            throw new Exception('Failed to store image');
+        }
+
+        return $path . '/' . $image->getClientOriginalName();
     }
 }
