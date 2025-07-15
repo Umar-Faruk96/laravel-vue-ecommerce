@@ -9,7 +9,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::where('published', true)->orderByDesc('created_at')->paginate(4);
+        $products = Product::where('published', true)->orderByDesc('created_at')->paginate(10);
         return view('products.index', compact('products'));
     }
 
