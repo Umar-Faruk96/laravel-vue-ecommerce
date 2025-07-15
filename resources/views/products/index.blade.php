@@ -3,7 +3,7 @@
         class="grid grig-cols-1 gap-8 p-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 text-gray-700 dark:text-gray-300">
         @if ($products->isEmpty())
             <div class="col-span-full text-center">
-                <h2 class="text-2xl font-bold">No Products Found</h2>
+                <h2 class="text-xl sm:text-3xl font-bold">No Products Found</h2>
                 <p class="mt-2 text-gray-600 dark:text-gray-400">Try searching for something else.</p>
             </div>
         @else
@@ -11,7 +11,7 @@
             <div
                 class="col-span-full flex flex-col md:flex-row items-center justify-center md:justify-between text-center md:text-left">
                 <div>
-                    <h2 class="text-xl sm:text-2xl font-bold">Newly Added Products</h2>
+                    <h2 class="text-xl sm:text-3xl font-bold">Newly Added Products</h2>
                     <p class="mt-2 text-gray-600 dark:text-gray-400 md:hidden">Explore our latest products.</p>
                 </div>
                 <button type="button" title="See Products" class="mt-4 md:mt-0">
