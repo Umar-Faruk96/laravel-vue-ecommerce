@@ -14,6 +14,7 @@
         >{{ prepend }}</span
       >
 
+      <!-- textarea -->
       <template v-if="type === 'textarea'">
         <textarea
           :name
@@ -24,6 +25,7 @@
         ></textarea>
       </template>
 
+      <!-- file input -->
       <template v-else-if="type === 'file'">
         <input
           :type
@@ -34,10 +36,12 @@
         />
       </template>
 
+      <!-- number input -->
       <template v-else-if="type === 'number'">
         <input
           :type
           :name
+          :id
           :required
           v-model="number"
           :class="inputClasses"
@@ -45,6 +49,7 @@
         />
       </template>
 
+      <!-- email input -->
       <template v-else-if="type === 'email'">
         <input
           :type
@@ -57,6 +62,7 @@
         />
       </template>
 
+      <!-- password input -->
       <template v-else-if="type === 'password'">
         <input
           :type
@@ -68,9 +74,20 @@
         />
       </template>
 
+      <template v-else-if="name === 'password_confirmation'">
+        <input
+          type="password"
+          :name
+          :required
+          v-model="confirmPassword"
+          :class="inputClasses"
+          :placeholder="label"
+        />
+      </template>
+
+      <!-- checkbox input -->
       <template v-else-if="type === 'checkbox'">
         <!--<pre class="dark:text-gray-600">{{ status }}</pre>-->
-
         <input
           :id="`${name}-${id}`"
           :type
@@ -87,17 +104,7 @@
         >
       </template>
 
-      <template v-else-if="name === 'password_confirmation'">
-        <input
-          type="password"
-          :name
-          :required
-          v-model="confirmPassword"
-          :class="inputClasses"
-          :placeholder="label"
-        />
-      </template>
-
+      <!-- text input -->
       <template v-else-if="name === 'first_name'">
         <input
           :type
@@ -124,9 +131,10 @@
 
       <template v-else>
         <input
-          :type="type"
-          :name="name"
-          :required="required"
+          :type
+          :name
+          :id
+          :required
           v-model="title"
           :class="inputClasses"
           :placeholder="label"

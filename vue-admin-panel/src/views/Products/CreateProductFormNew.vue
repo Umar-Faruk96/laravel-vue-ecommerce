@@ -55,7 +55,13 @@
 
               <form @submit.prevent="submit">
                 <main class="bg-white/80 dark:bg-gray-500 px-4 pt-5 pb-4 space-y-4">
-                  <CustomInputNew v-model:title="product.title" label="Product Title" />
+                  <CustomInputNew
+                    v-model:title="product.title"
+                    label="Product Title"
+                    name="product_title"
+                    id="product_title"
+                    required
+                  />
 
                   <CustomInputNew
                     type="file"
@@ -71,6 +77,9 @@
 
                   <CustomInputNew
                     type="number"
+                    name="price"
+                    id="product-price"
+                    required="true"
                     v-model:number="product.price"
                     label="Price"
                     prepend="&#2547;"
@@ -78,7 +87,8 @@
 
                   <div class="flex items-center gap-2">
                     <input
-                      :id="product.id || 'product-status'"             type="checkbox"
+                      :id="product.id || 'product-status'"
+                      type="checkbox"
                       :name="product.title || 'product-status'"
                       v-model="product.published"
                       class="w-5 h-5 appearance-none bg-gray-300 hover:bg-gray-500 dark:bg-gray-700 dark:hover:bg-gray-600 rounded checked:bg-indigo-700 checked:hover:bg-indigo-700 checked:focus:ring-2 checked:ring-indigo-700 checked:ring-offset-2 relative checked:after:absolute checked:after:top-1/2 checked:after:left-1/2 checked:after:content-['✔'] checked:after:-translate-x-1/2 checked:after:-translate-y-1/2 transition-all"

@@ -55,8 +55,10 @@ class ProductController extends Controller
 
         $productImage = $productData['image'] ?? null;
 
-        // check if image is provided, then store it
-        $productData = $this->checkProductImage($productImage, $productData);
+        if ($productImage && $productImage instanceof UploadedFile) {
+            $productData = $this->checkProductImage($productImage, $productData);
+        }
+
 
         $product = Product::create($productData);
 
@@ -79,7 +81,7 @@ class ProductController extends Controller
 
         $productImage = $productData['image'] ?? null;
 
-        if ($productImage) {
+        if ($productImage && $productImage instanceof UploadedFile) {
             // delete old image
             if ($product->image) {
                 Storage::deleteDirectory('images/' . basename(dirname($product->image), '/'));
