@@ -21,6 +21,10 @@ document.addEventListener("alpine:init", async () => {
         close() {
             this.visible = false;
             clearInterval(this.interval);
+            clearTimeout(this.timeout);
+            this.interval = null;
+            this.timeout = null;
+            this.percent = 0;
         },
 
         show(message) {

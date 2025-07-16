@@ -7,7 +7,6 @@
                 <p class="mt-2 text-gray-600 dark:text-gray-400">Try searching for something else.</p>
             </div>
         @else
-            {{-- Make heading of newly added products with a button to show all products in the shop page --}}
             <div
                 class="col-span-full flex flex-col md:flex-row items-center justify-center md:justify-between text-center md:text-left">
                 <div>

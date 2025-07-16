@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => \App\Http\Middleware\Admin::class,
             'guestOrVerified' => \App\Http\Middleware\GuestOrVerified::class,
             'validateCsrfToken' => \App\Http\Middleware\ValidateCsrfToken::class,
+            'noCache' => \App\Http\Middleware\NoCache::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

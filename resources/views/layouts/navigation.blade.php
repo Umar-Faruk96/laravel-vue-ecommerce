@@ -6,7 +6,7 @@
     <div>
         <a href="{{ route('home') }}" class="py-navbar-item block pl-5"> Logo </a>
     </div>
-    <!-- Responsive Menu -->
+    <!-- Mobile Menu -->
     <div class="height fixed bottom-0 top-0 z-10 block h-full w-[220px] bg-slate-900 transition-all md:hidden"
         :class="mobileMenuOpen ? 'left-0' : '-left-[220px]'">
         <ul>
@@ -103,7 +103,7 @@
             @endauth
         </ul>
     </div>
-    <!--/ Responsive Menu -->
+    <!--/ Mobile Menu -->
     <nav class="hidden md:block">
         <ul class="grid grid-flow-col items-center">
             <li>
