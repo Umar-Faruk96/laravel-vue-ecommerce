@@ -41,7 +41,7 @@
         <input
           :type
           :name
-          :id
+          :idFor
           :required
           v-model="number"
           :class="inputClasses"
@@ -133,7 +133,7 @@
         <input
           :type
           :name
-          :id
+          :idFor
           :required
           v-model="title"
           :class="inputClasses"

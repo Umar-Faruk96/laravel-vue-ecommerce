@@ -59,7 +59,7 @@
                     v-model:title="product.title"
                     label="Product Title"
                     name="product_title"
-                    id="product_title"
+                    id-for="product_title"
                     required
                   />
 
@@ -78,8 +78,8 @@
                   <CustomInputNew
                     type="number"
                     name="price"
-                    id="product-price"
-                    required="true"
+                    id-for="product-price"
+                    required
                     v-model:number="product.price"
                     label="Price"
                     prepend="&#2547;"

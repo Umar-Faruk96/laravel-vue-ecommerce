@@ -57,7 +57,7 @@ export const createProduct = ({ commit }, product) => {
         formData.append('description', product.description);
         formData.append('image', product.image);
         formData.append('price', product.price);
-        formData.append('published', product.published);
+        formData.append('published', product.published ? 1 : 0);
         product = formData;
     } else {
         product = { ...product };
@@ -76,7 +76,7 @@ export const updateProduct = async ({ commit }, product) => {
         formData.append('description', product.description);
         formData.append('image', product.image);
         formData.append('price', product.price);
-        formData.append('published', product.published);
+        formData.append('published', product.published ? 1 : 0);
         formData.append('_method', 'PUT');
         product = formData;
     } else {
