@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="container mx-auto lg:w-2/3 xl:w-2/3">
-        <h1 class="mb-6 text-3xl font-bold">Your Cart Items</h1>
+        <h1 class="mb-6 text-3xl font-bold dark:text-gray-200">Your Cart Items</h1>
 
         {{-- @dump($cartItems) --}}
 

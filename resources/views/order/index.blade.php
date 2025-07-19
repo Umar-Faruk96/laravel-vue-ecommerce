@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="container mx-auto p-5 lg:w-2/3">
-        <h1 class="mb-2 text-3xl font-bold dark:text-gray-200">My Orders</h1>
+        <h1 class="mb-6 text-3xl font-bold dark:text-gray-200">My Orders</h1>
 
         <div class="overflow-x-auto rounded-lg bg-white p-3">
             <table class="w-full table-auto">
