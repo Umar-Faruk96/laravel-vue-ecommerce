@@ -6,7 +6,7 @@ enum OrderStatus: string
 {
     case Unpaid = 'unpaid';
     case Pending = 'pending';
-    case Canceled = 'canceled';
+    case Cancelled = 'cancelled';
     case Paid = 'paid';
     case Shipped = 'shipped';
     case Completed = 'completed';
@@ -16,7 +16,7 @@ enum OrderStatus: string
         return [
             self::Unpaid->value => 'unpaid',
             self::Pending->value => 'pending',
-            self::Canceled->value => 'canceled',
+            self::Cancelled->value => 'cancelled',
             self::Paid->value => 'paid',
             self::Shipped->value => 'shipped',
             self::Completed->value => 'completed',

@@ -35,7 +35,7 @@
 
             <hr class="my-5" />
 
-            @foreach ($order->items as $item)
+            @foreach ($order->items()->with('product')->get() as $item)
                 <!-- Order Item -->
                 <div class="flex flex-col items-center gap-4 sm:flex-row">
                     <a href="{{ route('product.show', $item->product) }}"

@@ -9,7 +9,7 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        $orders = Order::query()
+        $orders = Order::withCount('items')
             ->where(['created_by' => $request->user()->id])
             ->orderBy('created_at', 'desc')
             ->paginate(10);

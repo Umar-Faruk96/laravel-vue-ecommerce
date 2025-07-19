@@ -14,13 +14,19 @@ class ProfileController extends Controller
 
         // dd($customer);
 
-        $shippingAddress = $customer->shippingAddress ?: new CustomerAddress(['type' => AddressType::Shipping]);
-
-        $billingAddress = $customer->billingAddress ?: new CustomerAddress(['type' => AddressType::Billing]);
+        if ($customer) {
+            $shippingAddress = $customer->shippingAddress ?: new CustomerAddress(['type' => AddressType::Shipping]);
+    
+            $billingAddress = $customer->billingAddress ?: new CustomerAddress(['type' => AddressType::Billing]);
+        }
 
         $countries = Country::query()->orderBy('name')->get();
 
-        return view('profile.show', compact('user', 'customer', 'shippingAddress', 'billingAddress', 'countries'));
+        if ($customer) {
+            return view('profile.show', compact('user', 'customer', 'shippingAddress', 'billingAddress', 'countries'));
+        }
+
+        return view('profile.show', compact('user', 'countries'));
     }
 
     public function store(ProfileRequest $request) : RedirectResponse
