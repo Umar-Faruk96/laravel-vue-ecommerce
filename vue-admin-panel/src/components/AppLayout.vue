@@ -47,7 +47,7 @@ const makeSidebarResponsive = () => {
 
 onMounted(() => {
   store.dispatch("getUser");
-  store.dispatch('getCountries');
+  // store.dispatch('getCountries');
   makeSidebarResponsive();
   window.addEventListener("resize", makeSidebarResponsive);
 });

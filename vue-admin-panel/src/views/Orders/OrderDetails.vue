@@ -3,14 +3,14 @@
   <template v-else>
     <div v-if="order" class="bg-black/10 p-4 rounded-lg shadow animate-fade-in-down">
       <div class="flex items-center justify-between mb-3">
-        <h1 class="text-black/60 text-3xl font-semibold">Order Summary</h1>
+        <h1 class="text-black/60 dark:text-white/70 text-3xl font-semibold">Order Summary</h1>
 
         <OrderStatus :order="order" />
 
         <!-- <pre>{{ order }}</pre> -->
       </div>
 
-      <div class="text-black/60 bg-black/10 p-4 rounded-lg shadow">
+      <div class="text-black/60 dark:text-white/60 bg-black/10 p-4 rounded-lg shadow">
         <!-- Order Details -->
         <div class="flex justify-between">
           <!--  Order Info-->
@@ -148,7 +148,7 @@
         <!--  Go to Orders -->
         <router-link
             :to="{name: 'app.orders'}"
-            class="mt-8 flex items-center gap-2 text-gray-600 font-medium hover:text-indigo-600 transition-all"
+            class="mt-8 flex items-center gap-2 text-gray-600 dark:text-indigo-300 font-medium hover:text-indigo-600 hover:dark:text-indigo-400 transition-all"
         >
           <ArrowLeftIcon class="size-6" />
           <span>Back to Orders</span>

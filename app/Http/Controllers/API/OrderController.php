@@ -16,7 +16,7 @@ class OrderController extends Controller
         $search = $request->get('search', '');
         $sortBy = $request->get('sort_by', 'created_at');
         $sortTo = $request->get('sort_to', 'desc');
-        $query = Order::query()->orderBy($sortBy, $sortTo);
+        $query = Order::query()->withCount('items')->with('user.customer.shippingAddress.country', 'user.customer.billingAddress.country')->orderBy($sortBy, $sortTo);
 
         if ($search) {
             $query->where('id', 'like', "%$search%");
@@ -27,6 +27,11 @@ class OrderController extends Controller
 
     public function show(Order $order): JsonResource
     {
+        $order = $order->load([
+            'items.product',
+            'user.customer.shippingAddress.country',
+            'user.customer.billingAddress.country'
+        ]);
         return OrderResource::make($order);
     }
 
