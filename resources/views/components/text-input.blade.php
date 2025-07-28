@@ -29,7 +29,7 @@
                 ($errors->has($attributeName) ? $errorClasses : (old($attributeName) ? $successClasses : $defaultClasses)),
         ]) !!} type="{{ $type }}">
     @endif
-    @error($attributeName)
+    {{-- @error($attributeName)
         <small class="text-red-600"> {{ $message }}</small>
-    @enderror
+    @enderror --}}
 </div>

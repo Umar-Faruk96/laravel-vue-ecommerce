@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\{User, Customer};
 use App\Helpers\Cart;
-use Illuminate\{View\View, Http\Request, Support\Facades\Auth, Support\Facades\Hash, Http\RedirectResponse, Auth\Events\Registered, Validation\Rules\Password};
+use App\Models\{User, Customer};
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\{View\View, Http\Request, Support\Facades\Auth, Support\Facades\Hash, Http\RedirectResponse, Auth\Events\Registered, Validation\Rules\Password};
 
 class RegisteredUserController extends Controller
 {
@@ -30,23 +31,30 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Password::defaults()],
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        DB::beginTransaction();
+        try {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
 
-        event(new Registered($user));
+            event(new Registered($user));
 
-        $customer = new Customer();
-        $customerNames = explode(' ', $user->name);
-        $customer->user_id = $user->id;
-        $customer->first_name = $customerNames[0];
-        $customer->last_name = $customerNames[1];
-        $customer->email = $user->email;
-        $customer->save();
+            $customer = new Customer();
+            $customerNames = explode(' ', $user->name);
+            $customer->user_id = $user->id;
+            $customer->first_name = $customerNames[0];
+            $customer->last_name = $customerNames[1];
+            $customer->email = $user->email;
+            $customer->save();
 
-        Auth::login($user);
+            Auth::login($user);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->withInput()->withErrors(['error' => 'Registration failed. Please try again later.']);
+        }
+        DB::commit();
 
         Cart::moveCartItemsIntoDB();
 

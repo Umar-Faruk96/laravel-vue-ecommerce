@@ -11,6 +11,13 @@
                 account</a>
         </p>
 
+        {{-- General Error --}}
+        @session('errors')
+            <div class="mb-4 rounded-md bg-red-500 text-gray-100 p-3">
+                <p>{{ session('errors')->first() }}</p>
+            </div>
+        @endsession
+
         <!-- Name -->
         <div class="mb-4">
             <x-text-input placeholder="Your name" type="text" name="name" :value="old('name')" required autofocus
