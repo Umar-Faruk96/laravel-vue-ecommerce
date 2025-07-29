@@ -11,6 +11,7 @@ use App\Enums\{OrderStatus, PaymentStatus};
 use App\Models\{Order, Payment, CartItem, OrderItem};
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\{View\View, Http\Request, Routing\Redirector, Http\RedirectResponse};
+use Illuminate\Support\Facades\DB;
 
 class CheckoutController extends Controller
 {
@@ -59,33 +60,41 @@ class CheckoutController extends Controller
             'cancel_url' => route('checkout.cancel', [], true),
         ]);
 
-        // Create Order
-        $orderData = [
-            'total_price' => $totalPrice,
-            'status' => OrderStatus::Unpaid,
-            'created_by' => $user->id,
-            'updated_by' => $user->id,
-        ];
-        $order = Order::create($orderData);
-
-        // Create Order Items
-        foreach ($orderItems as $orderItem) {
-            $orderItem['order_id'] = $order->id;
-            OrderItem::create($orderItem);
+        DB::beginTransaction();
+        try {
+            // Create Order
+            $orderData = [
+                'total_price' => $totalPrice,
+                'status' => OrderStatus::Unpaid,
+                'created_by' => $user->id,
+                'updated_by' => $user->id,
+            ];
+            $order = Order::create($orderData);
+    
+            // Create Order Items
+            foreach ($orderItems as $orderItem) {
+                $orderItem['order_id'] = $order->id;
+                OrderItem::create($orderItem);
+            }
+    
+            // Create Payment
+            $paymentData = [
+                'order_id' => $order->id,
+                'amount' => $totalPrice,
+                'status' => PaymentStatus::Pending,
+                'gateway' => 'stripe',
+                'type' => 'cc',
+                'created_by' => $user->id,
+                'updated_by' => $user->id,
+                'session_id' => $checkout_session->id
+            ];
+            Payment::create($paymentData);
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            // return redirect()->back()->withErrors(['error' => 'Failed to create order: ' . $exception->getMessage()]);
+            throw new \Exception('Failed to create order: ' . $exception->getMessage());
         }
-
-        // Create Payment
-        $paymentData = [
-            'order_id' => $order->id,
-            'amount' => $totalPrice,
-            'status' => PaymentStatus::Pending,
-            'gateway' => 'stripe',
-            'type' => 'cc',
-            'created_by' => $user->id,
-            'updated_by' => $user->id,
-            'session_id' => $checkout_session->id
-        ];
-        Payment::create($paymentData);
+        DB::commit();
 
         CartItem::where(['user_id' => $user->id])->delete();
 
