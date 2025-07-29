@@ -28,7 +28,7 @@ class UpdateCustomerRequest extends FormRequest
 		return [
 			'first_name' => ['required', 'string', 'min:3', 'max:50'],
 			'last_name' => ['required', 'string', 'min:3', 'max:50'],
-			'phone' => ['required', 'numeric', 'digits_between:7,11'],
+			'phone' => ['required', 'numeric', 'digits_between:7,13'],
 			'email' => ['required', 'email', 'string', 'lowercase', 'max:255', Rule::unique(Customer::class)->ignore($customer->user_id, 'user_id')],
 			'status' => ['required', 'boolean', /*Rule::enum(CustomerStatus::class)*/],
 			
