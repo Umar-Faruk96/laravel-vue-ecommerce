@@ -1,5 +1,8 @@
 <template>
-  <section v-if="loggedInUser.id" class="block sm:flex min-h-screen bg-white/75 dark:bg-gray-700">
+  <section
+    v-if="loggedInUser.id"
+    class="block sm:flex min-h-screen bg-white/75 dark:bg-gray-700"
+  >
     <!-- Sidebar -->
     <Sidebar :class="{ 'hidden xl:-ml-60': !showSidebar }" />
     <!--/ Sidebar -->
@@ -25,7 +28,7 @@
 </template>
 
 <script setup>
-import {ref, onMounted, onUnmounted, computed} from "vue";
+import { ref, onMounted, onUnmounted, computed } from "vue";
 
 import Sidebar from "./Sidebar.vue";
 import Navbar from "./Navbar.vue";
@@ -47,7 +50,6 @@ const makeSidebarResponsive = () => {
 
 onMounted(() => {
   store.dispatch("getUser");
-  // store.dispatch('getCountries');
   makeSidebarResponsive();
   window.addEventListener("resize", makeSidebarResponsive);
 });
