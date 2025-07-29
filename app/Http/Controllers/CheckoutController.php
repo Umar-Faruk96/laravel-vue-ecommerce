@@ -183,13 +183,20 @@ class CheckoutController extends Controller
 
     private function updateOrderAndSession(Payment $payment)
     {
-        $payment->status = PaymentStatus::Paid;
-        $payment->update();
-
-        $order = $payment->order;
-
-        $order->status = OrderStatus::Paid;
-        $order->update();
+        DB::beginTransaction();
+        try {
+            $payment->status = PaymentStatus::Paid;
+            $payment->update();
+    
+            $order = $payment->order;
+    
+            $order->status = OrderStatus::Paid;
+            $order->update();
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            throw new \Exception('Failed to update order and session: ' . $exception->getMessage());
+        }
+        DB::commit();
 
         $adminUsers = User::where('is_admin', 1)->get();
 
