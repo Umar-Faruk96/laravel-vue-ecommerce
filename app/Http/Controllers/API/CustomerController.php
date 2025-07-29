@@ -74,6 +74,7 @@ class CustomerController extends Controller
 				'customer_data' => $customerData,
 				'user_id' => request()->user()->id
 			]);
+			
 			throw  new \Exception('Error creating customer: ' . $exception->getMessage());
 		}
 		DB::commit();
@@ -108,6 +109,7 @@ class CustomerController extends Controller
 				'customer_data' => $customerData,
 				'user_id' => request()->user()->id
 			]);
+
 			throw new \Exception('Error updating customer: ' . $exception->getMessage());
 		}
 		DB::commit();

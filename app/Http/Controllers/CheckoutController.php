@@ -12,6 +12,7 @@ use App\Models\{Order, Payment, CartItem, OrderItem};
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\{View\View, Http\Request, Routing\Redirector, Http\RedirectResponse};
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CheckoutController extends Controller
 {
@@ -70,13 +71,13 @@ class CheckoutController extends Controller
                 'updated_by' => $user->id,
             ];
             $order = Order::create($orderData);
-    
+
             // Create Order Items
             foreach ($orderItems as $orderItem) {
                 $orderItem['order_id'] = $order->id;
                 OrderItem::create($orderItem);
             }
-    
+
             // Create Payment
             $paymentData = [
                 'order_id' => $order->id,
@@ -91,6 +92,14 @@ class CheckoutController extends Controller
             Payment::create($paymentData);
         } catch (\Exception $exception) {
             DB::rollBack();
+            Log::critical('Failed to create order, order items and payment', [
+                'user_id' => $user->id,
+                'order_data' => $orderData,
+                'order_items' => $orderItems,
+                'payment_data' => $paymentData,
+                'error' => $exception->getMessage()
+            ]);
+
             // return redirect()->back()->withErrors(['error' => 'Failed to create order: ' . $exception->getMessage()]);
             throw new \Exception('Failed to create order: ' . $exception->getMessage());
         }
@@ -187,21 +196,36 @@ class CheckoutController extends Controller
         try {
             $payment->status = PaymentStatus::Paid;
             $payment->update();
-    
+
             $order = $payment->order;
-    
+
             $order->status = OrderStatus::Paid;
             $order->update();
         } catch (\Exception $exception) {
             DB::rollBack();
-            throw new \Exception('Failed to update order and session: ' . $exception->getMessage());
+            Log::critical('Failed to update order and payment status', [
+                'payment_id' => $payment->id,
+                'order_id' => $order->id,
+                'error' => $exception->getMessage()
+            ]);
+
+            throw new \Exception('Failed to update order and payment status: ' . $exception->getMessage());
         }
         DB::commit();
 
         $adminUsers = User::where('is_admin', 1)->get();
 
-        foreach ([...$adminUsers, $order->user] as $user) {
-            Mail::to($user)->send(new OrderCreated($order, (bool)$user->is_admin));
+        try {
+            foreach ([...$adminUsers, $order->user] as $user) {
+                Mail::to($user)->send(new OrderCreated($order, (bool)$user->is_admin));
+            }
+        } catch (\Exception $exception) {
+            Log::critical('Failed to send order created email', [
+                'order_id' => $order->id,
+                'error' => $exception->getMessage()
+            ]);
+
+            throw new \Exception('Failed to send order created email: ' . $exception->getMessage());
         }
     }
 }

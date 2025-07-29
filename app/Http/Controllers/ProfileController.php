@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\{Models\Country, Models\CustomerAddress, Enums\AddressType, Http\Requests\ProfileRequest, Http\Requests\PasswordUpdateRequest};
 use Illuminate\{Http\RedirectResponse, Http\Request, Support\Facades\Redirect, Support\Facades\Hash, View\View};
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ProfileController extends Controller
 {
@@ -17,7 +18,7 @@ class ProfileController extends Controller
 
         if ($customer) {
             $shippingAddress = $customer->shippingAddress ?: new CustomerAddress(['type' => AddressType::Shipping]);
-    
+
             $billingAddress = $customer->billingAddress ?: new CustomerAddress(['type' => AddressType::Billing]);
         }
 
@@ -30,27 +31,35 @@ class ProfileController extends Controller
         return view('profile.show', compact('user', 'countries'));
     }
 
-    public function store(ProfileRequest $request) : RedirectResponse
+    public function store(ProfileRequest $request): RedirectResponse
     {
         DB::beginTransaction();
         try {
             $customerData = $request->validated();
-    
+
             // dd($customerData);
-    
+
             $shippingData = $customerData['shipping'];
             $billingData = $customerData['billing'];
-    
+
             // dd($shippingData, $billingData);
-    
+
             $customer = $request->user()->customer;
             $request->user()->update(['email' => $customerData['email'], 'name' => $customerData['first_name'] . ' ' . $customerData['last_name']]);
             $customer->update($customerData);
-    
+
             $customer->shippingAddress()->updateOrCreate(['customer_id' => $customer->user_id, 'type' => AddressType::Shipping], $shippingData);
             $customer->billingAddress()->updateOrCreate(['customer_id' => $customer->user_id, 'type' => AddressType::Billing], $billingData);
         } catch (\Exception $exception) {
             DB::rollBack();
+            Log::error('Failed to update profile', [
+                'user_id' => $request->user()->id,
+                'customer_data' => $customerData,
+                'shipping_data' => $shippingData,
+                'billing_data' => $billingData,
+                'error' => $exception->getMessage()
+            ]);
+
             // return redirect()->back()->withErrors(['error' => 'Failed to update profile: ' . $exception->getMessage()]);
             throw new \Exception('Failed to update profile: ' . $exception->getMessage());
         }
