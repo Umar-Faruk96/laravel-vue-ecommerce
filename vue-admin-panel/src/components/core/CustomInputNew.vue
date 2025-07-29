@@ -4,7 +4,7 @@
       label
     }}</label>
 
-    <div class="mt-3 flex rounded-md shadow-sm items-stretch">
+    <div class="flex rounded-md shadow-sm items-stretch">
       <span
         v-if="prepend"
         :class="[
@@ -99,7 +99,11 @@
 
         <label
           :for="`${name}-${id}`"
-          class="ml-2 block text-gray-900 font-medium dark:text-gray-600 capitalize"
+          class="ml-2 block font-medium capitalize cursor-pointer"
+          :class="{
+            'text-gray-400': !status,
+            'text-indigo-700 dark:text-indigo-200': status,
+          }"
           >{{ name }}</label
         >
       </template>

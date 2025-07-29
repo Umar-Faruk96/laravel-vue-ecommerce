@@ -28,7 +28,7 @@
       <form @submit.prevent="submit">
         <main class="bg-white/80 dark:bg-gray-700 px-4 pt-5 pb-4 space-y-8 rounded">
           <!-- Customer Info -->
-          <section class="space-y-2">
+          <section class="space-y-3">
             <!--<pre class="dark:text-gray-600">{{ customer }}</pre>-->
             <!--<pre class="dark:text-gray-600">{{ customer.status }}</pre>-->
             <!--<pre class="dark:text-gray-600">{{ countries }}</pre>-->
@@ -43,7 +43,7 @@
               <div class="flex text-gray-500 items-center gap-3">
                 <label
                   for="first_name"
-                  class="w-1/4 sm:w-auto mt-3 text-sm sm:text-base font-medium dark:text-gray-300"
+                  class="w-1/4 sm:w-auto text-sm sm:text-base font-medium text-gray-500 dark:text-gray-300"
                   >First Name:</label
                 >
                 <CustomInputNew
@@ -59,7 +59,7 @@
               <div class="flex text-gray-500 items-center gap-3">
                 <label
                   for="last_name"
-                  class="w-1/4 sm:w-auto mt-3 text-sm sm:text-base font-medium dark:text-gray-300"
+                  class="w-1/4 sm:w-auto text-sm sm:text-base font-medium text-gray-500 dark:text-gray-300"
                   >Last Name:</label
                 >
                 <CustomInputNew
@@ -77,7 +77,7 @@
               <div class="flex text-gray-500 items-center gap-3">
                 <label
                   for="email"
-                  class="mt-3 text-sm sm:text-base font-medium dark:text-gray-300"
+                  class="text-sm sm:text-base font-medium text-gray-500 dark:text-gray-300"
                   >Email:</label
                 >
                 <CustomInputNew
@@ -91,10 +91,10 @@
                 />
               </div>
 
-              <div class="flex text-gray-500 items-center gap-3">
+              <div class="flex text-gray-500 items-center gap-3 overflow-hidden">
                 <label
                   for="phone"
-                  class="mt-3 text-sm sm:text-base font-medium dark:text-gray-300"
+                  class="text-sm sm:text-base font-medium text-gray-500 dark:text-gray-300"
                   >Phone:</label
                 >
                 <input
@@ -103,7 +103,7 @@
                   name="phone"
                   id="phone"
                   required
-                  class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                  class="px-3 py-2 border border-black/30 dark:border-black/15 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
                   placeholder="Phone Number"
                 />
                 <small
@@ -116,7 +116,7 @@
               <div class="flex items-center gap-3">
                 <label
                   :for="`${customer.status ? 'active' : 'inactive'}-${customer.id}`"
-                  class="mt-3 text-gray-500 font-medium"
+                  class="text-sm sm:text-base font-medium text-gray-500 dark:text-gray-300"
                   >Status:</label
                 >
                 <CustomInputNew
@@ -134,18 +134,23 @@
 
           <!-- Billing Address -->
           <section class="space-y-4">
-            <h3 class="text-lg font-semibold dark:text-gray-600">Billing Address</h3>
+            <h3 class="text-lg font-semibold text-gray-600 dark:text-gray-300">
+              Billing Address
+            </h3>
 
-            <div class="flex gap-3 flex-1 text-gray-500">
-              <div class="w-1/3 space-y-2">
-                <label for="house_number" class="font-medium">House Number:</label>
+            <div
+              class="flex flex-col sm:flex-row gap-3 flex-1 text-gray-500 dark:text-gray-300 text-sm sm:text-base font-medium"
+            >
+              <!-- House Number -->
+              <div class="sm:w-1/3 space-y-2">
+                <label for="house_number" class="block">House Number:</label>
                 <input
                   type="text"
                   v-model="customer.billingAddress.house_number"
                   name="house_number"
                   id="house_number"
                   required
-                  class="block w-full px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                  class="block px-3 py-2 border border-black/30 dark:border-black/15 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
                   placeholder="House Number"
                 />
                 <small
@@ -157,16 +162,18 @@
                   >{{ errors["billingAddress.house_number"][0] }}</small
                 >
               </div>
+              <!-- / House Number -->
 
-              <div class="w-1/3 space-y-2">
-                <label for="area" class="font-medium">Area:</label>
+              <!-- Area -->
+              <div class="sm:w-1/3 space-y-2">
+                <label for="area" class="block">Area:</label>
                 <input
                   type="text"
                   v-model="customer.billingAddress.area"
                   name="area"
                   id="area"
                   required
-                  class="block w-full px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                  class="block px-3 py-2 border border-black/30 dark:border-black/15 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
                   placeholder="Area"
                 />
                 <small
@@ -175,16 +182,18 @@
                   >{{ errors["billingAddress.area"][0] }}</small
                 >
               </div>
+              <!-- / Area -->
 
-              <div class="w-1/3 space-y-2">
-                <label for="city" class="font-medium">City:</label>
+              <!-- City -->
+              <div class="sm:w-1/3 space-y-2">
+                <label for="city" class="block">City:</label>
                 <input
                   type="text"
                   v-model="customer.billingAddress.city"
                   name="city"
                   id="city"
                   required
-                  class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                  class="block px-3 py-2 border border-black/30 dark:border-black/15 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
                   placeholder="City"
                 />
 
@@ -194,18 +203,22 @@
                   >{{ errors["billingAddress.city"][0] }}</small
                 >
               </div>
+              <!-- / City -->
             </div>
 
-            <div class="flex gap-3 flex-1 text-gray-500">
-              <div class="w-1/3 space-y-2">
-                <label for="zip_code" class="font-medium">Zip Code:</label>
+            <div
+              class="flex flex-col sm:flex-row gap-3 flex-1 text-gray-500 dark:text-gray-300 text-sm sm:text-base font-medium"
+            >
+              <!-- Zip Code -->
+              <div class="sm:w-1/3 space-y-2">
+                <label for="zip_code" class="block">Zip Code:</label>
                 <input
                   type="text"
                   v-model="customer.billingAddress.zip_code"
                   name="zip_code"
                   id="zip_code"
                   required
-                  class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                  class="block px-3 py-2 border border-black/30 dark:border-black/15 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
                   placeholder="Zip Code"
                 />
                 <small
@@ -217,15 +230,17 @@
                   >{{ errors["billingAddress.zip_code"][0] }}</small
                 >
               </div>
+              <!-- / Zip Code -->
 
-              <div class="w-1/3 space-y-2">
-                <label for="country_code" class="font-medium">Country:</label>
+              <!-- Country -->
+              <div class="sm:w-1/3 space-y-2">
+                <label for="country_code" class="block">Country:</label>
                 <select
                   v-model="customer.billingAddress.country_code"
                   name="country_code"
                   id="country_code"
                   required
-                  class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                  class="block px-3 py-2 border border-black/30 dark:border-black/15 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
                 >
                   <option v-for="country of countries" :value="country.code">
                     {{ country.name }}
@@ -241,28 +256,34 @@
                   >{{ errors["billingAddress.country_code"][0] }}</small
                 >
               </div>
+              <!-- / Country -->
 
+              <!-- State -->
               <div class="w-1/3 space-y-2">
                 <template v-if="billingCountry && !billingCountry.states">
-                  <label for="state" class="font-medium">State:</label>
+                  <label for="state" class="block">State:</label>
                   <input
                     type="text"
                     name="state"
                     required
                     placeholder="State"
                     v-model="customer.billingAddress.state"
-                    class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                    class="block px-3 py-2 border border-black/30 dark:border-black/15 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
                   />
                 </template>
 
                 <template v-else>
-                  <label for="state" class="font-medium">State:</label>
+                  <label
+                    for="state"
+                    class="block text-sm sm:text-base font-medium text-gray-500 dark:text-gray-300"
+                    >State:</label
+                  >
                   <select
                     v-model="customer.billingAddress.state"
                     name="state"
                     id="state"
                     required
-                    class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                    class="block px-3 py-2 border border-black/30 dark:border-black/15 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
                   >
                     <option v-for="state of billingStates" :value="state.key">
                       {{ state.value }}
@@ -278,24 +299,30 @@
                   >{{ errors["billingAddress.state"][0] }}</small
                 >
               </div>
+              <!-- / State -->
             </div>
           </section>
           <!--/ Billing Address -->
 
           <!-- Shipping Address -->
           <section class="space-y-4">
-            <h3 class="text-lg font-semibold dark:text-gray-600">Shipping Address</h3>
+            <h3 class="text-lg font-semibold text-gray-600 dark:text-gray-300">
+              Shipping Address
+            </h3>
 
-            <div class="flex gap-3 flex-1 text-gray-500">
-              <div class="w-1/3 space-y-2">
-                <label for="house_number" class="font-medium">House Number:</label>
+            <div
+              class="flex flex-col sm:flex-row gap-3 flex-1 text-gray-500 dark:text-gray-300 text-sm sm:text-base font-medium"
+            >
+              <!-- House Number -->
+              <div class="sm:w-1/3 space-y-2">
+                <label for="house_number" class="block">House Number:</label>
                 <input
                   type="text"
                   v-model="customer.shippingAddress.house_number"
                   name="house_number"
                   id="house_number"
                   required
-                  class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                  class="block px-3 py-2 border border-black/30 dark:border-black/15 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
                   placeholder="House Number"
                 />
 
@@ -308,16 +335,18 @@
                   >{{ errors["shippingAddress.house_number"][0] }}</small
                 >
               </div>
+              <!-- / House Number -->
 
-              <div class="w-1/3 space-y-2">
-                <label for="area" class="font-medium">Area:</label>
+              <!-- Area -->
+              <div class="sm:w-1/3 space-y-2">
+                <label for="area" class="block">Area:</label>
                 <input
                   type="text"
                   v-model="customer.shippingAddress.area"
                   name="area"
                   id="area"
                   required
-                  class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                  class="block px-3 py-2 border border-black/30 dark:border-black/15 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
                   placeholder="Area"
                 />
 
@@ -329,16 +358,18 @@
                   >{{ errors["shippingAddress.area"][0] }}</small
                 >
               </div>
+              <!-- / Area -->
 
-              <div class="w-1/3 space-y-2">
-                <label for="city" class="font-medium">City:</label>
+              <!-- City -->
+              <div class="sm:w-1/3 space-y-2">
+                <label for="city" class="block">City:</label>
                 <input
                   type="text"
                   v-model="customer.shippingAddress.city"
                   name="city"
                   id="city"
                   required
-                  class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                  class="block px-3 py-2 border border-black/30 dark:border-black/15 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
                   placeholder="City"
                 />
 
@@ -350,18 +381,22 @@
                   >{{ errors["shippingAddress.city"][0] }}</small
                 >
               </div>
+              <!-- / City -->
             </div>
 
-            <div class="flex gap-3 flex-1 text-gray-500">
-              <div class="w-1/3 space-y-2">
-                <label for="zip_code" class="font-medium">Zip Code:</label>
+            <div
+              class="flex flex-col sm:flex-row gap-3 flex-1 text-gray-500 dark:text-gray-300 text-sm sm:text-base font-medium"
+            >
+              <!-- Zip Code -->
+              <div class="sm:w-1/3 space-y-2">
+                <label for="zip_code" class="block">Zip Code:</label>
                 <input
                   type="text"
                   v-model="customer.shippingAddress.zip_code"
                   name="zip_code"
                   id="zip_code"
                   required
-                  class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                  class="block px-3 py-2 border border-black/30 dark:border-black/15 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
                   placeholder="Zip Code"
                 />
 
@@ -374,15 +409,17 @@
                   >{{ errors["shippingAddress.zip_code"][0] }}</small
                 >
               </div>
+              <!-- / Zip Code -->
 
-              <div class="w-1/3 space-y-2">
-                <label for="country_code" class="font-medium">Country:</label>
+              <!-- Country -->
+              <div class="sm:w-1/3 space-y-2">
+                <label for="country_code" class="block">Country:</label>
                 <select
                   v-model="customer.shippingAddress.country_code"
                   name="country_code"
                   id="country_code"
                   required
-                  class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                  class="block px-3 py-2 border border-black/30 dark:border-black/15 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
                 >
                   <option v-for="country of countries" :value="country.code">
                     {{ country.name }}
@@ -398,29 +435,31 @@
                   >{{ errors["shippingAddress.country_code"][0] }}</small
                 >
               </div>
+              <!-- / Country -->
 
-              <div class="w-1/3 space-y-2">
+              <!-- State -->
+              <div class="sm:w-1/3 space-y-2">
                 <template v-if="shippingCountry && !shippingCountry.states">
-                  <label for="state" class="font-medium">State:</label>
+                  <label for="state" class="block">State:</label>
                   <input
                     type="text"
                     v-model="customer.shippingAddress.state"
                     name="state"
                     id="state"
                     required
-                    class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                    class="block px-3 py-2 border border-black/30 dark:border-black/15 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
                     placeholder="State"
                   />
                 </template>
 
                 <template v-else>
-                  <label for="state" class="font-medium">State:</label>
+                  <label for="state" class="block">State:</label>
                   <select
                     v-model="customer.shippingAddress.state"
                     name="state"
                     id="state"
                     required
-                    class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                    class="block px-3 py-2 border border-black/30 dark:border-black/15 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
                   >
                     <option v-for="state of shippingStates" :value="state.key">
                       {{ state.value }}
@@ -436,6 +475,7 @@
                   >{{ errors["shippingAddress.state"][0] }}</small
                 >
               </div>
+              <!-- / State -->
             </div>
           </section>
           <!--/ Shipping Address -->
@@ -452,7 +492,7 @@
             :to="{ name: 'app.customers' }"
             type="button"
             ref="cancelButton"
-            class="mt-3 w-full inline-flex justify-center rounded-md border border-black/30 shadow-sm px-4 py-2 bg-black/20 text-base font-medium text-black/80 hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black/40 sm:mt-0 sm:w-auto sm:text-sm transition-colors"
+            class="mt-3 w-full inline-flex justify-center rounded-md border border-black/30 shadow-sm px-4 py-2 bg-black/20 dark:bg-gray-700 text-base font-medium text-black/80 dark:text-gray-100 hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black/40 sm:mt-0 sm:w-auto sm:text-sm transition-colors"
           >
             Cancel
           </router-link>
