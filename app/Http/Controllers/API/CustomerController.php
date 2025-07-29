@@ -17,6 +17,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CustomerController extends Controller
 {
@@ -69,6 +70,10 @@ class CustomerController extends Controller
 			]);
 		} catch (\Exception $exception) {
 			DB::rollBack();
+			Log::error('Error creating customer: ' . $exception->getMessage(), [
+				'customer_data' => $customerData,
+				'user_id' => request()->user()->id
+			]);
 			throw  new \Exception('Error creating customer: ' . $exception->getMessage());
 		}
 		DB::commit();
@@ -99,6 +104,10 @@ class CustomerController extends Controller
 			$customer->billingAddress()->updateOrCreate(['customer_id' => $customer->user_id, 'type' => AddressType::Billing], $customerData['billingAddress']);
 		} catch (\Exception $exception) {
 			DB::rollBack();
+			Log::error('Error updating customer: ' . $exception->getMessage(), [
+				'customer_data' => $customerData,
+				'user_id' => request()->user()->id
+			]);
 			throw new \Exception('Error updating customer: ' . $exception->getMessage());
 		}
 		DB::commit();
