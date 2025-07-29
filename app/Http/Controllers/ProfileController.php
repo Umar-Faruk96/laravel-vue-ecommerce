@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\{Models\Country, Models\CustomerAddress, Enums\AddressType, Http\Requests\ProfileRequest, Http\Requests\PasswordUpdateRequest};
 use Illuminate\{Http\RedirectResponse, Http\Request, Support\Facades\Redirect, Support\Facades\Hash, View\View};
+use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
@@ -31,21 +32,29 @@ class ProfileController extends Controller
 
     public function store(ProfileRequest $request) : RedirectResponse
     {
-        $customerData = $request->validated();
-
-        // dd($customerData);
-
-        $shippingData = $customerData['shipping'];
-        $billingData = $customerData['billing'];
-
-        // dd($shippingData, $billingData);
-
-        $customer = $request->user()->customer;
-        $request->user()->update(['email' => $customerData['email'], 'name' => $customerData['first_name'] . ' ' . $customerData['last_name']]);
-        $customer->update($customerData);
-
-        $customer->shippingAddress()->updateOrCreate(['customer_id' => $customer->user_id, 'type' => AddressType::Shipping], $shippingData);
-        $customer->billingAddress()->updateOrCreate(['customer_id' => $customer->user_id, 'type' => AddressType::Billing], $billingData);
+        DB::beginTransaction();
+        try {
+            $customerData = $request->validated();
+    
+            // dd($customerData);
+    
+            $shippingData = $customerData['shipping'];
+            $billingData = $customerData['billing'];
+    
+            // dd($shippingData, $billingData);
+    
+            $customer = $request->user()->customer;
+            $request->user()->update(['email' => $customerData['email'], 'name' => $customerData['first_name'] . ' ' . $customerData['last_name']]);
+            $customer->update($customerData);
+    
+            $customer->shippingAddress()->updateOrCreate(['customer_id' => $customer->user_id, 'type' => AddressType::Shipping], $shippingData);
+            $customer->billingAddress()->updateOrCreate(['customer_id' => $customer->user_id, 'type' => AddressType::Billing], $billingData);
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            // return redirect()->back()->withErrors(['error' => 'Failed to update profile: ' . $exception->getMessage()]);
+            throw new \Exception('Failed to update profile: ' . $exception->getMessage());
+        }
+        DB::commit();
 
         /* if ($customer->shippingAddress) {
             $customer->shippingAddress->update($shippingData);
