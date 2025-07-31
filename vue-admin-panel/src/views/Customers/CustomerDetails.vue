@@ -40,10 +40,11 @@
             </h2>
 
             <div class="flex flex-col sm:flex-row gap-3 flex-1 justify-between">
+              <!-- First Name -->
               <div class="flex text-gray-500 items-center gap-3">
                 <label
                   for="first_name"
-                  class="w-1/4 sm:w-auto text-sm sm:text-base font-medium text-gray-500 dark:text-gray-300"
+                  class="text-sm md:text-base font-medium text-gray-500 dark:text-gray-300"
                   >First Name:</label
                 >
                 <CustomInputNew
@@ -55,11 +56,13 @@
                   :errors="errors['first_name']"
                 />
               </div>
+              <!-- / First Name -->
 
+              <!-- Last Name -->
               <div class="flex text-gray-500 items-center gap-3">
                 <label
                   for="last_name"
-                  class="w-1/4 sm:w-auto text-sm sm:text-base font-medium text-gray-500 dark:text-gray-300"
+                  class="text-sm md:text-base font-medium text-gray-500 dark:text-gray-300"
                   >Last Name:</label
                 >
                 <CustomInputNew
@@ -71,13 +74,15 @@
                   :errors="errors['last_name']"
                 />
               </div>
+              <!-- / Last Name -->
             </div>
 
             <div class="flex flex-col sm:flex-row gap-3 flex-1 justify-between">
+              <!-- Email -->
               <div class="flex text-gray-500 items-center gap-3">
                 <label
                   for="email"
-                  class="text-sm sm:text-base font-medium text-gray-500 dark:text-gray-300"
+                  class="text-sm md:text-base font-medium text-gray-500 dark:text-gray-300"
                   >Email:</label
                 >
                 <CustomInputNew
@@ -90,33 +95,39 @@
                   :errors="errors['email']"
                 />
               </div>
+              <!-- / Email -->
 
+              <!-- Phone -->
               <div class="flex text-gray-500 items-center gap-3 overflow-hidden">
                 <label
                   for="phone"
-                  class="text-sm sm:text-base font-medium text-gray-500 dark:text-gray-300"
+                  class="text-sm md:text-base font-medium text-gray-500 dark:text-gray-300"
                   >Phone:</label
                 >
-                <input
-                  type="tel"
-                  v-model="customer.phone"
-                  name="phone"
-                  id="phone"
-                  required
-                  class="px-3 py-2 border border-black/30 dark:border-black/15 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
-                  placeholder="Phone Number"
-                />
-                <small
-                  v-if="errors['phone'] && errors['phone'][0]"
-                  class="text-red-600"
-                  >{{ errors["phone"][0] }}</small
-                >
+                <div>
+                  <input
+                    type="tel"
+                    v-model="customer.phone"
+                    name="phone"
+                    id="phone"
+                    required
+                    class="px-3 py-2 border border-black/30 dark:border-black/15 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                    placeholder="Phone Number"
+                  />
+                  <small
+                    v-if="errors['phone'] && errors['phone'][0]"
+                    class="text-red-600"
+                    >{{ errors["phone"][0] }}</small
+                  >
+                </div>
               </div>
+              <!-- / Phone -->
 
+              <!-- Status -->
               <div class="flex items-center gap-3">
                 <label
                   :for="`${customer.status ? 'active' : 'inactive'}-${customer.id}`"
-                  class="text-sm sm:text-base font-medium text-gray-500 dark:text-gray-300"
+                  class="text-sm md:text-base font-medium text-gray-500 dark:text-gray-300"
                   >Status:</label
                 >
                 <CustomInputNew
@@ -128,6 +139,7 @@
                   :id="customer.id === '' ? 1 : customer.id"
                 />
               </div>
+              <!-- / Status -->
             </div>
           </section>
           <!--/ Customer Info -->
@@ -139,7 +151,7 @@
             </h3>
 
             <div
-              class="flex flex-col sm:flex-row gap-3 flex-1 text-gray-500 dark:text-gray-300 text-sm sm:text-base font-medium"
+              class="flex flex-col sm:flex-row gap-3 flex-1 text-gray-500 dark:text-gray-300 text-sm md:text-base font-medium"
             >
               <!-- House Number -->
               <div class="sm:w-1/3 space-y-2">
@@ -207,7 +219,7 @@
             </div>
 
             <div
-              class="flex flex-col sm:flex-row gap-3 flex-1 text-gray-500 dark:text-gray-300 text-sm sm:text-base font-medium"
+              class="flex flex-col sm:flex-row gap-3 flex-1 text-gray-500 dark:text-gray-300 text-sm md:text-base font-medium"
             >
               <!-- Zip Code -->
               <div class="sm:w-1/3 space-y-2">
@@ -273,11 +285,7 @@
                 </template>
 
                 <template v-else>
-                  <label
-                    for="state"
-                    class="block text-sm sm:text-base font-medium text-gray-500 dark:text-gray-300"
-                    >State:</label
-                  >
+                  <label for="state" class="block">State:</label>
                   <select
                     v-model="customer.billingAddress.state"
                     name="state"
@@ -311,7 +319,7 @@
             </h3>
 
             <div
-              class="flex flex-col sm:flex-row gap-3 flex-1 text-gray-500 dark:text-gray-300 text-sm sm:text-base font-medium"
+              class="flex flex-col sm:flex-row gap-3 flex-1 text-gray-500 dark:text-gray-300 text-sm md:text-base font-medium"
             >
               <!-- House Number -->
               <div class="sm:w-1/3 space-y-2">
@@ -385,7 +393,7 @@
             </div>
 
             <div
-              class="flex flex-col sm:flex-row gap-3 flex-1 text-gray-500 dark:text-gray-300 text-sm sm:text-base font-medium"
+              class="flex flex-col sm:flex-row gap-3 flex-1 text-gray-500 dark:text-gray-300 text-sm md:text-base font-medium"
             >
               <!-- Zip Code -->
               <div class="sm:w-1/3 space-y-2">
