@@ -19,6 +19,11 @@ class CheckoutController extends Controller
     public function checkout(Request $request): RedirectResponse|Redirector
     {
         $user = $request->user();
+        $customer = $user->customer;
+
+        if (!$customer->billingAddress || !$customer->shippingAddress) {
+            return redirect()->route('profile')->withErrors(['error' => 'Please provide your address details first']);
+        }
 
         $stripe = new StripeClient(config('stripe.stripe_sk'));
 
