@@ -68,16 +68,20 @@
       <table class="table-auto w-full text-black/60 dark:text-white/70">
         <thead>
         <tr>
-          <TableHeaderCell @sort="sortCustomers" field="id" :sortField :sortDirection
+          <TableHeaderCell @sort="sortCustomers" field="id" :sortField
+                           :sortDirection
           >ID
           </TableHeaderCell>
-          <TableHeaderCell @sort="sortCustomers" field="name" :sortField :sortDirection
+          <TableHeaderCell @sort="sortCustomers" field="name" :sortField
+                           :sortDirection
           >Name
           </TableHeaderCell>
-          <TableHeaderCell @sort="sortCustomers" field="email" :sortField :sortDirection
+          <TableHeaderCell @sort="sortCustomers" field="email" :sortField
+                           :sortDirection
           >Email
           </TableHeaderCell>
-          <TableHeaderCell @sort="sortCustomers" field="phone">Phone</TableHeaderCell>
+          <TableHeaderCell @sort="sortCustomers" field="phone">Phone
+          </TableHeaderCell>
           <TableHeaderCell
               @sort="sortCustomers"
               field="status"
@@ -99,7 +103,7 @@
         <tbody v-if="customers.loading || !customers.data.length">
         <tr>
           <td colspan="7">
-            <Spinner v-if="customers.loading" class="mt-4" />
+            <Spinner v-if="customers.loading" class="mt-4"/>
             <p v-else class="text-center py-8 text-gray-700 dark:text-white/70">
               There are no customers
             </p>
@@ -115,14 +119,23 @@
             class="animate-fade-in-down"
             :style="{ animationDelay: `${index * 0.1}s`, position: 'relative', zIndex: Math.abs(index - 10) }"
         >
-          <td class="border-b-2 dark:border-b-gray-400 p-2">{{ customer.id }}</td>
+          <td class="border-b-2 dark:border-b-gray-400 p-2">{{
+              customer.id
+            }}
+          </td>
           <td
               class="border-b-2 dark:border-b-gray-400 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis"
           >
             {{ customer.first_name }} {{ customer.last_name }}
           </td>
-          <td class="border-b-2 dark:border-b-gray-400 p-2">{{ customer.email }}</td>
-          <td class="border-b-2 dark:border-b-gray-400 p-2">{{ customer.phone }}</td>
+          <td class="border-b-2 dark:border-b-gray-400 p-2">{{
+              customer.email
+            }}
+          </td>
+          <td class="border-b-2 dark:border-b-gray-400 p-2">{{
+              customer.phone
+            }}
+          </td>
           <td
               :class="[
                 customer.status ? 'text-indigo-600 dark:text-indigo-300 font-medium' : 'text-gray-500 dark:text-gray-400',
@@ -268,7 +281,8 @@ import {Menu, MenuButton, MenuItems, MenuItem} from "@headlessui/vue";
 import Spinner from "../../components/core/Spinner.vue";
 import store from "../../store/index.js";
 import {CUSTOMERS_PER_PAGE} from "../../utils/constants.js";
-import TableHeaderCell from "../../components/core/ProductsTable/TableHeaderCell.vue";
+import TableHeaderCell
+  from "../../components/core/ProductsTable/TableHeaderCell.vue";
 
 const perPage = ref(CUSTOMERS_PER_PAGE);
 const search = ref("");
@@ -309,6 +323,7 @@ const deleteCustomer = (id) => {
   if (!confirm("Are you sure you want to delete this customer?")) return;
 
   store.dispatch("deleteCustomer", id).then(() => {
+    store.commit('showToast', 'Customer was successfully deleted.');
     getCustomers();
   });
 };
