@@ -22,7 +22,7 @@ class CheckoutController extends Controller
         $customer = $user->customer;
 
         if (!$customer->billingAddress || !$customer->shippingAddress) {
-            return redirect()->route('profile')->withErrors(['error' => 'Please provide your address details first']);
+            return redirect()->route('profile.show')->withErrors(['error' => 'Please provide your address details first']);
         }
 
         $stripe = new StripeClient(config('stripe.stripe_sk'));
