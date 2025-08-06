@@ -309,6 +309,7 @@ const deleteProduct = (id) => {
   if (!confirm("Are you sure you want to delete this product?")) return;
 
   store.dispatch("deleteProduct", id).then(() => {
+    store.commit('showToast', 'Product was successfully deleted.');
     getProducts();
   });
 };
