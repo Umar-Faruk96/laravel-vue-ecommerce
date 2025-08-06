@@ -79,7 +79,14 @@
             type="submit"
             class="py-2 w-full sm:w-auto px-4 border border-transparent text-sm font-medium rounded-md text-white/90 bg-indigo-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 transition-colors"
         >
-          Submit
+          Save
+        </button>
+        <button
+            type="button"
+            @click="submit($event, true)"
+            class="py-2 w-full sm:w-auto px-4 border border-transparent text-sm font-medium rounded-md text-white/90 bg-indigo-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 transition-colors"
+        >
+          Save & Close
         </button>
         <router-link
             :to="{ name: 'app.products' }"
@@ -129,7 +136,7 @@ onMounted(() => {
 const loading = ref(false);
 const router = useRouter();
 
-function submit() {
+function submit($event, close = false) {
   loading.value = true;
 
   if (product.value.id) {
@@ -138,8 +145,10 @@ function submit() {
 
       if (response.status === 200) {
         store.commit('showToast', 'Product was successfully updated.');
-        store.dispatch("getProducts");
-        router.push({name: "app.products"});
+        if (close) {
+          store.dispatch("getProducts");
+          router.push({name: "app.products"})
+        }
       }
     });
   } else {
@@ -151,8 +160,18 @@ function submit() {
 
           if (response.status === 201) {
             store.commit('showToast', 'Product was successfully created.');
-            store.dispatch("getProducts");
-            router.push({name: "app.products"});
+            if (close) {
+              store.dispatch("getProducts");
+              router.push({name: "app.products"});
+            } else {
+              product.value = response.data;
+              router.push({
+                name: "app.products.edit", params: {
+                  productId:
+                  response.data.id
+                }
+              });
+            }
           }
         })
         .catch((error) => {
