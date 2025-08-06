@@ -26,6 +26,16 @@ const routes = [
                 component: () => import('../views/Products/Products.vue'),
             },
             {
+                path: 'products/create',
+                name: 'app.products.create',
+                component: () => import('../views/Products/ProductForm.vue'),
+            },
+            {
+                path: 'products/edit/:id',
+                name: 'app.products.edit',
+                component: () => import('../views/Products/ProductForm.vue'),
+            },
+            {
                 path: 'orders',
                 name: 'app.orders',
                 component: () => import('../views/Orders/Orders.vue'),
@@ -51,7 +61,10 @@ const routes = [
             },
             {
                 path: 'reports',
-                redirect: {name: 'app.reports.orders', query: {dateQuery: 'all'}},
+                redirect: {
+                    name: 'app.reports.orders',
+                    query: {dateQuery: 'all'}
+                },
                 name: 'app.reports',
                 component: () => import('../views/Reports/Reports.vue'),
                 children: [
