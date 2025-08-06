@@ -117,7 +117,6 @@
               zIndex: Math.abs(index - 10),
             }"
         >
-          <!--<tr v-for="(product, index) of products.data" :key="index">-->
           <td class="border-b-2 dark:border-b-gray-400 p-2">{{
               product.id
             }}
@@ -166,19 +165,20 @@
                   <div class="px-1 py-1">
                     <!-- Edit Product -->
                     <MenuItem as="span" v-slot="{ active }">
-                      <button
+                      <router-link
+                          :to="{ name: 'app.products.edit', params: {
+                            productId: product.id}}"
                           :class="[
                             active ? 'bg-indigo-600 text-white/90' : 'text-black/80',
                             'group flex items-center w-full px-4 py-2 text-sm rounded-md',
                           ]"
-                          @click="editProduct(product)"
                       >
                         <PencilIcon
                             class="w-5 h-5 mr-2 text-black/60 group-hover:text-black/80"
                             aria-hidden="true"
                         />
                         Edit
-                      </button>
+                      </router-link>
                     </MenuItem>
                     <!--/ Edit Product -->
                     <!-- Delete Product -->
