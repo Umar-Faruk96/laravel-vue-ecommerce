@@ -51,7 +51,7 @@
                     class="text-sm md:text-base font-medium text-gray-500 dark:text-gray-300"
                 >First Name:</label
                 >
-                <CustomInputNew
+                <CustomInputV3
                     v-model:first-name="customer.first_name"
                     label="First Name"
                     name="first_name"
@@ -69,7 +69,7 @@
                     class="text-sm md:text-base font-medium text-gray-500 dark:text-gray-300"
                 >Last Name:</label
                 >
-                <CustomInputNew
+                <CustomInputV3
                     v-model:last-name="customer.last_name"
                     label="Last Name"
                     name="last_name"
@@ -89,7 +89,7 @@
                     class="text-sm md:text-base font-medium text-gray-500 dark:text-gray-300"
                 >Email:</label
                 >
-                <CustomInputNew
+                <CustomInputV3
                     type="email"
                     v-model:email="customer.email"
                     label="Email"
@@ -135,7 +135,7 @@
                     class="text-sm md:text-base font-medium text-gray-500 dark:text-gray-300"
                 >Status:</label
                 >
-                <CustomInputNew
+                <CustomInputV3
                     type="checkbox"
                     v-model:status="customer.status"
                     :name="customer.status ? 'active' : 'inactive'"
@@ -520,7 +520,7 @@
 import {useRoute, useRouter} from "vue-router";
 import {computed, onMounted, ref} from "vue";
 import store from "../../store/index.js";
-import CustomInputNew from "../../components/core/CustomInputNew.vue";
+import CustomInputV3 from "../../components/core/CustomInputV3.vue";
 import Spinner from "../../components/core/Spinner.vue";
 
 const route = useRoute();

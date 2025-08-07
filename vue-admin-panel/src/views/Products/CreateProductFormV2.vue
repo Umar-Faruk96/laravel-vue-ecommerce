@@ -127,7 +127,7 @@ import {onUpdated, ref} from "vue";
 import {XMarkIcon} from "@heroicons/vue/24/solid";
 import Spinner from "../../components/core/Spinner.vue";
 import store from "../../store/index.js";
-import CustomInput from "../../components/core/CustomInput.vue";
+import CustomInput from "../../components/core/CustomInputV2.vue";
 
 const formModal = defineModel("formModal");
 const loading = ref(false);
