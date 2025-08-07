@@ -25,9 +25,11 @@ div.ck.ck-toolbar, .ck.ck-editor__main > .ck.ck-content.ck-editor__editable {
 .ck.ck-editor__top .ck-sticky-panel .ck-sticky-panel__content {
     @apply border border-black/30 dark:border-black/15
 }
+
 .ck.ck-editor__main > .ck-editor__editable:not(.ck-focused), .ck.ck-content.ck-editor__editable.ck-focused:not(.ck-editor__nested-editable) {
     @apply border-t-0 border-black/30 dark:border-black/15
 }
+
 .ck-rounded-corners .ck.ck-editor__top .ck-sticky-panel .ck-sticky-panel__content, .ck-rounded-corners div.ck.ck-toolbar {
     @apply rounded-t-md
 }
@@ -38,4 +40,41 @@ div.ck.ck-toolbar, .ck.ck-editor__main > .ck.ck-content.ck-editor__editable {
 
 .ck-rounded-corners .ck.ck-editor__main > .ck-content.ck-editor__editable, .ck.ck-editor__main > .ck-content.ck-editor__editable.ck-rounded-corners {
     @apply rounded-b-md
+}
+
+.ck-content > blockquote,
+.ck-content > dl,
+.ck-content > dd,
+.ck-content > h1,
+.ck-content > h2,
+.ck-content > h3,
+.ck-content > h4,
+.ck-content > h5,
+.ck-content > h6,
+.ck-content > hr,
+.ck-content > figure,
+.ck-content > p,
+.ck-content > pre {
+    margin: revert;
+}
+
+.ck-content > ol,
+.ck-content > ul {
+    list-style: revert;
+    margin: revert;
+    padding: revert;
+}
+
+.ck-content > table {
+    border-collapse: revert;
+}
+
+.ck-content > h1,
+.ck-content > h2,
+.ck-content > h3,
+.ck-content > h4,
+.ck-content > h5,
+.ck-content > h6 {
+    font-size: revert;
+    font-weight: revert;
 }
