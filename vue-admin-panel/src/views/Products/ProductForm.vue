@@ -39,13 +39,7 @@
             @change="(file) => (product.image = file)"
         />
 
-        <CustomInputV3
-            type="textarea"
-            v-model:textarea="product.description"
-            label="Description"
-        />
-
-        <CKEditor/>
+        <CKEditor v-model="product.description"/>
 
         <CustomInputV3
             type="number"
@@ -120,7 +114,7 @@ const props = defineProps({
 const product = ref({
   id: null,
   title: null,
-  description: null,
+  description: "",
   price: null,
   image: null,
   published: null,

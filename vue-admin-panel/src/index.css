@@ -4,11 +4,38 @@
 
 .checkbox-checked {
     &:is(:where(.checkbox):has(*:checked) *) {
-      opacity: 100%;
+        opacity: 100%;
     }
 }
+
 .checkbox-indeterminate {
     &:is(:where(.checkbox):has(*:indeterminate) *) {
-      opacity: 100%;
+        opacity: 100%;
     }
+}
+
+div.ck.ck-toolbar, .ck.ck-editor__main > .ck.ck-content.ck-editor__editable {
+    @apply placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500;
+}
+
+.ck-reset_all :not(.ck-reset_all-excluded *) {
+    color: revert;
+}
+
+.ck.ck-editor__top .ck-sticky-panel .ck-sticky-panel__content {
+    @apply border border-black/30 dark:border-black/15
+}
+.ck.ck-editor__main > .ck-editor__editable:not(.ck-focused), .ck.ck-content.ck-editor__editable.ck-focused:not(.ck-editor__nested-editable) {
+    @apply border-t-0 border-black/30 dark:border-black/15
+}
+.ck-rounded-corners .ck.ck-editor__top .ck-sticky-panel .ck-sticky-panel__content, .ck-rounded-corners div.ck.ck-toolbar {
+    @apply rounded-t-md
+}
+
+.ck.ck-content {
+    @apply text-black/90 dark:text-gray-300 h-32
+}
+
+.ck-rounded-corners .ck.ck-editor__main > .ck-content.ck-editor__editable, .ck.ck-editor__main > .ck-content.ck-editor__editable.ck-rounded-corners {
+    @apply rounded-b-md
 }
