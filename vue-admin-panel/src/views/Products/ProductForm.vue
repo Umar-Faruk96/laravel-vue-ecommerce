@@ -45,6 +45,8 @@
             label="Description"
         />
 
+        <CKEditor/>
+
         <CustomInputV3
             type="number"
             name="price"
@@ -106,6 +108,7 @@ import Spinner from "../../components/core/Spinner.vue";
 import store from "../../store/index.js";
 import CustomInputV3 from "../../components/core/CustomInputV3.vue";
 import {useRouter} from "vue-router";
+import CKEditor from "../../components/core/CKEditor.vue";
 
 const props = defineProps({
   productId: {
