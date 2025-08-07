@@ -25,7 +25,7 @@
     <form @submit.prevent="submit">
       <main
           class="bg-white/80 dark:bg-gray-500 px-4 pt-5 pb-4 space-y-4 rounded-t-md">
-        <CustomInputNew
+        <CustomInputV3
             v-model:title="product.title"
             label="Product Title"
             name="product_title"
@@ -33,19 +33,19 @@
             required
         />
 
-        <CustomInputNew
+        <CustomInputV3
             type="file"
             label="Product Image"
             @change="(file) => (product.image = file)"
         />
 
-        <CustomInputNew
+        <CustomInputV3
             type="textarea"
             v-model:textarea="product.description"
             label="Description"
         />
 
-        <CustomInputNew
+        <CustomInputV3
             type="number"
             name="price"
             id-for="product-price"
@@ -104,7 +104,7 @@
 import {onMounted, ref} from "vue";
 import Spinner from "../../components/core/Spinner.vue";
 import store from "../../store/index.js";
-import CustomInputNew from "../../components/core/CustomInputNew.vue";
+import CustomInputV3 from "../../components/core/CustomInputV3.vue";
 import {useRouter} from "vue-router";
 
 const props = defineProps({

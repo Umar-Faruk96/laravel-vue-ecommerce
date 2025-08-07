@@ -61,7 +61,7 @@
                     </h2>
 
                     <div class="flex gap-3 flex-1">
-                      <CustomInputNew
+                      <CustomInputV3
                         v-model:first-name="customer.first_name"
                         label="First Name"
                         name="first_name"
@@ -69,7 +69,7 @@
                         :errors="errors['first_name']"
                       />
 
-                      <CustomInputNew
+                      <CustomInputV3
                         v-model:last-name="customer.last_name"
                         label="Last Name"
                         name="last_name"
@@ -78,7 +78,7 @@
                       />
                     </div>
 
-                    <CustomInputNew
+                    <CustomInputV3
                       type="email"
                       v-model:email="customer.email"
                       label="Email"
@@ -104,7 +104,7 @@
                         >
                       </div>
 
-                      <CustomInputNew
+                      <CustomInputV3
                         type="checkbox"
                         v-model:status="customer.status"
                         :name="customer.status ? 'active' : 'inactive'"
@@ -447,7 +447,7 @@ import { computed, ref } from "vue";
 import { XMarkIcon } from "@heroicons/vue/24/solid";
 import Spinner from "../../components/core/Spinner.vue";
 import store from "../../store/index.js";
-import CustomInputNew from "../../components/core/CustomInputNew.vue";
+import CustomInputV3 from "../../components/core/CustomInputV3.vue";
 import { useRouter } from "vue-router";
 
 const DEFAULT_CUSTOMER = {

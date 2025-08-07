@@ -13,9 +13,11 @@
   </section>
 
   <!-- Commented out after adding CreateProductFormNew -->
-  <!-- <CreateProductForm v-model:form-modal="productForm" :product="product" /> -->
+  <!-- <CreateProductFormV2 v-model:form-modal="productForm"
+  :product="product" /> -->
+
   <!--  Commented out after adding dedicated form for product create and edit -->
-  <!--  <CreateProductFormNew
+  <!--  <CreateProductFormV3
         v-model:form-modal="productForm"
         :product="productData"
         @close="clearProductForm"
@@ -30,8 +32,8 @@
 import ProductsTable from "./ProductsTable.vue";
 /*
 import {ref} from "vue";
-import CreateProductForm from './CreateProductForm.vue';
-import CreateProductFormNew from "./CreateProductFormNew.vue";
+import CreateProductFormV2 from './CreateProductFormV2.vue';
+import CreateProductFormV3 from "./CreateProductFormV3.vue";
 import store from "../../store/index.js";
 */
 

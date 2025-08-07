@@ -48,14 +48,14 @@
 
               <form @submit.prevent="submit">
                 <main class="bg-white/80 px-4 pt-5 pb-4">
-                  <CustomInputNew
+                  <CustomInputV3
                       v-model:title="user.name"
                       label="User Name"
                       name="name"
                       required :errors="errors['name']"
                   />
 
-                  <CustomInputNew
+                  <CustomInputV3
                       type="email"
                       v-model:email="user.email"
                       label="Email"
@@ -63,7 +63,7 @@
                       required :errors="errors['email']"
                   />
 
-                  <CustomInputNew
+                  <CustomInputV3
                       type="password"
                       v-model:password="user.password"
                       label="Password"
@@ -71,7 +71,7 @@
                       required :errors="errors['password']"
                   />
 
-                  <CustomInputNew
+                  <CustomInputV3
                       v-model:confirm-password="user.password_confirmation"
                       label="Confirm Password"
                       name="password_confirmation"
@@ -116,7 +116,7 @@ import {onUpdated, ref} from "vue";
 import {XMarkIcon} from "@heroicons/vue/24/solid";
 import Spinner from "../../components/core/Spinner.vue";
 import store from "../../store/index.js";
-import CustomInputNew from "../../components/core/CustomInputNew.vue";
+import CustomInputV3 from "../../components/core/CustomInputV3.vue";
 
 const props = defineProps({
   user: {
