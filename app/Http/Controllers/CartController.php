@@ -27,17 +27,27 @@ class CartController extends Controller
         $user = $request->user();
 
         if ($user) {
+//            User is authenticated
             $cartItem = CartItem::where(['user_id' => $user->id, 'product_id' => $product->id])->first();
 
             if ($cartItem) {
-                $cartItem->quantity += $quantity;
+//                User already has item(s) in the cart
+                $totalQuantity = $cartItem->quantity += $quantity;
+                if ($totalQuantity > $product->quantity) {
+                    return response(['error' => 'Not enough items in stock'], 422);
+                }
                 $cartItem->update();
             } else {
+//                User does not have item(s) in the cart
                 $data = [
                     'user_id' => $user->id,
                     'product_id' => $product->id,
                     'quantity' => $quantity,
                 ];
+
+                if ($quantity > $product->quantity) {
+                    return response(['error' => 'Not enough items in stock'], 422);
+                }
 
                 CartItem::create($data);
             }
@@ -46,12 +56,13 @@ class CartController extends Controller
                 'count' => Cart::getCartItemsCount()
             ]);
         } else {
+//            User is not authenticated
             $cartItems = Cart::getCookieCartItems();
 
             $productFound = false;
 
             foreach ($cartItems as &$item) {
-                if ($item['product_id'] === $product->id) {
+                if ($item['product_id'] === $product->id && ($item['quantity'] + $quantity) <= $product->quantity) {
                     $item['quantity'] += $quantity;
                     $productFound = true;
                     break;
@@ -59,6 +70,10 @@ class CartController extends Controller
             }
 
             if (!$productFound) {
+                if ($quantity > $product->quantity) {
+                    return response(['error' => 'Not enough items in stock'], 422);
+                }
+
                 $cartItems[] = [
                     'user_id' => null,
                     'product_id' => $product->id,
@@ -108,18 +123,26 @@ class CartController extends Controller
         $user = $request->user();
 
         if ($user) {
+//            User is authenticated
+            if ($quantity > $product->quantity) {
+                return response(['error' => 'Not enough items in stock'], 422);
+            }
+
             CartItem::where(['user_id' => $request->user()->id, 'product_id' => $product->id])->update(['quantity' => $quantity]);
 
             return response([
                 'count' => Cart::getCartItemsCount(),
             ]);
         } else {
+//            User is not authenticated
             $cartItems = Cart::getCookieCartItems();
 
             foreach ($cartItems as &$item) {
-                if ($item['product_id'] === $product->id) {
+                if ($item['product_id'] === $product->id && $quantity <= $product->quantity) {
                     $item['quantity'] = $quantity;
                     break;
+                } else {
+                    return response(['error' => 'Not enough items in stock'], 422);
                 }
             }
 
