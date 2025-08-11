@@ -74,7 +74,7 @@ document.addEventListener("alpine:init", async () => {
 
                     this.$dispatch('cart-change', { count: result.count });
                     this.$dispatch("notify", {
-                        message: "The item was added into the cart",
+                        message: "The item was added into the cart successfully",
                     });
                 } catch (response) {
                     console.log(response);
@@ -87,7 +87,7 @@ document.addEventListener("alpine:init", async () => {
 
                     this.$dispatch('cart-change', { count: result.count });
                     this.$dispatch("notify", {
-                        message: "The item was removed from cart",
+                        message: "The item was removed from cart successfully",
                     });
                     this.cartItems = this.cartItems.filter(p => p.id !== product.id);
                 } catch (response) {
@@ -101,7 +101,7 @@ document.addEventListener("alpine:init", async () => {
 
                     this.$dispatch('cart-change', { count: result.count });
                     this.$dispatch("notify", {
-                        message: "The item quantity was updated",
+                        message: "The item quantity was updated successfully",
                     });
                 } catch (response) {
                     console.log(response);

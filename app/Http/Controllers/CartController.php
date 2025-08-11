@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\{Models\CartItem, Models\Product, Helpers\Cart};
-use Illuminate\{Support\Facades\Cookie, Http\Request, Http\Response};
+use Illuminate\{Support\Facades\Cookie, Http\Request, Http\Response, Support\Str};
 
 class CartController extends Controller
 {
@@ -34,7 +34,11 @@ class CartController extends Controller
 //                User already has item(s) in the cart
                 $totalQuantity = $cartItem->quantity += $quantity;
                 if ($totalQuantity > $product->quantity) {
-                    return response(['error' => 'Not enough items in stock'], 422);
+                    return response(['message' => match ($product->quantity) {
+                        0 => 'Product is out of stock',
+                        1 => 'Only 1 item left in stock',
+                        default => 'You can buy only ' . $product->quantity . ' ' . Str::plural('item', $product->quantity) . ' left in stock',
+                    }], 422);
                 }
                 $cartItem->update();
             } else {
@@ -46,7 +50,11 @@ class CartController extends Controller
                 ];
 
                 if ($quantity > $product->quantity) {
-                    return response(['error' => 'Not enough items in stock'], 422);
+                    return response(['message' => match ($product->quantity) {
+                        0 => 'Product is out of stock',
+                        1 => 'Only 1 item left in stock',
+                        default => 'You can buy only ' . $product->quantity . ' ' . Str::plural('item', $product->quantity) . ' left in stock',
+                    }], 422);
                 }
 
                 CartItem::create($data);
@@ -71,7 +79,11 @@ class CartController extends Controller
 
             if (!$productFound) {
                 if ($quantity > $product->quantity) {
-                    return response(['error' => 'Not enough items in stock'], 422);
+                    return response(['message' => match ($product->quantity) {
+                        0 => 'Product is out of stock',
+                        1 => 'Only 1 item left in stock',
+                        default => 'You can buy only ' . $product->quantity . ' ' . Str::plural('item', $product->quantity) . ' left in stock',
+                    }], 422);
                 }
 
                 $cartItems[] = [
@@ -125,7 +137,11 @@ class CartController extends Controller
         if ($user) {
 //            User is authenticated
             if ($quantity > $product->quantity) {
-                return response(['error' => 'Not enough items in stock'], 422);
+                return response(['message' => match ($product->quantity) {
+                    0 => 'Product is out of stock',
+                    1 => 'Only 1 item left in stock',
+                    default => 'You can buy only ' . $product->quantity . ' ' . Str::plural('item', $product->quantity) . ' left in stock',
+                }], 422);
             }
 
             CartItem::where(['user_id' => $request->user()->id, 'product_id' => $product->id])->update(['quantity' => $quantity]);
@@ -142,7 +158,11 @@ class CartController extends Controller
                     $item['quantity'] = $quantity;
                     break;
                 } else {
-                    return response(['error' => 'Not enough items in stock'], 422);
+                    return response(['message' => match ($product->quantity) {
+                        0 => 'Product is out of stock',
+                        1 => 'Only 1 item left in stock',
+                        default => 'You can buy only ' . $product->quantity . ' ' . Str::plural('item', $product->quantity) . ' left in stock',
+                    }], 422);
                 }
             }
 
