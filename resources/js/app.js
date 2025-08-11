@@ -2,7 +2,7 @@ import './bootstrap';
 
 import Alpine from 'alpinejs';
 import collapse from '@alpinejs/collapse'
-import { post } from "./http.js";
+import {post} from "./http.js";
 
 Alpine.plugin(collapse)
 
@@ -17,6 +17,7 @@ document.addEventListener("alpine:init", async () => {
         interval: null,
         timeout: null,
         message: null,
+        type: "success",
 
         close() {
             this.visible = false;
@@ -27,9 +28,10 @@ document.addEventListener("alpine:init", async () => {
             this.percent = 0;
         },
 
-        show(message) {
+        show(message, type = "success") {
             this.visible = true;
             this.message = message;
+            this.type = type;
 
             if (this.interval) {
                 clearInterval(this.interval);
@@ -70,14 +72,17 @@ document.addEventListener("alpine:init", async () => {
 
             addToCart: async function (quantity = 1) {
                 try {
-                    const result = await post(this.product.addToCartUrl, { quantity });
+                    const result = await post(this.product.addToCartUrl, {quantity});
 
-                    this.$dispatch('cart-change', { count: result.count });
+                    this.$dispatch('cart-change', {count: result.count});
                     this.$dispatch("notify", {
                         message: "The item was added into the cart successfully",
                     });
                 } catch (response) {
-                    console.log(response);
+                    this.$dispatch("notify", {
+                        message: response.message,
+                        type: "error",
+                    });
                 }
             },
 
@@ -85,7 +90,7 @@ document.addEventListener("alpine:init", async () => {
                 try {
                     const result = await post(this.product.removeUrl);
 
-                    this.$dispatch('cart-change', { count: result.count });
+                    this.$dispatch('cart-change', {count: result.count});
                     this.$dispatch("notify", {
                         message: "The item was removed from cart successfully",
                     });
@@ -97,14 +102,18 @@ document.addEventListener("alpine:init", async () => {
 
             changeQuantity: async function () {
                 try {
-                    const result = await post(this.product.updateQuantityUrl, { quantity: product.quantity });
+                    const result = await post(this.product.updateQuantityUrl, {quantity: product.quantity});
 
-                    this.$dispatch('cart-change', { count: result.count });
+                    this.$dispatch('cart-change', {count: result.count});
                     this.$dispatch("notify", {
                         message: "The item quantity was updated successfully",
                     });
                 } catch (response) {
-                    console.log(response);
+                    // console.log(response);
+                    this.$dispatch("notify", {
+                        message: response.message,
+                        type: "error",
+                    });
                 }
             }
         };
