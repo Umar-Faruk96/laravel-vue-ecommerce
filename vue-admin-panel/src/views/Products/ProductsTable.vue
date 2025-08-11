@@ -83,6 +83,10 @@
                            :sortDirection
           >Price
           </TableHeaderCell>
+          <TableHeaderCell @sort="sortProducts" field="quantity" :sortField
+                           :sortDirection
+          >Quantity
+          </TableHeaderCell>
           <TableHeaderCell
               @sort="sortProducts"
               field="updated_at"
@@ -131,6 +135,10 @@
           </td>
           <td class="border-b-2 dark:border-b-gray-400 p-2">{{
               product.price
+            }}
+          </td>
+          <td class="border-b-2 dark:border-b-gray-400 p-2">{{
+              product.quantity
             }}
           </td>
           <td class="border-b-2 dark:border-b-gray-400 p-2">

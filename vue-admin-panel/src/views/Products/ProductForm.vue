@@ -51,6 +51,15 @@
             prepend="&#2547;"
         />
 
+        <CustomInputV3
+            type="number"
+            name="quantity"
+            id-for="product-quantity"
+            required
+            v-model:number="product.quantity"
+            label="Quantity"
+        />
+
         <div class="flex items-center gap-2">
           <input
               :id="product.id || 'product-status'"
@@ -116,6 +125,7 @@ const product = ref({
   title: null,
   description: "",
   price: null,
+  quantity: null,
   image: null,
   published: null,
 });
