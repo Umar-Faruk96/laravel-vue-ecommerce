@@ -156,9 +156,9 @@ class CartController extends Controller
     private function showErrorMsg(Product $product): Response
     {
         return response(['message' => match ($product->quantity) {
-            0, null => 'The' . $product->title . ' product is out of stock',
-            1 => 'Only 1 item left in stock for the ' . $product->title . ' product',
-            default => 'You can buy only ' . $product->quantity . ' ' . Str::plural('item', $product->quantity) . ' left in stock for the ' . $product->title . ' product',
+            0, null => 'The "' . $product->title . '" product is out of stock',
+            1 => 'Only 1 item left in stock for the "' . $product->title . '" product',
+            default => 'You can buy only ' . $product->quantity . ' ' . Str::plural('item', $product->quantity) . ' left in stock for the "' . $product->title . '" product',
         }], 422);
     }
 }

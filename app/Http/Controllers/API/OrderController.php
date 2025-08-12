@@ -5,8 +5,13 @@ namespace App\Http\Controllers\API;
 use App\Mail\OrderUpdated;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\{Http\Request, Http\JsonResponse};
-use App\{Models\Order, Http\Controllers\Controller, Http\Resources\OrderListResource, Http\Resources\OrderResource, Enums\OrderStatus};
+use Illuminate\{Http\Request, Http\JsonResponse, Support\Facades\DB};
+use App\{Models\Order,
+    Http\Controllers\Controller,
+    Http\Resources\OrderListResource,
+    Http\Resources\OrderResource,
+    Enums\OrderStatus
+};
 
 class OrderController extends Controller
 {
@@ -48,9 +53,22 @@ class OrderController extends Controller
             'status' => 'required|in:' . implode(',', OrderStatus::getStatuses()),
         ]);
 
-        $order->update(['status' => $validatedStatus['status']]);
+        DB::beginTransaction();
+        try {
+            $order->update(['status' => $validatedStatus['status']]);
 
-        Mail::to($order->user)->send(new OrderUpdated($order));
+            if ($order->status === OrderStatus::Cancelled->value) {
+                $order->items->each(function ($item) {
+                    return ($item->product && $item->product->quantity !== null)
+                        ? $item->product->update(['quantity' => $item->product->quantity + $item->quantity]) : null;
+                });
+            }
+
+            Mail::to($order->user)->send(new OrderUpdated($order));
+        } catch (\Exception $exception) {
+            DB::rollBack();
+        }
+        DB::commit();
 
         return response()->json([
             'message' => "Order status updated successfully to '{$validatedStatus['status']}'",

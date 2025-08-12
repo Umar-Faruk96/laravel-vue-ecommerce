@@ -38,9 +38,9 @@ class CheckoutController extends Controller
 
             if ($product->quantity !== null && $quantity > $product->quantity) {
                 $message = match ($product->quantity) {
-                    0, null => 'The ' . $product->title . ' product is out of stock',
-                    1 => 'Only 1 item left in stock for the ' . $product->title . ' product',
-                    default => 'You can buy only ' . $product->quantity . ' ' . Str::plural('item', $product->quantity) . ' left in stock for the ' . $product->title . ' product',
+                    0, null => 'The "' . $product->title . '" product is out of stock',
+                    1 => 'Only 1 item left in stock for the "' . $product->title . '" product',
+                    default => 'You can buy only ' . $product->quantity . ' ' . Str::plural('item', $product->quantity) . ' left in stock for the "' . $product->title . '" product',
                 };
                 return redirect()->back()->withErrors(['error' => $message]);
             }
@@ -92,6 +92,12 @@ class CheckoutController extends Controller
             foreach ($orderItems as $orderItem) {
                 $orderItem['order_id'] = $order->id;
                 OrderItem::create($orderItem);
+            }
+
+            // Decrement Product Quantity
+            foreach ($products as $product) {
+                $product->quantity -= $cartItems[$product->id]['quantity'];
+                $product->save();
             }
 
             // Create Payment
