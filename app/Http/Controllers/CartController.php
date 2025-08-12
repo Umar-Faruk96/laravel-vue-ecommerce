@@ -35,9 +35,9 @@ class CartController extends Controller
                 $totalQuantity = $cartItem->quantity += $quantity;
                 if ($totalQuantity > $product->quantity) {
                     return response(['message' => match ($product->quantity) {
-                        0 => 'Product is out of stock',
-                        1 => 'Only 1 item left in stock',
-                        default => 'You can buy only ' . $product->quantity . ' ' . Str::plural('item', $product->quantity) . ' left in stock',
+                        0 => 'The' . $product->title . ' product is out of stock',
+                        1 => 'Only 1 item left in stock for the ' . $product->title . ' product',
+                        default => 'You can buy only ' . $product->quantity . ' ' . Str::plural('item', $product->quantity) . ' left in stock for the ' . $product->title . ' product',
                     }], 422);
                 }
                 $cartItem->update();
@@ -51,9 +51,9 @@ class CartController extends Controller
 
                 if ($quantity > $product->quantity) {
                     return response(['message' => match ($product->quantity) {
-                        0 => 'Product is out of stock',
-                        1 => 'Only 1 item left in stock',
-                        default => 'You can buy only ' . $product->quantity . ' ' . Str::plural('item', $product->quantity) . ' left in stock',
+                        0 => 'The' . $product->title . ' product is out of stock',
+                        1 => 'Only 1 item left in stock for the ' . $product->title . ' product',
+                        default => 'You can buy only ' . $product->quantity . ' ' . Str::plural('item', $product->quantity) . ' left in stock for the ' . $product->title . ' product',
                     }], 422);
                 }
 
@@ -80,9 +80,9 @@ class CartController extends Controller
             if (!$productFound) {
                 if ($quantity > $product->quantity) {
                     return response(['message' => match ($product->quantity) {
-                        0 => 'Product is out of stock',
-                        1 => 'Only 1 item left in stock',
-                        default => 'You can buy only ' . $product->quantity . ' ' . Str::plural('item', $product->quantity) . ' left in stock',
+                        0 => 'The' . $product->title . ' product is out of stock',
+                        1 => 'Only 1 item left in stock for the ' . $product->title . ' product',
+                        default => 'You can buy only ' . $product->quantity . ' ' . Str::plural('item', $product->quantity) . ' left in stock for the ' . $product->title . ' product',
                     }], 422);
                 }
 
@@ -138,9 +138,9 @@ class CartController extends Controller
 //            User is authenticated
             if ($quantity > $product->quantity) {
                 return response(['message' => match ($product->quantity) {
-                    0 => 'Product is out of stock',
-                    1 => 'Only 1 item left in stock',
-                    default => 'You can buy only ' . $product->quantity . ' ' . Str::plural('item', $product->quantity) . ' left in stock',
+                    0 => 'The' . $product->title . ' product is out of stock',
+                    1 => 'Only 1 item left in stock for the ' . $product->title . ' product',
+                    default => 'You can buy only ' . $product->quantity . ' ' . Str::plural('item', $product->quantity) . ' left in stock for the ' . $product->title . ' product',
                 }], 422);
             }
 
@@ -159,9 +159,9 @@ class CartController extends Controller
                     break;
                 } else {
                     return response(['message' => match ($product->quantity) {
-                        0 => 'Product is out of stock',
-                        1 => 'Only 1 item left in stock',
-                        default => 'You can buy only ' . $product->quantity . ' ' . Str::plural('item', $product->quantity) . ' left in stock',
+                        0 => 'The' . $product->title . ' product is out of stock',
+                        1 => 'Only 1 item left in stock for the ' . $product->title . ' product',
+                        default => 'You can buy only ' . $product->quantity . ' ' . Str::plural('item', $product->quantity) . ' left in stock for the ' . $product->title . ' product',
                     }], 422);
                 }
             }
