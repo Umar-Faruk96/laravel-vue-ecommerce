@@ -40,7 +40,7 @@
          @notify.window="show($event.detail.message, $event.detail.type)"
          class="fixed left-1/2 top-16 -ml-[200px] w-[400px] px-4 py-2 pb-4 text-white"
          :class="type === 'error' ? 'bg-red-500' : 'bg-emerald-500'">
-        <div class="font-semibold" x-text="message"></div>
+        <p class="font-semibold" x-text="message"></p>
 
         <button @click="close"
                 class="absolute right-2 top-2 flex h-[30px] w-[30px] items-center justify-center rounded-full transition-colors hover:bg-black/10">
