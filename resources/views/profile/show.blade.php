@@ -9,11 +9,14 @@
     }" class="container mx-auto p-5 lg:w-2/3">
         <div class="grid grid-cols-1 items-start gap-6 md:grid-cols-3">
             <div class="rounded-lg bg-white p-3 shadow md:col-span-2">
+
+                {{--    Session Errors    --}}
                 @session('errors')
                 <div class="mb-4 rounded-md bg-red-500 text-gray-100 p-3">
                     <p>{{ session('errors')->first() }}</p>
                 </div>
                 @endsession
+                {{--    /Session Errors    --}}
 
                 <form x-data="{
                     countries: {{ json_encode($countries) }},

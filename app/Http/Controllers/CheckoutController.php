@@ -10,7 +10,7 @@ use Stripe\{Customer, StripeClient};
 use App\Enums\{OrderStatus, PaymentStatus};
 use App\Models\{Order, Payment, CartItem, OrderItem};
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Illuminate\{View\View, Http\Request, Routing\Redirector, Http\RedirectResponse};
+use Illuminate\{Support\Str, View\View, Http\Request, Routing\Redirector, Http\RedirectResponse};
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -35,6 +35,16 @@ class CheckoutController extends Controller
 
         foreach ($products as $product) {
             $quantity = $cartItems[$product->id]['quantity'];
+
+            if ($product->quantity !== null && $quantity > $product->quantity) {
+                $message = match ($product->quantity) {
+                    0, null => 'The ' . $product->title . ' product is out of stock',
+                    1 => 'Only 1 item left in stock for the ' . $product->title . ' product',
+                    default => 'You can buy only ' . $product->quantity . ' ' . Str::plural('item', $product->quantity) . ' left in stock for the ' . $product->title . ' product',
+                };
+                return redirect()->back()->withErrors(['error' => $message]);
+            }
+
             $totalPrice += $product->price * $quantity;
 
             // initial setup for stripe

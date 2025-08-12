@@ -34,12 +34,9 @@ class CartController extends Controller
 //                User already has item(s) in the cart
                 $totalQuantity = $cartItem->quantity += $quantity;
                 if ($totalQuantity > $product->quantity) {
-                    return response(['message' => match ($product->quantity) {
-                        0 => 'The' . $product->title . ' product is out of stock',
-                        1 => 'Only 1 item left in stock for the ' . $product->title . ' product',
-                        default => 'You can buy only ' . $product->quantity . ' ' . Str::plural('item', $product->quantity) . ' left in stock for the ' . $product->title . ' product',
-                    }], 422);
+                    return $this->showErrorMsg($product);
                 }
+
                 $cartItem->update();
             } else {
 //                User does not have item(s) in the cart
@@ -50,11 +47,7 @@ class CartController extends Controller
                 ];
 
                 if ($quantity > $product->quantity) {
-                    return response(['message' => match ($product->quantity) {
-                        0 => 'The' . $product->title . ' product is out of stock',
-                        1 => 'Only 1 item left in stock for the ' . $product->title . ' product',
-                        default => 'You can buy only ' . $product->quantity . ' ' . Str::plural('item', $product->quantity) . ' left in stock for the ' . $product->title . ' product',
-                    }], 422);
+                    return $this->showErrorMsg($product);
                 }
 
                 CartItem::create($data);
@@ -79,11 +72,7 @@ class CartController extends Controller
 
             if (!$productFound) {
                 if ($quantity > $product->quantity) {
-                    return response(['message' => match ($product->quantity) {
-                        0 => 'The' . $product->title . ' product is out of stock',
-                        1 => 'Only 1 item left in stock for the ' . $product->title . ' product',
-                        default => 'You can buy only ' . $product->quantity . ' ' . Str::plural('item', $product->quantity) . ' left in stock for the ' . $product->title . ' product',
-                    }], 422);
+                    return $this->showErrorMsg($product);
                 }
 
                 $cartItems[] = [
@@ -137,11 +126,7 @@ class CartController extends Controller
         if ($user) {
 //            User is authenticated
             if ($quantity > $product->quantity) {
-                return response(['message' => match ($product->quantity) {
-                    0 => 'The' . $product->title . ' product is out of stock',
-                    1 => 'Only 1 item left in stock for the ' . $product->title . ' product',
-                    default => 'You can buy only ' . $product->quantity . ' ' . Str::plural('item', $product->quantity) . ' left in stock for the ' . $product->title . ' product',
-                }], 422);
+                return $this->showErrorMsg($product);
             }
 
             CartItem::where(['user_id' => $request->user()->id, 'product_id' => $product->id])->update(['quantity' => $quantity]);
@@ -158,11 +143,7 @@ class CartController extends Controller
                     $item['quantity'] = $quantity;
                     break;
                 } else {
-                    return response(['message' => match ($product->quantity) {
-                        0 => 'The' . $product->title . ' product is out of stock',
-                        1 => 'Only 1 item left in stock for the ' . $product->title . ' product',
-                        default => 'You can buy only ' . $product->quantity . ' ' . Str::plural('item', $product->quantity) . ' left in stock for the ' . $product->title . ' product',
-                    }], 422);
+                    return $this->showErrorMsg($product);
                 }
             }
 
@@ -170,5 +151,14 @@ class CartController extends Controller
 
             return response(['count' => Cart::getCountFromItems($cartItems)]);
         }
+    }
+
+    private function showErrorMsg(Product $product): Response
+    {
+        return response(['message' => match ($product->quantity) {
+            0, null => 'The' . $product->title . ' product is out of stock',
+            1 => 'Only 1 item left in stock for the ' . $product->title . ' product',
+            default => 'You can buy only ' . $product->quantity . ' ' . Str::plural('item', $product->quantity) . ' left in stock for the ' . $product->title . ' product',
+        }], 422);
     }
 }

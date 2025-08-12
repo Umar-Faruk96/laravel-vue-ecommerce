@@ -2,6 +2,15 @@
     <div class="container mx-auto lg:w-2/3 xl:w-2/3">
         <h1 class="mb-6 text-3xl font-bold dark:text-gray-200">Your Cart Items</h1>
 
+        {{--    Session Errors    --}}
+{{--        @dump(session()->all())--}}
+        @session('errors')
+        <div class="mb-4 rounded-md bg-red-500 text-gray-100 p-3">
+            <p>{{ session('errors')->first() }}</p>
+        </div>
+        @endsession
+        {{--    /Session Errors    --}}
+
         {{-- @dump($cartItems) --}}
 
         <div x-data="{
@@ -32,8 +41,8 @@
                         <div x-data="productItem(product)">
                             <div class="flex w-full flex-1 flex-col items-center gap-4 sm:flex-row">
                                 <a :href="product.href"
-                                    class="flex h-32 w-36 items-center justify-center overflow-hidden">
-                                    <img :src="product.image" class="object-cover" alt="" />
+                                   class="flex h-32 w-36 items-center justify-center overflow-hidden">
+                                    <img :src="product.image" class="object-cover" alt=""/>
                                 </a>
 
                                 <div class="flex flex-1 flex-col justify-between">
@@ -48,17 +57,17 @@
                                         <div class="flex items-center">
                                             Qty:
                                             <input type="number" min="1" x-model="product.quantity"
-                                                @change="changeQuantity()"
-                                                class="ml-3 w-16 border-gray-200 py-1 focus:border-purple-600 focus:ring-purple-600" />
+                                                   @change="changeQuantity()"
+                                                   class="ml-3 w-16 border-gray-200 py-1 focus:border-purple-600 focus:ring-purple-600"/>
                                         </div>
 
                                         <a href="#" @click.prevent="removeItemFromCart()"
-                                            class="text-purple-600 hover:text-purple-500">Remove</a>
+                                           class="text-purple-600 hover:text-purple-500">Remove</a>
                                     </div>
                                 </div>
                             </div>
 
-                            <hr class="my-5" />
+                            <hr class="my-5"/>
                         </div>
                     </template>
                     <!--/ Product Item -->
