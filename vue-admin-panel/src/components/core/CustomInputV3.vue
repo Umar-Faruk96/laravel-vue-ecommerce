@@ -154,7 +154,8 @@
       >
     </div>
 
-    <small v-if="errors && errors[0]" class="text-red-600">{{
+    <small v-if="errors && errors[0]"
+           class="text-red-600 dark:text-red-300 dark:font-semibold">{{
         errors[0]
       }}</small>
   </div>

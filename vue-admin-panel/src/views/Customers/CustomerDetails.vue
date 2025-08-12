@@ -562,7 +562,7 @@ function submit() {
         .catch((error) => {
           loading.value = false;
           errors.value = error.data.errors;
-          console.error("Error updating customer:", error);
+          // console.error("Error updating customer:", error);
         });
   }
 }

@@ -31,11 +31,14 @@
             name="product_title"
             id-for="product_title"
             required
+            :errors="errors['title']"
         />
 
         <CustomInputV3
             type="file"
             label="Product Image"
+            name="product_image"
+            :errors="errors['product_image']"
             @change="(file) => (product.image = file)"
         />
 
@@ -49,6 +52,7 @@
             v-model:number="product.price"
             label="Price"
             prepend="&#2547;"
+            :errors="errors['price']"
         />
 
         <CustomInputV3
@@ -58,6 +62,7 @@
             required
             v-model:number="product.quantity"
             label="Quantity"
+            :errors="errors['quantity']"
         />
 
         <div class="flex items-center gap-2">
@@ -141,6 +146,7 @@ onMounted(() => {
 });
 
 const loading = ref(false);
+const errors = ref({});
 const router = useRouter();
 
 function submit($event, close = false) {
@@ -157,7 +163,11 @@ function submit($event, close = false) {
           router.push({name: "app.products"})
         }
       }
-    });
+    }).catch((error) => {
+      loading.value = false;
+      errors.value = error.data.errors;
+      // console.error("Error updating product:", error);
+    })
   } else {
     store
         .dispatch("createProduct", product.value)
@@ -183,7 +193,8 @@ function submit($event, close = false) {
         })
         .catch((error) => {
           loading.value = false;
-          console.error("Error creating product:", error);
+          errors.value = error.data.errors;
+          // console.error("Error creating product:", error);
         });
   }
 }
