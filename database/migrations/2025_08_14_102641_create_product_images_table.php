@@ -15,11 +15,11 @@ return new class extends Migration {
         Schema::create('product_images', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Product::class, 'product_id')->constrained()->cascadeOnDelete();
-            $table->string('url', 255);
+            $table->string('url', 2000);
             $table->string('path', 255)->nullable();
             $table->text('altText')->nullable();
-            $table->string('mime', 50);
-            $table->integer('size');
+            $table->string('mime', 50)->nullable();
+            $table->integer('size')->nullable();
             $table->integer('position');
             $table->timestamps();
         });
@@ -68,6 +68,13 @@ return new class extends Migration {
                     ];
                 })
         );
+
+//        create image, image_mime and image_size columns back in products table
+        Schema::table('products', function (Blueprint $table) {
+            $table->string('image', 255)->nullable();
+            $table->string('image_mime', 50)->nullable();
+            $table->integer('image_size')->nullable();
+        });
 
         Schema::dropIfExists('product_images');
     }
