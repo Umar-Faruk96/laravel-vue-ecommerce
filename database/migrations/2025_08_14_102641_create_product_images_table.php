@@ -29,16 +29,17 @@ return new class extends Migration {
             DB::table('products')
                 ->selectRaw('id, image, image_mime, image_size')
                 ->whereNotNull('image')
-                ->get()->each(function ($product) {
+                ->get()->map(function ($product) {
                     return [
                         'product_id' => $product->id,
                         'url' => $product->image,
                         'mime' => $product->image_mime,
                         'size' => $product->image_size,
                         'position' => 1,
+                        'created_at' => now(),
+                        'updated_at' => now(),
                     ];
-                })
-                ->toArray()
+                })->toArray()
         );
 
 //        remove image, image_mime and image_size columns from products table
@@ -54,15 +55,21 @@ return new class extends Migration {
      */
     public function down(): void
     {
+//        create image, image_mime and image_size columns back in products table
+        Schema::table('products', function (Blueprint $table) {
+            $table->string('image', 255)->nullable()->after('slug');
+            $table->string('image_mime', 50)->nullable()->after('image');
+            $table->integer('image_size')->nullable()->after('image_mime');
+        });
+
 //        import data of image related columns from product_images table back to products table
-        DB::table('products')->insert(
+        DB::table('products')->update(
             DB::table('product_images')
                 ->selectRaw('product_id, url, mime, size')
                 ->whereNotNull('url')
                 ->get()
-                ->each(function ($product) {
+                ->map(function ($product) {
                     return [
-                        'id' => $product->product_id,
                         'image' => $product->url,
                         'image_mime' => $product->mime,
                         'image_size' => $product->size,
@@ -70,13 +77,6 @@ return new class extends Migration {
                 })
                 ->toArray()
         );
-
-//        create image, image_mime and image_size columns back in products table
-        Schema::table('products', function (Blueprint $table) {
-            $table->string('image', 255)->nullable();
-            $table->string('image_mime', 50)->nullable();
-            $table->integer('image_size')->nullable();
-        });
 
         Schema::dropIfExists('product_images');
     }
