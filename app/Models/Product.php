@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\{HasSlug, SlugOptions};
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -16,9 +17,6 @@ class Product extends Model
         'description',
         'price',
         'quantity',
-        'image',
-        'image_mime',
-        'image_size',
         'published',
         'created_by',
         'updated_by'
@@ -31,8 +29,13 @@ class Product extends Model
             ->saveSlugsTo('slug');
     }
 
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'slug';
+    }
+
+    public function images(): HasMany
+    {
+        return $this->hasMany(ProductImage::class)->orderBy('position');
     }
 }
