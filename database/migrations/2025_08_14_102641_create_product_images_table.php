@@ -38,6 +38,7 @@ return new class extends Migration {
                         'position' => 1,
                     ];
                 })
+                ->toArray()
         );
 
 //        remove image, image_mime and image_size columns from products table
@@ -67,6 +68,7 @@ return new class extends Migration {
                         'image_size' => $product->size,
                     ];
                 })
+                ->toArray()
         );
 
 //        create image, image_mime and image_size columns back in products table
