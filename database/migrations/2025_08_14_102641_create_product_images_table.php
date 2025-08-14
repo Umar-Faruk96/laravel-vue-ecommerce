@@ -31,6 +31,13 @@ return new class extends Migration {
                 ->whereNotNull('image')
                 ->get()->toArray()
         );
+
+//        remove image, image_mime and image_size columns from products table
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropColumn('image');
+            $table->dropColumn('image_mime');
+            $table->dropColumn('image_size');
+        });
     }
 
     /**
