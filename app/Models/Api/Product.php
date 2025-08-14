@@ -7,7 +7,7 @@ use App\Models\Product as MainProduct;
 
 class Product extends MainProduct
 {
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'id';
     }
