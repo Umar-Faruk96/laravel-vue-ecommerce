@@ -63,20 +63,16 @@ return new class extends Migration {
         });
 
 //        import data of image related columns from product_images table back to products table
-        DB::table('products')->update(
-            DB::table('product_images')
-                ->selectRaw('product_id, url, mime, size')
-                ->whereNotNull('url')
-                ->get()
-                ->map(function ($product) {
-                    return [
-                        'image' => $product->url,
-                        'image_mime' => $product->mime,
-                        'image_size' => $product->size,
-                    ];
-                })
-                ->toArray()
-        );
+        DB::table('product_images')->select('product_id', 'url', 'mime', 'size')
+            ->get()->each(function ($image) {
+                DB::table('products')
+                    ->where('id', $image->product_id)
+                    ->update([
+                        'image' => $image->url,
+                        'image_mime' => $image->mime,
+                        'image_size' => $image->size,
+                    ]);
+            });
 
         Schema::dropIfExists('product_images');
     }
