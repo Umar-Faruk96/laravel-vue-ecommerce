@@ -29,7 +29,15 @@ return new class extends Migration {
             DB::table('products')
                 ->selectRaw('id, image, image_mime, image_size')
                 ->whereNotNull('image')
-                ->get()->toArray()
+                ->get()->each(function ($product) {
+                    return [
+                        'product_id' => $product->id,
+                        'url' => $product->image,
+                        'mime' => $product->image_mime,
+                        'size' => $product->image_size,
+                        'position' => 1,
+                    ];
+                })
         );
 
 //        remove image, image_mime and image_size columns from products table
