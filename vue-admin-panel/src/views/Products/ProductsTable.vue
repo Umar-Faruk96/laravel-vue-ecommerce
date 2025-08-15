@@ -126,7 +126,11 @@
             }}
           </td>
           <td class="border-b-2 dark:border-b-gray-400 p-2">
-            <img :src="product.image_url" :alt="product.title" class="w-16"/>
+            <img v-if="product.image_url" :src="product.image_url"
+                 :alt="product.title"
+                 class="w-16"/>
+            <img v-else src="@/assets/images/no-image-placeholder.png"
+                 :alt="product.title" class="w-16"/>
           </td>
           <td
               class="border-b-2 dark:border-b-gray-400 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis"
@@ -221,7 +225,7 @@
     <!-- Pagination -->
     <section
         v-if="!products.loading && products.data.length"
-        class="flex flex-col sm:flex-row gap-2 overflow-x-scroll justify-between items-center mt-5"
+        class="flex flex-col sm:flex-row gap-2 overflow-x-scroll sm:overflow-x-hidden justify-between items-center mt-5"
     >
       <span class="text-black/40 dark:text-white/70"
       >Showing from {{ products.from }} to {{ products.to }}</span
