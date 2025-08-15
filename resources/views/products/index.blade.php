@@ -24,7 +24,7 @@
                 <div x-data="productItem({{ json_encode([
                     'id' => $product->id,
                     'slug' => $product->slug,
-                    'image' => $product->image?? Storage::url('images/no-image-placeholder.png'),
+                    'image' => $product->image ?? Storage::url('images/no-image-placeholder.png'),
                     'title' => $product->title,
                     'price' => $product->price,
                     'addToCartUrl' => route('cart.add', $product),

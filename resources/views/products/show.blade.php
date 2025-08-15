@@ -2,7 +2,7 @@
     <div x-data="productItem({{ json_encode([
         'id' => $product->id,
         'slug' => $product->slug,
-        'image' => $product->image,
+        'image' => $product->image ?? Storage::url('images/no-image-placeholder.png'),
         'title' => $product->title,
         'price' => $product->price,
         'quantity' => $product->quantity,
@@ -11,7 +11,7 @@
         <div class="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-5">
             <div class="lg:col-span-3">
                 <div x-data="{
-                    images: ['{{ $product->image }}'],
+                    images: ['{{ $product->image ?? Storage::url('images/no-image-placeholder.png') }}'],
                     activeImage: null,
                     prev() {
                         let index = this.images.indexOf(this.activeImage);
