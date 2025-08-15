@@ -24,16 +24,17 @@
                 <div x-data="productItem({{ json_encode([
                     'id' => $product->id,
                     'slug' => $product->slug,
-                    'image' => $product->image,
+                    'image' => $product->image?? Storage::url('images/no-image-placeholder.png'),
                     'title' => $product->title,
                     'price' => $product->price,
                     'addToCartUrl' => route('cart.add', $product),
                 ]) }})"
-                    class="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100 border-1 rounded-md border border-gray-200 dark:border-gray-800 transition-colors hover:border-purple-600">
+                     class="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100 border-1 rounded-md border border-gray-200 dark:border-gray-800 transition-colors hover:border-purple-600">
                     <a href="{{ route('product.show', $product->slug) }}"
-                        class="aspect-h-2 aspect-w-2 block overflow-hidden">
-                        <img src="{{ $product->image }}" alt=""
-                            class="rounded-t-lg object-cover transition-transform hover:rotate-1 hover:scale-105" />
+                       class="aspect-h-2 aspect-w-2 block overflow-hidden">
+                        <img src="{{ $product->image ?? Storage::url('images/no-image-placeholder.png') }}"
+                             alt="{{ $product->title }}"
+                             class="rounded-t-lg object-cover transition-transform hover:rotate-1 hover:scale-105"/>
                     </a>
                     <div class="p-4">
                         <h3 class="text-lg">
