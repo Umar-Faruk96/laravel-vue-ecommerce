@@ -24,10 +24,10 @@
     </header>
 
     <form @submit.prevent="submit">
-      <main
+      <section
           class="bg-white/80 dark:bg-gray-500 px-4 pt-5 pb-4 space-y-4 rounded-t-md">
         <div class="grid grid-cols-1 lg:grid-cols-3">
-          <div class="col-span-2 space-y-4">
+          <section class="col-span-2 space-y-4">
             <CustomInputV3
                 v-model:title="product.title"
                 label="Product Title"
@@ -83,17 +83,19 @@
               >Published</label
               >
             </div>
-          </div>
+          </section>
+          <!--     Images Upload Section     -->
           <div class="col-span-1 px-4 pt-5 pb-4">
-            <image-preview v-model="product.images"
+            <image-preview v-model:images="product.images"
                            :images="product.images"
                            v-model:deleted-images="product.deleted_images"
                            v-model:image-positions="product.image_positions"
                            :errors="errors['product_images']"
                            :name="'product_images'"/>
           </div>
+          <!--    / Images Upload Section      -->
         </div>
-      </main>
+      </section>
 
       <footer
           class="bg-black/5 dark:bg-gray-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse rounded-b-md"
