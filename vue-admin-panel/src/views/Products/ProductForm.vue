@@ -5,7 +5,8 @@
   />
 
   <template v-else>
-    <header class="py-3 sm:px-4 flex flex-col sm:flex-row gap-4 justify-between items-center">
+    <header
+        class="py-3 sm:px-4 flex flex-col sm:flex-row gap-4 justify-between items-center">
       <h2 class="dark:text-white/70 sm:text-xl font-semibold leading-6 text-black/90">
         {{
           product.id
@@ -25,8 +26,8 @@
     <form @submit.prevent="submit">
       <main
           class="bg-white/80 dark:bg-gray-500 px-4 pt-5 pb-4 space-y-4 rounded-t-md">
-        <div class="grid grid-cols-3">
-          <div class="col-span-2">
+        <div class="grid grid-cols-1 lg:grid-cols-3">
+          <div class="col-span-2 space-y-4">
             <CustomInputV3
                 v-model:title="product.title"
                 label="Product Title"
@@ -36,13 +37,13 @@
                 :errors="errors['title']"
             />
 
-            <CustomInputV3
-                type="file"
-                label="Product Image"
-                name="product_image"
-                :errors="errors['product_image']"
-                @change="(file) => (product.image = file)"
-            />
+            <!--            <CustomInputV3
+                            type="file"
+                            label="Product Image"
+                            name="product_image"
+                            :errors="errors['product_image']"
+                            @change="(file) => (product.image = file)"
+                        />-->
 
             <CKEditor v-model="product.description"/>
 
@@ -83,6 +84,12 @@
               >
             </div>
           </div>
+          <div class="col-span-1 px-4 pt-5 pb-4">
+            <image-preview v-model="product.images"
+                           :images="product.images"
+                           v-model:deleted-images="product.deleted_images"
+                           v-model:image-positions="product.image_positions"/>
+          </div>
         </div>
       </main>
 
@@ -98,7 +105,7 @@
         <button
             type="button"
             @click="submit($event, true)"
-            class="py-2 w-full sm:w-auto px-4 border border-transparent text-sm font-medium rounded-md text-white/90 bg-fuchsia-500 hover:bg-fuchsia-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-500 sm:ml-3 transition-colors"
+            class="mt-3 sm:mt-0 py-2 w-full sm:w-auto px-4 border border-transparent text-sm font-medium rounded-md text-white/90 bg-fuchsia-500 hover:bg-fuchsia-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-500 sm:ml-3 transition-colors"
         >
           Save & Close
         </button>
@@ -121,6 +128,7 @@ import store from "../../store/index.js";
 import CustomInputV3 from "../../components/core/CustomInputV3.vue";
 import {useRouter} from "vue-router";
 import CKEditor from "../../components/core/CKEditor.vue";
+import ImagePreview from "../../components/ImagePreview.vue";
 
 const props = defineProps({
   productId: {
@@ -132,6 +140,9 @@ const props = defineProps({
 const product = ref({
   id: null,
   title: null,
+  images: [],
+  deleted_images: [],
+  image_positions: [],
   description: "",
   price: null,
   quantity: null,
