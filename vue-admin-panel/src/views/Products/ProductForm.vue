@@ -45,7 +45,7 @@
                             @change="(file) => (product.image = file)"
                         />-->
 
-            <CKEditor v-model="product.description"/>
+            <CKEditor v-model:data="product.description"/>
 
             <CustomInputV3
                 type="number"

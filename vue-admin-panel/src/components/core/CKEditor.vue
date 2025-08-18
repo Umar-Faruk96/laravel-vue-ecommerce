@@ -1,9 +1,10 @@
 <template>
     <ckeditor
         v-if="editor"
-        v-model="data"
+        v-model="editorData"
         :editor="editor"
-        :config="config" tag-name="textarea"
+        :config="config"
+        tag-name="textarea"
     />
 </template>
 
@@ -15,7 +16,18 @@ const cloud = useCKEditorCloud({
     version: '46.0.0',
 });
 
-const data = ref('<p>Hello world!</p>');
+const model = defineModel('data', {
+  type: String,
+  default: ''
+});
+
+// Convert null/undefined to empty string for the editor
+const editorData = computed({
+  get: () => model.value || '',
+  set: (value) => {
+    model.value = value || '';
+  }
+});
 
 
 const editor = computed(() => {
