@@ -88,7 +88,9 @@
             <image-preview v-model="product.images"
                            :images="product.images"
                            v-model:deleted-images="product.deleted_images"
-                           v-model:image-positions="product.image_positions"/>
+                           v-model:image-positions="product.image_positions"
+                           :errors="errors['product_images']"
+                           :name="'product_images'"/>
           </div>
         </div>
       </main>
