@@ -5,7 +5,7 @@
   />
 
   <template v-else>
-    <header class="py-3 sm:px-4 flex justify-between items-center">
+    <header class="py-3 sm:px-4 flex flex-col sm:flex-row gap-4 justify-between items-center">
       <h2 class="dark:text-white/70 sm:text-xl font-semibold leading-6 text-black/90">
         {{
           product.id
@@ -25,60 +25,64 @@
     <form @submit.prevent="submit">
       <main
           class="bg-white/80 dark:bg-gray-500 px-4 pt-5 pb-4 space-y-4 rounded-t-md">
-        <CustomInputV3
-            v-model:title="product.title"
-            label="Product Title"
-            name="product_title"
-            id-for="product_title"
-            required
-            :errors="errors['title']"
-        />
+        <div class="grid grid-cols-3">
+          <div class="col-span-2">
+            <CustomInputV3
+                v-model:title="product.title"
+                label="Product Title"
+                name="product_title"
+                id-for="product_title"
+                required
+                :errors="errors['title']"
+            />
 
-        <CustomInputV3
-            type="file"
-            label="Product Image"
-            name="product_image"
-            :errors="errors['product_image']"
-            @change="(file) => (product.image = file)"
-        />
+            <CustomInputV3
+                type="file"
+                label="Product Image"
+                name="product_image"
+                :errors="errors['product_image']"
+                @change="(file) => (product.image = file)"
+            />
 
-        <CKEditor v-model="product.description"/>
+            <CKEditor v-model="product.description"/>
 
-        <CustomInputV3
-            type="number"
-            name="price"
-            id-for="product-price"
-            required
-            v-model:number="product.price"
-            label="Price"
-            prepend="&#2547;"
-            :errors="errors['price']"
-        />
+            <CustomInputV3
+                type="number"
+                name="price"
+                id-for="product-price"
+                required
+                v-model:number="product.price"
+                label="Price"
+                prepend="&#2547;"
+                :errors="errors['price']"
+            />
 
-        <CustomInputV3
-            type="number"
-            name="quantity"
-            id-for="product-quantity"
-            required
-            v-model:number="product.quantity"
-            label="Quantity"
-            :errors="errors['quantity']"
-        />
+            <CustomInputV3
+                type="number"
+                name="quantity"
+                id-for="product-quantity"
+                required
+                v-model:number="product.quantity"
+                label="Quantity"
+                :errors="errors['quantity']"
+            />
 
-        <div class="flex items-center gap-2">
-          <input
-              :id="product.id || 'product-status'"
-              type="checkbox"
-              :name="product.title || 'product-status'"
-              v-model="product.published"
-              class="w-5 h-5 appearance-none bg-gray-300 hover:bg-gray-500 dark:bg-gray-700 dark:hover:bg-gray-600 rounded checked:bg-indigo-700 checked:hover:bg-indigo-700 checked:focus:ring-2 checked:ring-indigo-700 checked:ring-offset-2 relative checked:after:absolute checked:after:top-1/2 checked:after:left-1/2 checked:after:content-['✔'] checked:after:-translate-x-1/2 checked:after:-translate-y-1/2 transition-all"
-              :checked="product.published"
-          />
-          <label
-              :for="product.id || 'product-status'"
-              class="text-sm text-black/80 dark:text-gray-300"
-          >Published</label
-          >
+            <div class="flex items-center gap-2">
+              <input
+                  :id="product.id || 'product-status'"
+                  type="checkbox"
+                  :name="product.title || 'product-status'"
+                  v-model="product.published"
+                  class="w-5 h-5 appearance-none bg-gray-300 hover:bg-gray-500 dark:bg-gray-700 dark:hover:bg-gray-600 rounded checked:bg-indigo-700 checked:hover:bg-indigo-700 checked:focus:ring-2 checked:ring-indigo-700 checked:ring-offset-2 relative checked:after:absolute checked:after:top-1/2 checked:after:left-1/2 checked:after:content-['✔'] checked:after:-translate-x-1/2 checked:after:-translate-y-1/2 transition-all"
+                  :checked="product.published"
+              />
+              <label
+                  :for="product.id || 'product-status'"
+                  class="text-sm text-black/80 dark:text-gray-300"
+              >Published</label
+              >
+            </div>
+          </div>
         </div>
       </main>
 
