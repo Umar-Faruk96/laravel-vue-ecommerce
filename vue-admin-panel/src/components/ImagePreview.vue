@@ -20,7 +20,7 @@ const imagePositions = defineModel('imagePositions');
 const files = ref([]);
 const imageUrls = ref([]);
 
-const onFileChange = (event) => {
+const uploadFiles = (event) => {
   // console.log(event);
   files.value = [...files.value, event.target.files];
 
@@ -56,7 +56,7 @@ const readFile = (file) => {
       </span>
         <input type="file"
                class="absolute w-full h-full opacity-0"
-               @change="onFileChange" multiple>
+               @change="uploadFiles" multiple>
       </div>
     </div>
     <small v-if="errors && errors[0]"
