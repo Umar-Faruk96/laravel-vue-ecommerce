@@ -21,9 +21,23 @@ const files = ref([]);
 const imageUrls = ref([]);
 
 const onFileChange = (event) => {
-  console.log(event);
-  // files.value = event.target.files;
-  // imageUrls.value = [];
+  // console.log(event);
+  files.value = [...files.value, event.target.files];
+
+  for (const file of event.target.files) {
+    readFile(file).then(url => {
+      imageUrls.value = [...imageUrls.value, url];
+    })
+  }
+}
+
+const readFile = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  })
 }
 
 </script>
@@ -33,7 +47,7 @@ const onFileChange = (event) => {
     <div class="flex flex-wrap gap-1">
       <div
           class="relative w-[120px] h-[120px] rounded border border-dashed flex items-center justify-center hover:border-purple-500 overflow-hidden">
-        Image
+
       </div>
       <div
           class="relative w-[120px] h-[120px] rounded border border-dashed flex items-center justify-center hover:border-purple-500 dark:hover:border-purple-300 overflow-hidden">
