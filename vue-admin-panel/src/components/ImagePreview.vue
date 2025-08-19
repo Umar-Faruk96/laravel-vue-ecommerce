@@ -98,13 +98,18 @@ const removeImage = (image) => {
     deletedImages.value.push(image.id);
     image.toBeDeleted = true
 
-    deletedImages.value = deletedImages.value.filter(img => img === image.id);
+    deletedImages.value = [...deletedImages.value];
   } else {
     files.value = files.value.filter(file => file.id !== image.id);
     imageUrls.value = imageUrls.value.filter(img => img.id !== image.id);
 
     images.value = [...files.value];
   }
+}
+
+const revertImage = (image) => {
+  image.toBeDeleted = false;
+  deletedImages.value = deletedImages.value.filter(id => id !== image.id);
 }
 </script>
 
