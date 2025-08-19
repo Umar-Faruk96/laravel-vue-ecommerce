@@ -11,6 +11,10 @@ const props = defineProps({
   name: {
     type: String,
     required: true,
+  },
+  imageCollections: {
+    type: Array,
+    required: false,
   }
 })
 
@@ -30,22 +34,22 @@ const updateModels = () => {
   deletedImages.value = deletedImages.value || [];
 }
 
-watch(images, () => {
-  if (images.value.length) {
-    console.log('imageUrls:', imageUrls.value);
-    console.log('images:', images.value);
+watch(() => props.imageCollections, (newImages) => {
+  if (!newImages?.length) return;
 
-    imageUrls.value = [
-      ...imageUrls.value,
-      ...images.value.map(image => ({
-        ...image,
+  const newImageUrls = newImages
+      .filter(image => image?.url &&
+          !imageUrls.value.some(existingImage => existingImage?.id ===
+              image?.id))
+      .map(newImage => ({
+        ...newImage,
         imagesFound: true
       }))
-    ]
+
+  if (newImageUrls.length) {
+    imageUrls.value = [...imageUrls.value, ...newImageUrls];
   }
-  console.log('imageUrls:', imageUrls.value);
-  console.log('images:', images.value);
-})
+}, {immediate: true, deep: true})
 
 const uploadFiles = (event) => {
   const filesWithIds = [...event.target.files].map(file => {
@@ -94,7 +98,7 @@ const removeImage = (image) => {
     deletedImages.value.push(image.id);
     image.toBeDeleted = true
 
-    // deletedImages.value = deletedImages.value.filter(img => img !== image.id);
+    deletedImages.value = deletedImages.value.filter(img => img === image.id);
   } else {
     files.value = files.value.filter(file => file.id !== image.id);
     imageUrls.value = imageUrls.value.filter(img => img.id !== image.id);
