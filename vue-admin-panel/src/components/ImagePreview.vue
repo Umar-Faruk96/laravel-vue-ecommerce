@@ -1,7 +1,7 @@
 <script setup>
 
 import {ref, onMounted, watch} from "vue";
-import {v4 as uuidv4} from 'uuid';
+import {v4 as uuIdv4} from 'uuid';
 
 const props = defineProps({
   errors: {
@@ -26,12 +26,15 @@ onMounted(() => {
 })
 
 const updateModels = () => {
-  images.value = images.value || imageUrls.value;
+  images.value = images.value || files.value;
   deletedImages.value = deletedImages.value || [];
 }
 
 watch(images, () => {
-  if (images.value) {
+  if (images.value.length) {
+    console.log('imageUrls:', imageUrls.value);
+    console.log('images:', images.value);
+
     imageUrls.value = [
       ...imageUrls.value,
       ...images.value.map(image => ({
@@ -40,26 +43,39 @@ watch(images, () => {
       }))
     ]
   }
-}, {
-  immediate: true
+  console.log('imageUrls:', imageUrls.value);
+  console.log('images:', images.value);
 })
 
 const uploadFiles = (event) => {
-  // console.log(event.target.files);
+  const filesWithIds = [...event.target.files].map(file => {
+    file.id = uuIdv4();
+    return file;
+  });
 
-  const uploadedFiles = event.target.files;
-  files.value = [...files.value, ...uploadedFiles];
+  files.value = [...files.value, ...filesWithIds];
+  images.value = [...files.value];
 
-  for (const file of uploadedFiles) {
-    file.id = uuidv4();
-    readFile(file).then(url => {
-      imageUrls.value.push({
-        id: file.id,
-        url
-      });
-    })
-  }
-  images.value = files.value;
+  filesWithIds.forEach(file => {
+    if (file instanceof File) {
+      readFile(file)
+          .then(url => {
+            imageUrls.value = [
+              ...imageUrls.value,
+              {
+                id: file.id,
+                url,
+                imagesFound: false
+              }
+            ];
+          })
+          .catch(err => {
+            console.error('Error reading file:', err);
+          });
+    } else {
+      console.error('Invalid file object:', file);
+    }
+  });
 
   event.target.value = null;
 }
@@ -83,7 +99,7 @@ const removeImage = (image) => {
     files.value = files.value.filter(file => file.id !== image.id);
     imageUrls.value = imageUrls.value.filter(img => img.id !== image.id);
 
-    images.value = files.value;
+    images.value = [...files.value];
   }
 }
 </script>
