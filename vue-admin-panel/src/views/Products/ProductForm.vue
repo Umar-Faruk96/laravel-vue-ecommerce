@@ -87,14 +87,11 @@
           <!--     Images Upload Section     -->
           <div class="col-span-1 px-4 pt-5 pb-4">
             <image-preview v-model:images="product.images"
-                           :imageCollections="[{id: 1, url:
-                           'https://placehold.co/400'}]"
+                           :imageCollections="product.images"
                            v-model:deleted-images="product.deleted_images"
                            v-model:image-positions="product.image_positions"
                            :errors="errors['product_images']"
                            :name="'product_images'"/>
-            <pre>{{ product.images }}</pre>
-            <pre>{{ product.deleted_images }}</pre>
           </div>
           <!--    / Images Upload Section      -->
         </div>
