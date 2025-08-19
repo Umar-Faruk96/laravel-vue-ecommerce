@@ -118,7 +118,8 @@ const revertImage = (image) => {
     <div class="flex flex-wrap gap-1">
       <div v-for="image of imageUrls"
            class="relative w-[120px] h-[120px] rounded border border-dashed flex items-center justify-center hover:border-purple-500 dark:hover:border-purple-300 overflow-hidden">
-        <img :src="image.url" alt="" class="w-full h-full object-cover"/>
+        <img :src="image.url" alt="" class="w-full h-full object-cover"
+             :class="{'opacity-50': image.toBeDeleted}"/>
 
         <small v-if="image.toBeDeleted"
                class="absolute left-0 bottom-0 right-0 py-1 px-2 bg-black w-100 text-white justify-between items-center flex">
