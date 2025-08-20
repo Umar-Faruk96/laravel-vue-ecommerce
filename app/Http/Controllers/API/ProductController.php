@@ -12,7 +12,12 @@ use Illuminate\{
     Support\Facades\Storage,
     Support\Facades\URL
 };
-use App\{Models\Api\Product, Http\Requests\ProductRequest, Http\Controllers\Controller, Http\Resources\ProductListResource, Http\Resources\ProductResource};
+use App\{Models\Api\Product,
+    Http\Requests\ProductRequest,
+    Http\Controllers\Controller,
+    Http\Resources\ProductListResource,
+    Http\Resources\ProductResource
+};
 use Illuminate\Database\Eloquent\Builder;
 
 class ProductController extends Controller
@@ -71,15 +76,15 @@ class ProductController extends Controller
 
         $productData['created_by'] = request()->user()->id;
         $productData['updated_by'] = request()->user()->id;
-
-        $productImage = $productData['image'] ?? null;
-
-        if ($productImage && $productImage instanceof UploadedFile) {
-            $productData = $this->checkProductImage($productImage, $productData);
-        }
-
-
         $product = Product::create($productData);
+
+        $productImages = $productData['images'] ?? [];
+        try {
+            $this->saveImages($productImages, $product);
+        } catch (Exception $e) {
+            $product->delete();
+            throw $e;
+        }
 
         return ProductResource::make($product);
     }
@@ -120,19 +125,24 @@ class ProductController extends Controller
         $productData = $request->validated();
 
         $productData['updated_by'] = request()->user()->id;
+        $product->update($productData);
 
-        $productImage = $productData['image'] ?? null;
+        $productImages = $productData['images'] ?? [];
+        $deletedImages = $productData['deleted_images'] ?? [];
 
-        if ($productImage && $productImage instanceof UploadedFile) {
+        try {
+            $this->saveImages($productImages, $product);
+        } catch (Exception $e) {
+            throw $e;
+        }
+        if (count($deletedImages) > 0) {
             // delete old image
             if ($product->image) {
                 Storage::deleteDirectory('images/' . basename(dirname($product->image), '/'));
             }
 
-            $productData = $this->checkProductImage($productImage, $productData);
         }
 
-        $product->update($productData);
 
         return ProductResource::make($product);
     }
@@ -166,6 +176,31 @@ class ProductController extends Controller
         return $productData;
     }
 
+    public function saveImages(array $images, Product $product): void
+    {
+        try {
+            $directory = 'products/images/' . $product->id . '_' . $product->title;
+            foreach ($images as $key => $image) {
+                if ($image instanceof UploadedFile) {
+                    $filename = $image->getClientOriginalName();
+                    if (!Storage::putFileAs($directory, $image, $filename)) {
+                        throw new Exception('Failed to store image: ' . $filename);
+                    }
+                    $relativePath = $directory . '/' . $filename;
+                    $product->images()->create([
+                        'product_id' => $product->id,
+                        'path' => $relativePath,
+                        'url' => URL::to(Storage::url($relativePath)),
+                        'mime' => $image->getClientMimeType(),
+                        'size' => $image->getSize(),
+                    ]);
+                }
+            }
+        } catch (Exception $e) {
+            throw new Exception('Oops! Something wrong happened while uploading image.' . $e->getMessage());
+        }
+    }
+
     /**
      * @throws Exception
      */
@@ -182,5 +217,20 @@ class ProductController extends Controller
         }
 
         return $path . '/' . $image->getClientOriginalName();
+    }
+
+    private function storeImageV2(UploadedFile $image, int $key): string
+    {
+        $directory = 'products/images/' . Str::random();
+
+        /* if (!Storage::exists($path)) {
+            Storage::makeDirectory($path);
+        } */
+
+        if (!Storage::putFileAs($directory, $image, $image->getClientOriginalName())) {
+            throw new Exception('Failed to store image');
+        }
+
+        return $directory . '/' . $image->getClientOriginalName();
     }
 }
