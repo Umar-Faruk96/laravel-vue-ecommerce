@@ -157,9 +157,9 @@ class ProductController extends Controller
         $product->load('images');
 
         try {
-            $directory = 'products/images/' . $product->id . '_' . $product->title;
             foreach ($images as $key => $image) {
                 if ($image instanceof UploadedFile) {
+                    $directory = 'products/images/' . $key . '_' . $product->id . '_' . $product->title;
                     $filename = $image->getClientOriginalName();
                     if (!Storage::putFileAs($directory, $image, $filename)) {
                         throw new Exception('Failed to store image: ' . $filename);
