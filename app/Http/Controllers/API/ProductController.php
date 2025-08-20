@@ -65,6 +65,25 @@ class ProductController extends Controller
         return ProductResource::make($product);
     }
 
+    public function storeV2(ProductRequest $request): ProductResource
+    {
+        $productData = $request->validated();
+
+        $productData['created_by'] = request()->user()->id;
+        $productData['updated_by'] = request()->user()->id;
+
+        $productImage = $productData['image'] ?? null;
+
+        if ($productImage && $productImage instanceof UploadedFile) {
+            $productData = $this->checkProductImage($productImage, $productData);
+        }
+
+
+        $product = Product::create($productData);
+
+        return ProductResource::make($product);
+    }
+
     public function show(Product $product): ProductResource
     {
         $product->load('images');
@@ -75,6 +94,28 @@ class ProductController extends Controller
      * @throws Exception
      */
     public function update(ProductRequest $request, Product $product): ProductResource
+    {
+        $productData = $request->validated();
+
+        $productData['updated_by'] = request()->user()->id;
+
+        $productImage = $productData['image'] ?? null;
+
+        if ($productImage && $productImage instanceof UploadedFile) {
+            // delete old image
+            if ($product->image) {
+                Storage::deleteDirectory('images/' . basename(dirname($product->image), '/'));
+            }
+
+            $productData = $this->checkProductImage($productImage, $productData);
+        }
+
+        $product->update($productData);
+
+        return ProductResource::make($product);
+    }
+
+    public function updateV2(ProductRequest $request, Product $product): ProductResource
     {
         $productData = $request->validated();
 
