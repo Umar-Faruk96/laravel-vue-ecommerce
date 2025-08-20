@@ -135,13 +135,8 @@ class ProductController extends Controller
         } catch (Exception $e) {
             throw $e;
         }
-        if (count($deletedImages) > 0) {
-            // delete old image
-            if ($product->image) {
-                Storage::deleteDirectory('images/' . basename(dirname($product->image), '/'));
-            }
-
-        }
+        if (count($deletedImages) > 0)
+            $this->deleteImages($deletedImages, $product);
 
 
         return ProductResource::make($product);
@@ -158,26 +153,10 @@ class ProductController extends Controller
         return response()->json(['message' => 'Product deleted successfully']);
     }
 
-    /**
-     * @throws Exception
-     */
-    public function checkProductImage(UploadedFile $image, array $productData): array
-    {
-        if ($image) {
-            $relativePath = $this->storeImage(image: $image);
-
-            $productData['image'] = URL::to(Storage::url($relativePath) /* add storage in the URL */); // make URL absolute
-
-            $productData['image_mime'] = $image->getClientMimeType();
-
-            $productData['image_size'] = $image->getSize();
-        }
-
-        return $productData;
-    }
-
     public function saveImages(array $images, Product $product): void
     {
+        $product->load('images');
+
         try {
             $directory = 'products/images/' . $product->id . '_' . $product->title;
             foreach ($images as $key => $image) {
@@ -201,6 +180,35 @@ class ProductController extends Controller
         }
     }
 
+    private function deleteImages(array $imageIds, Product $product): void
+    {
+        $product->load('images');
+        foreach ($product->images as $image) {
+            if (in_array($image->id, $imageIds) && $image->path) {
+                Storage::delete($image->path);
+            }
+            $image->delete();
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function checkProductImage(UploadedFile $image, array $productData): array
+    {
+        if ($image) {
+            $relativePath = $this->storeImage(image: $image);
+
+            $productData['image'] = URL::to(Storage::url($relativePath) /* add storage in the URL */); // make URL absolute
+
+            $productData['image_mime'] = $image->getClientMimeType();
+
+            $productData['image_size'] = $image->getSize();
+        }
+
+        return $productData;
+    }
+
     /**
      * @throws Exception
      */
@@ -217,20 +225,5 @@ class ProductController extends Controller
         }
 
         return $path . '/' . $image->getClientOriginalName();
-    }
-
-    private function storeImageV2(UploadedFile $image, int $key): string
-    {
-        $directory = 'products/images/' . Str::random();
-
-        /* if (!Storage::exists($path)) {
-            Storage::makeDirectory($path);
-        } */
-
-        if (!Storage::putFileAs($directory, $image, $image->getClientOriginalName())) {
-            throw new Exception('Failed to store image');
-        }
-
-        return $directory . '/' . $image->getClientOriginalName();
     }
 }
