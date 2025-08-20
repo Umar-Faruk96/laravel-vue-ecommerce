@@ -138,7 +138,6 @@ class ProductController extends Controller
         if (count($deletedImages) > 0)
             $this->deleteImages($deletedImages, $product);
 
-
         return ProductResource::make($product);
     }
 
@@ -172,6 +171,7 @@ class ProductController extends Controller
                         'url' => URL::to(Storage::url($relativePath)),
                         'mime' => $image->getClientMimeType(),
                         'size' => $image->getSize(),
+                        'position' => $key + 1
                     ]);
                 }
             }
