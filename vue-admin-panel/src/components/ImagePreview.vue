@@ -115,8 +115,6 @@ const revertImage = (image) => {
 
 <template>
   <section>
-    <pre>{{ deletedImages}}</pre>
-    
     <div class="flex flex-wrap gap-1">
       <div v-for="image of imageUrls"
            class="relative w-[120px] h-[120px] rounded border border-dashed flex items-center justify-center hover:border-purple-500 dark:hover:border-purple-300 overflow-hidden">
