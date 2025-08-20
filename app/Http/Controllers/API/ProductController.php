@@ -3,15 +3,14 @@
 namespace App\Http\Controllers\API;
 
 use Exception;
-use Illuminate\{
-    Http\JsonResponse,
+use Illuminate\{Http\JsonResponse,
     Http\Resources\Json\AnonymousResourceCollection,
+    Support\Facades\DB,
     Support\Str,
     Http\Request,
     Http\UploadedFile,
     Support\Facades\Storage,
-    Support\Facades\URL
-};
+    Support\Facades\URL};
 use App\{Models\Api\Product,
     Http\Requests\ProductRequest,
     Http\Controllers\Controller,
@@ -125,18 +124,23 @@ class ProductController extends Controller
         $productData = $request->validated();
 
         $productData['updated_by'] = request()->user()->id;
-        $product->update($productData);
 
         $productImages = $productData['images'] ?? [];
         $deletedImages = $productData['deleted_images'] ?? [];
 
+        DB::beginTransaction();
         try {
+            $product->update($productData);
+
             $this->saveImages($productImages, $product);
+
+            if (count($deletedImages) > 0)
+                $this->deleteImages($deletedImages, $product);
         } catch (Exception $e) {
+            DB::rollBack();
             throw $e;
         }
-        if (count($deletedImages) > 0)
-            $this->deleteImages($deletedImages, $product);
+        DB::commit();
 
         return ProductResource::make($product);
     }
@@ -159,7 +163,7 @@ class ProductController extends Controller
         try {
             foreach ($images as $key => $image) {
                 if ($image instanceof UploadedFile) {
-                    $directory = 'products/images/' . $key . '_' . $product->id . '_' . $product->title;
+                    $directory = 'products/images/' . $key . '_' . time() . '_' . $product->id . '_' . $product->title;
                     $filename = $image->getClientOriginalName();
                     if (!Storage::putFileAs($directory, $image, $filename)) {
                         throw new Exception('Failed to store image: ' . $filename);

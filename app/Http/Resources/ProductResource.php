@@ -9,6 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class ProductResource extends JsonResource
 {
     public static $wrap = false;
+
     /**
      * Transform the resource into an array.
      *
@@ -22,10 +23,13 @@ class ProductResource extends JsonResource
             'slug' => $this->slug,
             'description' => $this->description,
             'image_url' => $this->image,
-            'images' => $this->images,
+            'images' => $this->images->map(fn($image) => [
+                'id' => $image->id,
+                'url' => $image->url
+            ]),
             'price' => $this->price,
             'quantity' => $this->quantity,
-            'published' => (bool) $this->published,
+            'published' => (bool)$this->published,
             'created_at' => (new DateTime($this->created_at))->format('Y-m-d H:i:s'),
             'updated_at' => (new DateTime($this->updated_at))->format('Y-m-d H:i:s'),
         ];
