@@ -96,7 +96,7 @@
           <!--    / Images Upload Section      -->
         </div>
       </section>
-
+      <!--      <pre>{{ product }}</pre>-->
       <footer
           class="bg-black/5 dark:bg-gray-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse rounded-b-md"
       >
@@ -150,7 +150,6 @@ const product = ref({
   description: "",
   price: null,
   quantity: null,
-  image: null,
   published: null,
 });
 
@@ -174,10 +173,10 @@ function submit($event, close = false) {
   if (product.value.id) {
     store.dispatch("updateProductV2", product.value).then((response) => {
       loading.value = false;
-      // debugger;
+
       if (response.status === 200) {
+        product.value = response.data;
         store.commit('showToast', 'Product was successfully updated.');
-        store.dispatch('getProduct', product.value.id);
 
         if (close) {
           store.dispatch("getProducts");
@@ -197,6 +196,7 @@ function submit($event, close = false) {
           // console.log("response", response);
 
           if (response.status === 201) {
+            product.value = response.data;
             store.commit('showToast', 'Product was successfully created.');
             if (close) {
               store.dispatch("getProducts");

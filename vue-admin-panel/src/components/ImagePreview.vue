@@ -36,6 +36,7 @@ const updateModels = () => {
 
 watch(() => props.imageCollections, (newImages) => {
   if (!newImages?.length) return;
+  // debugger
 
   const newImageUrls = newImages
       .filter(image => image?.url &&
@@ -47,7 +48,7 @@ watch(() => props.imageCollections, (newImages) => {
       }))
 
   if (newImageUrls.length) {
-    imageUrls.value = [...imageUrls.value, ...newImageUrls];
+    imageUrls.value = [...newImageUrls];
   }
 }, {immediate: true, deep: true})
 
