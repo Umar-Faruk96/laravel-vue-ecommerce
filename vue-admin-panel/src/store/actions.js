@@ -66,6 +66,23 @@ export const createProduct = ({ commit }, product) => {
     return axiosClient.post('/products', product);
 }
 
+export const createProductV2 = ({ commit }, product) => {
+    // debugger;
+    if (product.image && product.image instanceof File) {
+        const formData = new FormData();
+        formData.append('title', product.title);
+        formData.append('description', product.description);
+        formData.append('image', product.image);
+        formData.append('price', product.price);
+        formData.append('published', product.published ? 1 : 0);
+        product = formData;
+    } else {
+        product = { ...product };
+    }
+
+    return axiosClient.post('/products', product);
+}
+
 export const updateProduct = async ({ commit }, product) => {
     const id = product.id;
 
