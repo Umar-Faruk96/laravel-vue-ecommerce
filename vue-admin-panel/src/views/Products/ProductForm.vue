@@ -174,9 +174,11 @@ function submit($event, close = false) {
   if (product.value.id) {
     store.dispatch("updateProductV2", product.value).then((response) => {
       loading.value = false;
-
+      // debugger;
       if (response.status === 200) {
         store.commit('showToast', 'Product was successfully updated.');
+        store.dispatch('getProduct', product.value.id);
+
         if (close) {
           store.dispatch("getProducts");
           router.push({name: "app.products"})

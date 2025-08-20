@@ -88,6 +88,7 @@ export const createProductV2 = ({commit}, product) => {
         formData.append('description', product.description);
         product.images.forEach(image => (image instanceof File) && formData.append('images[]', image));
         formData.append('price', product.price);
+        formData.append('quantity', product.quantity);
         formData.append('published', product.published ? 1 : 0);
         product = formData;
     } else {
@@ -128,6 +129,7 @@ export const updateProductV2 = async ({commit}, product) => {
         product.images.forEach(image => (image instanceof File) && formData.append('images[]', image));
         product.deleted_images && product.deleted_images.forEach(id => formData.append('deleted_images[]', id));
         formData.append('price', product.price);
+        formData.append('quantity', product.quantity);
         formData.append('published', product.published ? 1 : 0);
         formData.append('_method', 'PUT');
         product = formData;
