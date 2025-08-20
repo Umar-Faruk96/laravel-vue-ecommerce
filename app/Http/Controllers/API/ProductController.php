@@ -186,8 +186,8 @@ class ProductController extends Controller
         foreach ($product->images as $image) {
             if (in_array($image->id, $imageIds) && $image->path) {
                 Storage::delete($image->path);
+                $image->delete();
             }
-            $image->delete();
         }
     }
 
