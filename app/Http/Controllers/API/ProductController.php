@@ -46,7 +46,7 @@ class ProductController extends Controller
     /**
      * @throws Exception
      */
-    public function store(ProductRequest $request): ProductResource
+    public function storeV0(ProductRequest $request): ProductResource
     {
         $productData = $request->validated();
 
@@ -65,7 +65,7 @@ class ProductController extends Controller
         return ProductResource::make($product);
     }
 
-    public function storeV2(ProductRequest $request): ProductResource
+    public function store(ProductRequest $request): ProductResource
     {
         $productData = $request->validated();
 
@@ -93,7 +93,7 @@ class ProductController extends Controller
     /**
      * @throws Exception
      */
-    public function update(ProductRequest $request, Product $product): ProductResource
+    public function updateV0(ProductRequest $request, Product $product): ProductResource
     {
         $productData = $request->validated();
 
@@ -115,7 +115,7 @@ class ProductController extends Controller
         return ProductResource::make($product);
     }
 
-    public function updateV2(ProductRequest $request, Product $product): ProductResource
+    public function update(ProductRequest $request, Product $product): ProductResource
     {
         $productData = $request->validated();
 
