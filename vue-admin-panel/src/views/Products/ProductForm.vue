@@ -172,7 +172,7 @@ function submit($event, close = false) {
   loading.value = true;
 
   if (product.value.id) {
-    store.dispatch("updateProduct", product.value).then((response) => {
+    store.dispatch("updateProductV2", product.value).then((response) => {
       loading.value = false;
 
       if (response.status === 200) {
@@ -189,7 +189,7 @@ function submit($event, close = false) {
     })
   } else {
     store
-        .dispatch("createProduct", product.value)
+        .dispatch("createProductV2", product.value)
         .then((response) => {
           loading.value = false;
           // console.log("response", response);
