@@ -10,7 +10,8 @@ use Illuminate\{Http\JsonResponse,
     Http\Request,
     Http\UploadedFile,
     Support\Facades\Storage,
-    Support\Facades\URL};
+    Support\Facades\URL
+};
 use App\{Models\Api\Product,
     Http\Requests\ProductRequest,
     Http\Controllers\Controller,
@@ -85,6 +86,7 @@ class ProductController extends Controller
             throw $e;
         }
 
+        $product->load('images');
         return ProductResource::make($product);
     }
 
@@ -142,6 +144,7 @@ class ProductController extends Controller
         }
         DB::commit();
 
+        $product->load('images');
         return ProductResource::make($product);
     }
 
@@ -158,8 +161,6 @@ class ProductController extends Controller
 
     public function saveImages(array $images, Product $product): void
     {
-        $product->load('images');
-
         try {
             foreach ($images as $key => $image) {
                 if ($image instanceof UploadedFile) {
@@ -186,7 +187,6 @@ class ProductController extends Controller
 
     private function deleteImages(array $imageIds, Product $product): void
     {
-        $product->load('images');
         foreach ($product->images as $image) {
             if (in_array($image->id, $imageIds) && $image->path) {
                 Storage::delete($image->path);
