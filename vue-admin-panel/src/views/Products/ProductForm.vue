@@ -175,6 +175,7 @@ function submit($event, close = false) {
       loading.value = false;
 
       if (response.status === 200) {
+        // debugger;
         product.value = response.data;
         store.commit('showToast', 'Product was successfully updated.');
 

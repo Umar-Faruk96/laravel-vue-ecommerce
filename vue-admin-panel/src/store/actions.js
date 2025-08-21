@@ -120,7 +120,7 @@ export const updateProduct = async ({commit}, product) => {
 
 export const updateProductV2 = async ({commit}, product) => {
     const id = product.id;
-    debugger;
+    // debugger;
     if (product.images && product.images.length) {
         const formData = new FormData();
         formData.append('id', id);

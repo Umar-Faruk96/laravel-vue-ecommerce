@@ -27,6 +27,9 @@ const imageUrls = ref([]);
 
 onMounted(() => {
   updateModels();
+  /*if (props.imageCollections?.length) {
+    imageUrls.value = props.imageCollections;
+  }*/
 })
 
 const updateModels = () => {
