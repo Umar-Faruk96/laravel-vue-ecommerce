@@ -11,7 +11,7 @@
         <div class="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-5">
             <div class="lg:col-span-3">
                 <div x-data="{
-                    images: ['{{ $product->images ? $product->images->map(fn($image) => $image->url) : Storage::url('images/no-image-placeholder.png') }}'],
+                    images: {{ $product->images->count() ? json_encode($product->images->pluck('url')) : json_encode([Storage::url('images/no-image-placeholder.png')]) }},
                     activeImage: null,
                     prev() {
                         let index = this.images.indexOf(this.activeImage);
