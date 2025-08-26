@@ -22,7 +22,7 @@
         Cancel
       </router-link>
     </header>
-    <!--<pre>{{ product.image_positions }}</pre>-->
+    <pre>{{ product.image_positions }}</pre>
     <form @submit.prevent="submit">
       <section
           class="bg-white/80 dark:bg-gray-500 px-4 pt-5 pb-4 space-y-4 rounded-t-md">
@@ -42,10 +42,10 @@
             <CustomInputV3
                 type="number"
                 name="price"
-                id-for="product-price"
+                id-for="product_price"
                 required
                 v-model:number="product.price"
-                label="Price"
+                label="Product Price"
                 prepend="&#2547;"
                 :errors="errors['price']"
             />
@@ -53,10 +53,10 @@
             <CustomInputV3
                 type="number"
                 name="quantity"
-                id-for="product-quantity"
+                id-for="product_quantity"
                 required
                 v-model:number="product.quantity"
-                label="Quantity"
+                label="Product Quantity"
                 :errors="errors['quantity']"
             />
 

@@ -36,8 +36,9 @@ const updateModels = () => {
 }
 
 const uploadFiles = (event) => {
-  const filesWithIds = [...event.target.files].map(file => {
-    file.id = uuIdv4();
+  const filesWithIds = [...event.target.files].map((file, index) => {
+    // file.id = uuIdv4();
+    file.id = index + 1;
     return file;
   });
 
@@ -120,11 +121,11 @@ const catchPosChange = ({oldIndex, newIndex}) => {
 }
 
 const updatePositions = () => {
-  imagePositions.value = imageUrls.value.filter(image => !image.toBeDeleted).map((image, index) => ({
+  imagePositions.value = (imageUrls.value.filter(image => !image.toBeDeleted).map((image, index) => ({
         id: image.id,
         position: index + 1
       }
-  ))
+  )))
 }
 
 watch(() => props.imageCollections, (newImages) => {
