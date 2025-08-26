@@ -127,6 +127,7 @@ export const updateProductV2 = async ({commit}, product) => {
         formData.append('title', product.title);
         formData.append('description', product.description);
         product.images.forEach(image => (image instanceof File) && formData.append(`images[${image.id}]`, image));
+        product.image_positions.forEach(position => formData.append(`image_positions[${position.id}]`, position.position));
         product.deleted_images && product.deleted_images.forEach(id => formData.append('deleted_images[]', id));
         formData.append('price', product.price);
         formData.append('quantity', product.quantity);

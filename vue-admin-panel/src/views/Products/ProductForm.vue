@@ -22,7 +22,7 @@
         Cancel
       </router-link>
     </header>
-
+    <!--<pre>{{ product.image_positions }}</pre>-->
     <form @submit.prevent="submit">
       <section
           class="bg-white/80 dark:bg-gray-500 px-4 pt-5 pb-4 space-y-4 rounded-t-md">
@@ -36,14 +36,6 @@
                 required
                 :errors="errors['title']"
             />
-
-            <!--            <CustomInputV3
-                            type="file"
-                            label="Product Image"
-                            name="product_image"
-                            :errors="errors['product_image']"
-                            @change="(file) => (product.image = file)"
-                        />-->
 
             <CKEditor v-model:data="product.description"/>
 

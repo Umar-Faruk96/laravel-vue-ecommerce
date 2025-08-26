@@ -28,33 +28,12 @@ const imageUrls = ref([]);
 
 onMounted(() => {
   updateModels();
-  /*if (props.imageCollections?.length) {
-    imageUrls.value = props.imageCollections;
-  }*/
 })
 
 const updateModels = () => {
   images.value = images.value || files.value;
   deletedImages.value = deletedImages.value || [];
 }
-
-watch(() => props.imageCollections, (newImages) => {
-  if (!newImages?.length) return;
-  // debugger
-
-  const newImageUrls = newImages
-      .filter(image => image?.url &&
-          !imageUrls.value.some(existingImage => existingImage?.id ===
-              image?.id))
-      .map(newImage => ({
-        ...newImage,
-        imagesFound: true
-      }))
-
-  if (newImageUrls.length) {
-    imageUrls.value = [...newImageUrls];
-  }
-}, {immediate: true, deep: true})
 
 const uploadFiles = (event) => {
   const filesWithIds = [...event.target.files].map(file => {
@@ -65,9 +44,14 @@ const uploadFiles = (event) => {
   files.value = [...files.value, ...filesWithIds];
   images.value = [...files.value];
 
+  const allPromises = [];
+
   filesWithIds.forEach(file => {
     if (file instanceof File) {
-      readFile(file)
+      const promise = readFile(file);
+      allPromises.push(promise);
+
+      promise
           .then(url => {
             imageUrls.value = [
               ...imageUrls.value,
@@ -84,6 +68,12 @@ const uploadFiles = (event) => {
     } else {
       console.error('Invalid file object:', file);
     }
+
+    Promise.all(allPromises).then(() => {
+      updatePositions();
+    }).catch(err => {
+      console.error('Error reading files:', err);
+    })
   });
 
   event.target.value = null;
@@ -110,14 +100,53 @@ const removeImage = (image) => {
 
     images.value = [...files.value];
   }
+
+  updatePositions();
 }
 
 const revertImageDelete = (image) => {
   image.toBeDeleted = false;
   deletedImages.value = deletedImages.value.filter(id => id !== image.id);
+
+  updatePositions();
 }
 
-const catchPosChange = (event) => {}
+const catchPosChange = ({oldIndex, newIndex}) => {
+  if (newIndex !== oldIndex) {
+    const [movedItem] = imageUrls.value.splice(oldIndex, 1)
+    imageUrls.value.splice(newIndex, 0, movedItem)
+  }
+  updatePositions();
+}
+
+const updatePositions = () => {
+  imagePositions.value = imageUrls.value.filter(image => !image.toBeDeleted).map((image, index) => ({
+        id: image.id,
+        position: index + 1
+      }
+  ))
+}
+
+watch(() => props.imageCollections, (newImages) => {
+  if (!newImages?.length) return;
+  // debugger
+
+  // only add new images that are not already in the imageUrls (i.e. in the database)
+  const newImageUrls = newImages
+      .filter(image => image?.url &&
+          !imageUrls.value.some(existingImage => existingImage?.id ===
+              image.id))
+      .map(newImage => ({
+        ...newImage,
+        imagesFound: true
+      }))
+
+  if (newImageUrls.length) {
+    imageUrls.value = [...newImageUrls];
+  }
+
+  updatePositions();
+}, {immediate: true, deep: true})
 </script>
 
 <template>
