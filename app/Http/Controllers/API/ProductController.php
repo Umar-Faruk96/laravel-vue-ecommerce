@@ -79,8 +79,9 @@ class ProductController extends Controller
         $product = Product::create($productData);
 
         $productImages = $productData['images'] ?? [];
+        $productImagePositions = $productData['image_positions'] ?? [];
         try {
-            $this->saveImages($productImages, $product);
+            $this->saveImages($productImages, $productImagePositions, $product);
         } catch (Exception $e) {
             $product->delete();
             throw $e;
@@ -128,13 +129,14 @@ class ProductController extends Controller
         $productData['updated_by'] = request()->user()->id;
 
         $productImages = $productData['images'] ?? [];
+        $productImagePositions = $productData['image_positions'] ?? [];
         $deletedImages = $productData['deleted_images'] ?? [];
 
         DB::beginTransaction();
         try {
             $product->update($productData);
 
-            $this->saveImages($productImages, $product);
+            $this->saveImages($productImages, $productImagePositions, $product);
 
             if (count($deletedImages) > 0)
                 $this->deleteImages($deletedImages, $product);
@@ -159,8 +161,13 @@ class ProductController extends Controller
         return response()->json(['message' => 'Product deleted successfully']);
     }
 
-    public function saveImages(array $images, Product $product): void
+    public function saveImages(array $images, array $positions, Product $product): void
     {
+        $product->load('images');
+        foreach ($positions as $key => $position) {
+            $product->images()->where('id', $key)->update(['position' => $position]);
+        }
+
         try {
             foreach ($images as $key => $image) {
                 if ($image instanceof UploadedFile) {
@@ -176,7 +183,7 @@ class ProductController extends Controller
                         'url' => URL::to(Storage::url($relativePath)),
                         'mime' => $image->getClientMimeType(),
                         'size' => $image->getSize(),
-                        'position' => $key + 1
+                        'position' => $positions[$key] ?? $key + 1
                     ]);
                 }
             }

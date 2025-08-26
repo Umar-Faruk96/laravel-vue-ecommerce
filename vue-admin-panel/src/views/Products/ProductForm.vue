@@ -22,7 +22,7 @@
         Cancel
       </router-link>
     </header>
-    <pre>{{ product.image_positions }}</pre>
+
     <form @submit.prevent="submit">
       <section
           class="bg-white/80 dark:bg-gray-500 px-4 pt-5 pb-4 space-y-4 rounded-t-md">
@@ -74,6 +74,10 @@
                   class="text-sm text-black/80 dark:text-gray-300"
               >Published</label
               >
+              <small v-if="errors && errors[0]"
+                     class="text-red-600 dark:text-red-300 dark:font-semibold">{{
+                  errors[0]
+                }}</small>
             </div>
           </section>
           <!--     Images Upload Section     -->
