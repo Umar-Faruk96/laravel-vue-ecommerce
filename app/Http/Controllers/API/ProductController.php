@@ -181,7 +181,7 @@ class ProductController extends Controller
                 }
             }
         } catch (Exception $e) {
-            throw new Exception('Oops! Something wrong happened while uploading image.' . $e->getMessage());
+            throw new Exception('Oops! Something wrong happened while uploading image. Message: ' . $e->getMessage());
         }
     }
 
