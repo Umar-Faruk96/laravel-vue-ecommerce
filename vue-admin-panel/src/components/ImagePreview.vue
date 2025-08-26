@@ -2,6 +2,7 @@
 
 import {ref, onMounted, watch} from "vue";
 import {v4 as uuIdv4} from 'uuid';
+import { Sortable } from "sortablejs-vue3";
 
 const props = defineProps({
   errors: {
