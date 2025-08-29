@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
+/**
+ * @method static orderBy(mixed $sortBy, mixed $sortOrder)
+ */
 class Category extends Model
 {
     use HasFactory;
