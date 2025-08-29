@@ -30,4 +30,14 @@ class CategoryController extends Controller
 
         return new CategoryResource($category);
     }
+
+    public function update(CategoryRequest $request, Category $category)
+    {
+        $validated = $request->validated();
+        $validated['updated_by'] = $request->user()->id;
+
+        $category->update($validated);
+
+        return new CategoryResource($category);
+    }
 }
