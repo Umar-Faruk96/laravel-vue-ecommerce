@@ -11,6 +11,7 @@ use Spatie\Sluggable\SlugOptions;
 
 /**
  * @method static orderBy(mixed $sortBy, mixed $sortOrder)
+ * @method static create(mixed $validated)
  */
 class Category extends Model
 {

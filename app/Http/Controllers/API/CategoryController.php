@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -19,8 +20,14 @@ class CategoryController extends Controller
         return CategoryResource::collection($categories);
     }
 
-    public function store()
+    public function store(CategoryRequest $request)
     {
-        
+        $validated = $request->validated();
+        $validated['created_by'] = $request->user()->id;
+        $validated['updated_by'] = $request->user()->id;
+
+        $category = Category::create($validated);
+
+        return new CategoryResource($category);
     }
 }
