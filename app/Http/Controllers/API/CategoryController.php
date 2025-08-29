@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -14,6 +16,6 @@ class CategoryController extends Controller
 
         $categories = Category::orderBy($sortBy, $sortOrder)->get();
 
-        return
+        return CategoryResource::collection($categories);
     }
 }
