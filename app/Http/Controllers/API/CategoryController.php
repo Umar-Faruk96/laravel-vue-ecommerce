@@ -14,8 +14,13 @@ class CategoryController extends Controller
         $sortBy = $request->input('sort_by', 'id');
         $sortOrder = $request->input('sort_order', 'asc');
 
-        $categories = Category::orderBy($sortBy, $sortOrder)->get();
+        $categories = Category::orderBy($sortBy, $sortOrder)->latest()->get();
 
         return CategoryResource::collection($categories);
+    }
+
+    public function store()
+    {
+        
     }
 }
