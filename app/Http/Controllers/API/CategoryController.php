@@ -7,10 +7,12 @@ use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 
 class CategoryController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request) : AnonymousResourceCollection
     {
         $sortBy = $request->input('sort_by', 'id');
         $sortOrder = $request->input('sort_order', 'asc');
@@ -20,7 +22,7 @@ class CategoryController extends Controller
         return CategoryResource::collection($categories);
     }
 
-    public function store(CategoryRequest $request)
+    public function store(CategoryRequest $request) : CategoryResource
     {
         $validated = $request->validated();
         $validated['created_by'] = $request->user()->id;
@@ -31,7 +33,7 @@ class CategoryController extends Controller
         return new CategoryResource($category);
     }
 
-    public function update(CategoryRequest $request, Category $category)
+    public function update(CategoryRequest $request, Category $category) : CategoryResource
     {
         $validated = $request->validated();
         $validated['updated_by'] = $request->user()->id;
@@ -41,7 +43,7 @@ class CategoryController extends Controller
         return new CategoryResource($category);
     }
 
-    public function destroy(Category $category)
+    public function destroy(Category $category) : Response
     {
         $category->delete();
 
