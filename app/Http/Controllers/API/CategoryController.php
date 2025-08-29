@@ -40,4 +40,11 @@ class CategoryController extends Controller
 
         return new CategoryResource($category);
     }
+
+    public function destroy(Category $category)
+    {
+        $category->delete();
+
+        return response()->noContent();
+    }
 }
