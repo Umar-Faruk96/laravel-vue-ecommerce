@@ -1,15 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\{
-	AuthController,
-	CustomerController,
-	DashboardController,
-	ProductController,
-	OrderController,
-	ReportController,
-	UserController
-};
+use App\Http\Controllers\API\{AuthController,
+    CategoryController,
+    CustomerController,
+    DashboardController,
+    ProductController,
+    OrderController,
+    ReportController,
+    UserController};
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 	// Dashboard routes
@@ -29,6 +28,9 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 	Route::post('/orders/change-status/{order}', [OrderController::class, 'changeOrderStatus']);
 	// Route::post('/orders/change-status/{order}/{status}', [OrderController::class, 'changeStatus']);
 	Route::apiResource('orders', OrderController::class)->only(['index', 'show']);
+
+    // Category routes
+    Route::apiResource('categories', CategoryController::class)->only(['index', 'store', 'update', 'destroy']);
 
 	// Users routes
 	Route::get('/user', [AuthController::class, 'getUser']);
