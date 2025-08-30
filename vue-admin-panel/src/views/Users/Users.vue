@@ -3,7 +3,7 @@
     <h1 class="text-black/60 dark:text-white/70 sm:text-3xl font-semibold">Users</h1>
 
     <button
-        @click="openUserFormModal"
+        @click="openUserForm"
         type="button"
         class="flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white/80 bg-indigo-600 dark:bg-indigo-800 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
     >
@@ -14,7 +14,7 @@
   <CreateUserForm
       v-model:form-modal="userForm"
       :user="userData"
-      @close="clearUserForm"
+      @close="closeUserForm"
   />
 
   <UsersTable @edit-user="editUserForm" />
@@ -28,7 +28,7 @@ import store from "../../store/index.js";
 
 const userForm = ref(false);
 
-const openUserFormModal = () => {
+const openUserForm = () => {
   userForm.value = true;
 };
 
@@ -44,11 +44,11 @@ const editUserForm = (user) => {
   // store.dispatch("getSelectedUser", user.id).then(({ data }) => {
   // userData.value = data;
   userData.value = user;
-  openUserFormModal();
+  openUserForm();
   // });
 };
 
-const clearUserForm = () => {
+const closeUserForm = () => {
   userData.value = {...DEFAULT_USER};
 };
 </script>
