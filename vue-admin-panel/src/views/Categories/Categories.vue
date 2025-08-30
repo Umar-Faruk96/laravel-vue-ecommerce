@@ -9,14 +9,14 @@
     </button>
   </div>
   <CategoriesTable @clickEdit="editCategory"/>
-  <CategoryModal v-model="categoryForm" :category="categoryData"
+  <CategoryForm v-model="categoryForm" :category="categoryData"
                  @close="closeCategoryForm"/>
 </template>
 
 <script setup>
 import {computed, ref} from "vue";
 import store from "@/store";
-import CategoryModal from "./CategoryModal.vue";
+import CategoryForm from "./CategoryForm.vue";
 import CategoriesTable from "./CategoriesTable.vue";
 
 const DEFAULT_CATEGORY = {

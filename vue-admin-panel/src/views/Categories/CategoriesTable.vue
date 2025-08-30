@@ -151,7 +151,6 @@ import {
   PencilIcon,
   TrashIcon
 } from '@heroicons/vue/24/solid'
-import CategoryModal from "./CategoryModal.vue";
 
 const categories = computed(() => store.state.categories);
 const sortField = ref('name');

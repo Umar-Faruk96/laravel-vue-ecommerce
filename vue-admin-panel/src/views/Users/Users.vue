@@ -24,7 +24,6 @@
 import {ref} from "vue";
 import UsersTable from "./UsersTable.vue";
 import CreateUserForm from "./CreateUserForm.vue";
-import store from "../../store/index.js";
 
 const userForm = ref(false);
 

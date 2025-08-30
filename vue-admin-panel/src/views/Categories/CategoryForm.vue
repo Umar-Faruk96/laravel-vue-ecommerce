@@ -41,7 +41,7 @@
                   </svg>
                 </button>
               </header>
-              <form @submit.prevent="onSubmit">
+              <form @submit.prevent="submit">
                 <div class="bg-white px-4 pt-5 pb-4">
                   <CustomInputV3 class="mb-2" v-model="category.name" label="Name" :errors="errors['name']"/>
                   <CustomInputV3 type="select"
@@ -137,7 +137,7 @@ function closeCategoryForm() {
   errors.value = {};
 }
 
-function onSubmit() {
+function submit() {
   loading.value = true
   category.value.active = !!category.value.active
   if (category.value.id) {

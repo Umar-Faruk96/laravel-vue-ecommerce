@@ -114,9 +114,9 @@ import {
 } from "@headlessui/vue";
 import {onUpdated, ref} from "vue";
 import {XMarkIcon} from "@heroicons/vue/24/solid";
-import Spinner from "../../components/core/Spinner.vue";
-import store from "../../store/index.js";
-import CustomInputV3 from "../../components/core/CustomInputV3.vue";
+import Spinner from "@/components/core/Spinner.vue";
+import store from "@/store/index.js";
+import CustomInputV3 from "@/components/core/CustomInputV3.vue";
 
 const props = defineProps({
   user: {
