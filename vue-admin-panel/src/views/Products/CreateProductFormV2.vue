@@ -52,7 +52,7 @@
 
               <form @submit.prevent="submit">
                 <main class="bg-white/80 px-4 pt-5 pb-4">
-                  <CustomInput
+                  <CustomInputV3
                       class="mb-2"
                       v-model="product.title"
                       label="Product Title"
@@ -61,7 +61,7 @@
                       :errors="errors['title']"
                   />
 
-                  <CustomInput
+                  <CustomInputV3
                       type="file"
                       class="mb-2"
                       label="Product Image"
@@ -69,7 +69,7 @@
                       @change="(file) => (product.image = file)"
                   />
 
-                  <CustomInput
+                  <CustomInputV3
                       type="textarea"
                       class="mb-2"
                       v-model="product.description"
@@ -78,7 +78,7 @@
                       :errors="errors['description']"
                   />
 
-                  <CustomInput
+                  <CustomInputV3
                       type="number"
                       class="mb-2"
                       v-model="product.price"
@@ -127,7 +127,7 @@ import {onUpdated, ref} from "vue";
 import {XMarkIcon} from "@heroicons/vue/24/solid";
 import Spinner from "../../components/core/Spinner.vue";
 import store from "../../store/index.js";
-import CustomInput from "../../components/core/CustomInputV2.vue";
+import CustomInputV3 from "../../components/core/CustomInputV2.vue";
 
 const formModal = defineModel("formModal");
 const loading = ref(false);
