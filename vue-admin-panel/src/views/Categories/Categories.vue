@@ -36,8 +36,8 @@ function showCategoryForm() {
   categoryForm.value = true
 }
 
-function editCategory(u) {
-  categoryData.value = u;
+function editCategory(category) {
+  categoryData.value = category;
   showCategoryForm();
 }
 
