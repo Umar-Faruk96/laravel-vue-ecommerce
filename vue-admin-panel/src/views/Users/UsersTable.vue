@@ -237,10 +237,11 @@ import {
   TrashIcon,
 } from "@heroicons/vue/24/solid";
 import {Menu, MenuButton, MenuItems, MenuItem} from "@headlessui/vue";
-import Spinner from "../../components/core/Spinner.vue";
-import store from "../../store/index.js";
-import {USERS_PER_PAGE} from "../../utils/constants.js";
-import TableHeaderCell from "../../components/core/ProductsTable/TableHeaderCell.vue";
+import Spinner from "@/components/core/Spinner.vue";
+import store from "@/store/index.js";
+import {USERS_PER_PAGE} from "@/utils/constants.js";
+import TableHeaderCell from
+      "@/components/core/ProductsTable/TableHeaderCell.vue";
 
 const perPage = ref(USERS_PER_PAGE);
 const search = ref("");

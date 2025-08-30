@@ -15,7 +15,7 @@
 
 <script setup>
 import {computed, ref} from "vue";
-import store from "../../store";
+import store from "@/store";
 import CategoryModal from "./CategoryModal.vue";
 import CategoriesTable from "./CategoriesTable.vue";
 

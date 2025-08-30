@@ -141,10 +141,10 @@
 
 <script setup>
 import {computed, onMounted, ref} from "vue";
-import store from "../../store";
-import Spinner from "../../components/core/Spinner.vue";
+import store from "@/store";
+import Spinner from "@/components/core/Spinner.vue";
 import TableHeaderCell from
-      "../../components/core/ProductsTable/TableHeaderCell.vue";
+      "@/components/core/ProductsTable/TableHeaderCell.vue";
 import {Menu, MenuButton, MenuItem, MenuItems} from "@headlessui/vue";
 import {
   EllipsisVerticalIcon,
