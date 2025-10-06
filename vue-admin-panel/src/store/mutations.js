@@ -3,19 +3,19 @@ import axiosClient from "../utils/axios";
 export const setUser = (state, user) => {
     // debugger;
     state.user.data = user;
-}
+};
 
 export const setToken = (state, token) => {
     state.user.token = token;
 
     if (token) {
         axiosClient.defaults.headers.common.Authorization = `Bearer ${token}`;
-        sessionStorage.setItem('auth_token', token);
+        sessionStorage.setItem("auth_token", token);
     } else {
         delete axiosClient.defaults.headers.common.Authorization;
-        sessionStorage.removeItem('auth_token');
+        sessionStorage.removeItem("auth_token");
     }
-}
+};
 
 export const setProducts = (state, [loading, data = null]) => {
     if (data) {
@@ -27,12 +27,12 @@ export const setProducts = (state, [loading, data = null]) => {
             limit: data.meta.per_page,
             from: data.meta.from,
             to: data.meta.to,
-            total: data.meta.total
-        }
+            total: data.meta.total,
+        };
     }
 
     state.products.loading = loading;
-}
+};
 
 export const setOrders = (state, [loading, data = null]) => {
     if (data) {
@@ -44,12 +44,12 @@ export const setOrders = (state, [loading, data = null]) => {
             limit: data.meta.per_page,
             from: data.meta.from,
             to: data.meta.to,
-            total: data.meta.total
-        }
+            total: data.meta.total,
+        };
     }
 
     state.orders.loading = loading;
-}
+};
 
 export const setUsers = (state, [loading, data = null]) => {
     if (data) {
@@ -61,12 +61,12 @@ export const setUsers = (state, [loading, data = null]) => {
             limit: data.meta.per_page,
             from: data.meta.from,
             to: data.meta.to,
-            total: data.meta.total
-        }
+            total: data.meta.total,
+        };
     }
 
     state.users.loading = loading;
-}
+};
 
 export const setCustomers = (state, [loading, data = null]) => {
     if (data) {
@@ -78,28 +78,39 @@ export const setCustomers = (state, [loading, data = null]) => {
             limit: data.meta.per_page,
             from: data.meta.from,
             to: data.meta.to,
-            total: data.meta.total
-        }
+            total: data.meta.total,
+        };
     }
 
     state.customers.loading = loading;
-}
+};
 
 export const setCountries = (state, data = null) => {
     if (data) {
         state.countries = data.data;
     }
-}
+};
+
+export const setCategories = (state, [loading, data = null]) => {
+    if (data) {
+        state.categories = {
+            ...state.categories,
+            data: data.data,
+        };
+    }
+
+    state.categories.loading = loading;
+};
 
 export const showToast = (state, message) => {
     state.toast.visible = true;
     state.toast.message = message;
-}
+};
 
 export const closeToast = (state) => {
     state.toast.visible = false;
     state.toast.timeout = null;
     state.toast.percent = 0;
     clearInterval(state.toast.interval);
-    state.toast.message = '';
-}
+    state.toast.message = "";
+};

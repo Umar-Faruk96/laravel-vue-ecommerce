@@ -1,116 +1,125 @@
-import {createRouter, createWebHistory} from 'vue-router';
-import store from '../store';
+import { createRouter, createWebHistory } from "vue-router";
+import store from "../store";
 
 const routes = [
     {
-        path: '/',
-        redirect: {name: 'app.dashboard'},
+        path: "/",
+        redirect: { name: "app.dashboard" },
     },
     {
-        path: '/app',
-        name: 'app',
-        redirect: {name: 'app.dashboard'},
-        component: () => import('../components/AppLayout.vue'),
+        path: "/app",
+        name: "app",
+        redirect: { name: "app.dashboard" },
+        component: () => import("../components/AppLayout.vue"),
         meta: {
             requiresAuth: true,
         },
         children: [
             {
-                path: 'dashboard',
-                name: 'app.dashboard',
-                component: () => import('../views/Dashboard.vue'),
+                path: "dashboard",
+                name: "app.dashboard",
+                component: () => import("../views/Dashboard.vue"),
             },
             {
-                path: 'products',
-                name: 'app.products',
-                component: () => import('../views/Products/Products.vue'),
+                path: "products",
+                name: "app.products",
+                component: () => import("../views/Products/Products.vue"),
             },
             {
-                path: 'products/create',
-                name: 'app.products.create',
-                component: () => import('../views/Products/ProductForm.vue'),
+                path: "products/create",
+                name: "app.products.create",
+                component: () => import("../views/Products/ProductForm.vue"),
             },
             {
-                path: 'products/edit/:productId(\\d+)',
-                name: 'app.products.edit',
-                component: () => import('../views/Products/ProductForm.vue'),
-                props: true
+                path: "products/edit/:productId(\\d+)",
+                name: "app.products.edit",
+                component: () => import("../views/Products/ProductForm.vue"),
+                props: true,
             },
             {
-                path: 'orders',
-                name: 'app.orders',
-                component: () => import('../views/Orders/Orders.vue'),
+                path: "categories",
+                name: "app.categories",
+                component: () => import("../views/Categories/Categories.vue"),
             },
             {
-                path: 'orders/:id',
-                name: 'app.orders.show',
-                component: () => import('../views/Orders/OrderDetails.vue'),
+                path: "orders",
+                name: "app.orders",
+                component: () => import("../views/Orders/Orders.vue"),
             },
             {
-                path: 'users',
-                name: 'app.users',
-                component: () => import('../views/Users/Users.vue'),
-            }, {
-                path: 'customers',
-                name: 'app.customers',
-                component: () => import('../views/Customers/Customers.vue'),
+                path: "orders/:id",
+                name: "app.orders.show",
+                component: () => import("../views/Orders/OrderDetails.vue"),
             },
             {
-                path: 'customers/:id',
-                name: 'app.customers.show',
-                component: () => import('../views/Customers/CustomerDetails.vue'),
+                path: "users",
+                name: "app.users",
+                component: () => import("../views/Users/Users.vue"),
             },
             {
-                path: 'reports',
+                path: "customers",
+                name: "app.customers",
+                component: () => import("../views/Customers/Customers.vue"),
+            },
+            {
+                path: "customers/:id",
+                name: "app.customers.show",
+                component: () =>
+                    import("../views/Customers/CustomerDetails.vue"),
+            },
+            {
+                path: "reports",
                 redirect: {
-                    name: 'app.reports.orders',
-                    query: {dateQuery: 'all'}
+                    name: "app.reports.orders",
+                    query: { dateQuery: "all" },
                 },
-                name: 'app.reports',
-                component: () => import('../views/Reports/Reports.vue'),
+                name: "app.reports",
+                component: () => import("../views/Reports/Reports.vue"),
                 children: [
                     {
-                        path: 'orders',
-                        name: 'app.reports.orders',
-                        component: () => import('../views/Reports/OrdersReport.vue'),
+                        path: "orders",
+                        name: "app.reports.orders",
+                        component: () =>
+                            import("../views/Reports/OrdersReport.vue"),
                     },
                     {
-                        path: 'customers',
-                        name: 'app.reports.customers',
-                        component: () => import('../views/Reports/CustomersReport.vue'),
-                    }
-                ]
+                        path: "customers",
+                        name: "app.reports.customers",
+                        component: () =>
+                            import("../views/Reports/CustomersReport.vue"),
+                    },
+                ],
             },
-        ]
+        ],
     },
     {
-        path: '/login',
-        name: 'Login',
-        component: () => import('../views/Login.vue'),
+        path: "/login",
+        name: "Login",
+        component: () => import("../views/Login.vue"),
         meta: {
             requiresGuest: true,
-        }
+        },
     },
     {
-        path: '/request-password/:token',
-        name: 'RequestPassword',
-        component: () => import('../views/RequestPassword.vue'),
+        path: "/request-password/:token",
+        name: "RequestPassword",
+        component: () => import("../views/RequestPassword.vue"),
         meta: {
             requiresGuest: true,
-        }
+        },
     },
     {
-        path: '/forgot-password/:token',
-        name: 'ForgotPassword',
-        component: () => import('../views/ForgotPassword.vue'),
+        path: "/forgot-password/:token",
+        name: "ForgotPassword",
+        component: () => import("../views/ForgotPassword.vue"),
         meta: {
             requiresGuest: true,
-        }
+        },
     },
     {
-        path: '/:pathMatch(.*)*',
-        name: 'NotFound',
-        component: () => import('../views/NotFound.vue'),
+        path: "/:pathMatch(.*)*",
+        name: "NotFound",
+        component: () => import("../views/NotFound.vue"),
     },
 ];
 
@@ -121,9 +130,9 @@ const router = createRouter({
 
 router.beforeEach((to, _from, next) => {
     if (to.meta.requiresAuth && !store.state.user.token) {
-        next({name: 'Login'});
+        next({ name: "Login" });
     } else if (to.meta.requiresGuest && store.state.user.token) {
-        next({name: 'app.dashboard'});
+        next({ name: "app.dashboard" });
     } else {
         next();
     }
