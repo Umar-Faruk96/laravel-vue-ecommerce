@@ -3,25 +3,21 @@
     <h1 class="text-black/60 dark:text-white/70 sm:text-3xl font-semibold">Users</h1>
 
     <button
-        @click="openUserForm"
-        type="button"
-        class="flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white/80 bg-indigo-600 dark:bg-indigo-800 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      @click="openUserForm"
+      type="button"
+      class="flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white/80 bg-indigo-600 dark:bg-indigo-800 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
     >
       Add New User
     </button>
   </section>
 
-  <CreateUserForm
-      v-model:form-modal="userForm"
-      :user="userData"
-      @close="closeUserForm"
-  />
+  <CreateUserForm v-model:form-modal="userForm" :user="userData" @close="closeUserForm" />
 
   <UsersTable @edit-user="editUserForm" />
 </template>
 
 <script setup>
-import {ref} from "vue";
+import { ref } from "vue";
 import UsersTable from "./UsersTable.vue";
 import CreateUserForm from "./CreateUserForm.vue";
 
@@ -37,7 +33,7 @@ const DEFAULT_USER = {
   email: "",
 };
 
-const userData = ref({...DEFAULT_USER});
+const userData = ref({ ...DEFAULT_USER });
 
 const editUserForm = (user) => {
   // store.dispatch("getSelectedUser", user.id).then(({ data }) => {
@@ -48,6 +44,6 @@ const editUserForm = (user) => {
 };
 
 const closeUserForm = () => {
-  userData.value = {...DEFAULT_USER};
+  userData.value = { ...DEFAULT_USER };
 };
 </script>

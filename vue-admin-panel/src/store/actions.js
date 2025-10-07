@@ -197,7 +197,7 @@ export const getUsers = async (
     { commit, state },
     { url = null, search = "", per_page, sort_by, sort_to } = {}
 ) => {
-    commit("setCategories", [true]);
+    commit("setUsers", [true]);
 
     url = url || "/users";
 
@@ -215,11 +215,11 @@ export const getUsers = async (
                 sort_to,
             },
         });
-        commit("setCategories", [false, data]);
+        commit("setUsers", [false, data]);
 
         return data;
     } catch (error) {
-        commit("setCategories", [false]);
+        commit("setUsers", [false]);
     }
 };
 
