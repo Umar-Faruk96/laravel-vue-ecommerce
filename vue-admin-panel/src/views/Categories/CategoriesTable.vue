@@ -1,12 +1,16 @@
 <template>
-  <section class="bg-white p-4 rounded-lg shadow animate-fade-in-down">
-    <div class="flex justify-between border-b-2 pb-3">
-      <div class="flex items-center">
-        <span class="ml-3">Found {{ categories.data.length }} categories</span>
-      </div>
+  <section
+    class="bg-black/10 p-4 rounded-lg shadow animate-fade-in-down text-sm sm:text-base"
+    style="animation-delay: 0.2s"
+  >
+    <!-- Categories Total Count -->
+    <div class="flex pb-3 ml-3 text-black/60 dark:text-white/70">
+      <span>Found {{ categories.data.length }} categories</span>
     </div>
+    <!-- / Categories Total Count -->
 
-    <table class="table-auto w-full">
+    <!-- Categories Table -->
+    <table class="table-auto w-full text-black/60 dark:text-white/70">
       <thead>
         <tr>
           <TableHeaderCell
@@ -60,42 +64,47 @@
           <TableHeaderCell field="actions"> Actions </TableHeaderCell>
         </tr>
       </thead>
+      <!-- Categories Loading -->
       <tbody v-if="categories.loading || !categories.data.length">
         <tr>
           <td colspan="7">
-            <Spinner v-if="categories.loading" />
-            <p v-else class="text-center py-8 text-gray-700">There are no categories</p>
+            <Spinner v-if="categories.loading" class="mt-4" />
+            <p v-else class="text-center py-8 text-gray-700 dark:text-white/70">
+              There are no categories
+            </p>
           </td>
         </tr>
       </tbody>
+      <!-- / Categories Loading -->
+      <!-- Categories List -->
       <tbody v-else>
         <tr v-for="category of categories.data">
-          <td class="border-b p-2">{{ category.id }}</td>
-          <td class="border-b p-2">
+          <td class="border-b dark:border-b-gray-400 p-2">{{ category.id }}</td>
+          <td class="border-b dark:border-b-gray-400 p-2">
             {{ category.name }}
           </td>
           <td
-            class="border-b p-2 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis"
+            class="border-b dark:border-b-gray-400 p-2 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis"
           >
             {{ category.slug }}
           </td>
-          <td class="border-b p-2">
+          <td class="border-b dark:border-b-gray-400 p-2">
             {{ category.active ? "Yes" : "No" }}
           </td>
-          <td class="border-b p-2">
+          <td class="border-b dark:border-b-gray-400 p-2">
             {{ category.parent?.name }}
           </td>
-          <td class="border-b p-2">
+          <td class="border-b dark:border-b-gray-400 p-2">
             {{ category.created_at }}
           </td>
-          <td class="border-b p-2">
+          <td class="border-b dark:border-b-gray-400 p-2">
             <Menu as="div" class="relative inline-block text-left">
               <div>
                 <MenuButton
-                  class="inline-flex items-center justify-center rounded-full w-10 h-10 bg-black bg-opacity-0 text-sm font-medium text-white hover:bg-opacity-5 focus:bg-opacity-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+                  class="inline-flex items-center justify-center rounded-full w-10 h-10 bg-black bg-opacity-0 text-sm font-medium hover:bg-opacity-5 focus:bg-opacity-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/90 focus-visible:ring-opacity-75"
                 >
                   <EllipsisVerticalIcon
-                    class="h-5 w-5 text-indigo-500"
+                    class="h-5 w-5 text-indigo-500 dark:text-indigo-300"
                     aria-hidden="true"
                   />
                 </MenuButton>
@@ -110,20 +119,20 @@
                 leave-to-class="transform scale-95 opacity-0"
               >
                 <MenuItems
-                  class="absolute z-10 right-0 mt-2 w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  class="absolute right-0 mt-2 w-32 origin-top-right rounded-md bg-white/90 dark:bg-gray-400 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                 >
                   <div class="px-1 py-1">
                     <MenuItem v-slot="{ active }">
                       <button
                         :class="[
-                          active ? 'bg-indigo-600 text-white' : 'text-gray-900',
+                          active ? 'bg-indigo-600 text-white/90' : 'text-gray-900',
                           'group flex w-full items-center rounded-md px-2 py-2 text-sm',
                         ]"
                         @click="editCategory(category)"
                       >
                         <PencilIcon
                           :active="active"
-                          class="mr-2 h-5 w-5 text-indigo-400"
+                          class="mr-2 h-5 w-5 text-black/60 group-hover:text-black/80"
                           aria-hidden="true"
                         />
                         Edit
@@ -132,14 +141,14 @@
                     <MenuItem v-slot="{ active }">
                       <button
                         :class="[
-                          active ? 'bg-indigo-600 text-white' : 'text-gray-900',
+                          active ? 'bg-indigo-600 text-white/90' : 'text-gray-900',
                           'group flex w-full items-center rounded-md px-2 py-2 text-sm',
                         ]"
                         @click="deleteCategory(category)"
                       >
                         <TrashIcon
                           :active="active"
-                          class="mr-2 h-5 w-5 text-indigo-400"
+                          class="mr-2 h-5 w-5 text-black/60 group-hover:text-black/80"
                           aria-hidden="true"
                         />
                         Delete
@@ -152,7 +161,9 @@
           </td>
         </tr>
       </tbody>
+      <!-- / Categories List -->
     </table>
+    <!-- / Categories Table -->
   </section>
 </template>
 

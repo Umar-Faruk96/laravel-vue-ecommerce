@@ -1,20 +1,18 @@
 <template>
   <div class="flex items-center justify-between mb-3">
-    <h1 class="text-3xl font-semibold">Categories</h1>
+    <h1 class="text-black/60 dark:text-white/70 sm:text-3xl font-semibold">Categories</h1>
     <button
       type="button"
       @click="showCategoryForm()"
-      class="py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      class="py-2 px-4 border border-transparent shadow-sm text-xs sm:text-sm font-medium rounded-md text-white/80 bg-indigo-600 dark:bg-indigo-800 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
     >
-      Add new Category
+      Add New Category
     </button>
   </div>
+
   <CategoriesTable @clickEdit="editCategory" />
-  <CategoryForm
-    v-model="categoryForm"
-    :category="categoryData"
-    @close="closeCategoryForm"
-  />
+
+  <!-- <CategoryForm v-model="categoryForm" :category="categoryData" @close="closeCategoryForm" /> -->
 </template>
 
 <script setup>
