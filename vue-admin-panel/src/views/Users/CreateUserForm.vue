@@ -1,5 +1,5 @@
 <template>
-  <TransitionRoot appear :show="formModal" as="template">
+  <TransitionRoot appear :show="formState" as="template">
     <Dialog as="div" @close="closeUserForm" class="relative z-10">
       <TransitionChild
         as="template"
@@ -10,7 +10,7 @@
         leave-from="opacity-100"
         leave-to="opacity-0"
       >
-        <div class="fixed inset-0 bg-black/60" />
+        <div class="fixed inset-0 bg-black/60 transition-colors" />
       </TransitionChild>
 
       <div class="fixed inset-0 overflow-y-auto">
@@ -25,7 +25,7 @@
             leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-              class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white/90 p-4 text-left align-middle shadow-xl transition-all"
+              class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white/90 dark:bg-gray-400 p-4 text-left align-middle shadow-xl transition-all"
             >
               <Spinner
                 v-if="loading"
@@ -33,7 +33,10 @@
               />
 
               <header class="py-3 px-4 flex justify-between items-center">
-                <DialogTitle as="h3" class="text-lg font-medium leading-6 text-black/90">
+                <DialogTitle
+                  as="h3"
+                  class="text-lg font-medium leading-6 text-black dark:text-gray-900"
+                >
                   {{ user.id ? `Edit User: "${props.user.name}"` : "Create new User" }}
                 </DialogTitle>
 
@@ -47,7 +50,9 @@
               </header>
 
               <form @submit.prevent="submit">
-                <main class="bg-white/80 px-4 pt-5 pb-4">
+                <main
+                  class="bg-white/80 dark:bg-gray-500 rounded-lg space-y-2 px-4 pt-5 pb-4"
+                >
                   <CustomInputV3
                     v-model:title="user.name"
                     label="User Name"
@@ -94,7 +99,7 @@
                   </button>
                   <button
                     type="button"
-                    class="mt-3 w-full inline-flex justify-center rounded-md border border-black/30 shadow-sm px-4 py-2 bg-black/20 text-base font-medium text-black/80 hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black/40 sm:mt-0 sm:w-auto sm:text-sm transition-colors"
+                    class="mt-3 w-full inline-flex justify-center rounded-md border border-black/30 shadow-sm px-4 py-2 bg-black/20 text-base font-medium text-white/70 hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black/40 sm:mt-0 sm:w-auto sm:text-sm transition-colors"
                     @click="closeUserForm"
                     ref="cancelButton"
                   >
@@ -145,11 +150,11 @@ onUpdated(() => {
   };
 });
 
-const formModal = defineModel("formModal");
+const formState = defineModel("modelValue");
 const emit = defineEmits(["close"]);
 
 function closeUserForm() {
-  formModal.value = false;
+  formState.value = false;
   emit("close");
 }
 

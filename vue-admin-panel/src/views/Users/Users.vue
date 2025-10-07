@@ -11,7 +11,7 @@
     </button>
   </section>
 
-  <CreateUserForm v-model:form-modal="userForm" :user="userData" @close="closeUserForm" />
+  <CreateUserForm v-model="userFormState" :user="userData" @close="closeUserForm" />
 
   <UsersTable @edit-user="editUserForm" />
 </template>
@@ -21,10 +21,10 @@ import { ref } from "vue";
 import UsersTable from "./UsersTable.vue";
 import CreateUserForm from "./CreateUserForm.vue";
 
-const userForm = ref(false);
+const userFormState = ref(false);
 
 const openUserForm = () => {
-  userForm.value = true;
+  userFormState.value = true;
 };
 
 const DEFAULT_USER = {

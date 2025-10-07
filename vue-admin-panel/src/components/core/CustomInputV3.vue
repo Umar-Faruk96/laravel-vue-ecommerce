@@ -6,6 +6,7 @@
     }}</label>
 
     <div class="flex rounded-md shadow-sm items-stretch">
+      <!-- prepended content -->
       <span
         v-if="prepend"
         :class="[
@@ -14,6 +15,7 @@
         ]"
         >{{ prepend }}</span
       >
+      <!-- / prepended content -->
 
       <!-- textarea -->
       <template v-if="type === 'textarea'">
@@ -36,6 +38,7 @@
           @change="($event) => emit('change', $event.target.files[0])"
         />
       </template>
+      <!-- / file input -->
 
       <!-- number input -->
       <template v-else-if="type === 'number'">
@@ -49,6 +52,7 @@
           :placeholder="label"
         />
       </template>
+      <!-- / number input -->
 
       <!-- email input -->
       <template v-else-if="type === 'email'">
@@ -62,6 +66,7 @@
           :placeholder="label"
         />
       </template>
+      <!-- / email input -->
 
       <!-- password input -->
       <template v-else-if="type === 'password'">
@@ -85,29 +90,32 @@
           :placeholder="label"
         />
       </template>
+      <!-- / password input -->
 
       <!-- checkbox input -->
       <template v-else-if="type === 'checkbox'">
         <!--<pre class="dark:text-gray-600">{{ status }}</pre>-->
-        <input
-          :id="`${name}-${id}`"
-          :type
-          :name
-          v-model="status"
-          class="w-5 h-5 appearance-none bg-gray-300 hover:bg-gray-500 dark:bg-gray-700 dark:hover:bg-gray-500 rounded checked:bg-indigo-700 checked:hover:bg-indigo-700 checked:focus:ring-2 checked:ring-indigo-700 checked:ring-offset-2 relative checked:after:absolute checked:after:top-1/2 checked:after:left-1/2 checked:after:content-['✔'] checked:after:-translate-x-1/2 checked:after:-translate-y-1/2 transition-all"
-          :checked="status"
-        />
-
-        <label
-          :for="`${name}-${id}`"
-          class="ml-2 block font-medium capitalize cursor-pointer"
-          :class="{
-            'text-gray-400': !status,
-            'text-indigo-700 dark:text-indigo-200': status,
-          }"
-          >{{ name }}</label
-        >
+        <span class="flex items-center">
+          <input
+            :id="`${name}-${id}`"
+            :type
+            :name
+            v-model="status"
+            class="w-5 h-5 appearance-none bg-gray-300 hover:bg-gray-500 dark:bg-gray-700 dark:hover:bg-gray-800 rounded checked:bg-indigo-700 checked:hover:bg-indigo-700 checked:focus:ring-2 checked:ring-indigo-700 checked:ring-offset-2 relative checked:after:absolute checked:after:top-1/2 checked:after:left-1/2 checked:after:content-['✔'] checked:after:-translate-x-1/2 checked:after:-translate-y-1/2 transition-all"
+            :checked="status"
+          />
+          <label
+            :for="`${name}-${id}`"
+            class="ml-2 block font-medium capitalize cursor-pointer"
+            :class="{
+              'text-gray-300': !status,
+              'text-indigo-700 dark:text-indigo-100': status,
+            }"
+            >{{ name }}</label
+          >
+        </span>
       </template>
+      <!-- / checkbox input -->
 
       <!-- text input -->
       <template v-else-if="name === 'first_name'">
@@ -145,12 +153,15 @@
           :placeholder="label"
         />
       </template>
+      <!-- / text input -->
 
+      <!-- appended content -->
       <span
         v-if="append"
         class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-white/70 dark:border-gray-600 bg-white/95 dark:bg-gray-700 text-white/50 dark:text-gray-600 text-sm"
         >{{ append }}</span
       >
+      <!-- / appended content -->
     </div>
 
     <small
@@ -215,7 +226,7 @@ const status = defineModel("status");
 
 const inputClasses = computed(() => {
   const classes = [
-    `block w-full px-3 py-2 border border-black/30 dark:border-black/15 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors`,
+    `block w-full px-3 py-2 border border-black/30 dark:border-black/15 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:bg-gray-700 focus:z-10 sm:text-sm transition-colors`,
   ];
 
   if (props.append && !props.prepend) {

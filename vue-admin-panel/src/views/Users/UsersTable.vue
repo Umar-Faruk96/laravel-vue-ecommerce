@@ -66,7 +66,7 @@
     </div>
     <!--/ Sorting & Search -->
 
-    <!-- Users Table -->
+    <!-- Users List -->
     <div class="overflow-scroll sm:overflow-visible">
       <table class="table-auto w-full text-black/60 dark:text-white/70">
         <thead>
@@ -93,7 +93,7 @@
         <!-- Users Loading or No Users -->
         <tbody v-if="users.loading || !users.data.length">
           <tr>
-            <td colspan="6">
+            <td colspan="5">
               <Spinner v-if="users.loading" class="mt-4" />
               <p v-else class="text-center py-8 text-gray-700 dark:text-white/70">
                 There are no users
@@ -102,6 +102,7 @@
           </tr>
         </tbody>
         <!--/ Users Loading or No Users -->
+
         <!-- Users Data -->
         <tbody v-else>
           <tr
@@ -192,7 +193,7 @@
         <!--/ Users Data -->
       </table>
     </div>
-    <!--/ Users Table -->
+    <!--/ Users List -->
 
     <!-- Pagination -->
     <section

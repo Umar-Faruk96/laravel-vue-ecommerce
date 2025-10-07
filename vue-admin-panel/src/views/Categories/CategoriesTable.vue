@@ -9,7 +9,7 @@
     </div>
     <!-- / Categories Total Count -->
 
-    <!-- Categories Table -->
+    <!-- Categories List -->
     <table class="table-auto w-full text-black/60 dark:text-white/70">
       <thead>
         <tr>
@@ -76,7 +76,8 @@
         </tr>
       </tbody>
       <!-- / Categories Loading -->
-      <!-- Categories List -->
+
+      <!-- Categories Data -->
       <tbody v-else>
         <tr v-for="category of categories.data">
           <td class="border-b dark:border-b-gray-400 p-2">{{ category.id }}</td>
@@ -161,9 +162,9 @@
           </td>
         </tr>
       </tbody>
-      <!-- / Categories List -->
+      <!-- / Categories Data -->
     </table>
-    <!-- / Categories Table -->
+    <!-- / Categories List -->
   </section>
 </template>
 

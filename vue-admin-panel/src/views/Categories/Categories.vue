@@ -12,7 +12,11 @@
 
   <CategoriesTable @clickEdit="editCategory" />
 
-  <!-- <CategoryForm v-model="categoryForm" :category="categoryData" @close="closeCategoryForm" /> -->
+  <CategoryForm
+    v-model="categoryFormState"
+    :category="categoryData"
+    @close="closeCategoryForm"
+  />
 </template>
 
 <script setup>
@@ -32,10 +36,10 @@ const DEFAULT_CATEGORY = {
 const categories = computed(() => store.state.categories);
 
 const categoryData = ref({ ...DEFAULT_CATEGORY });
-const categoryForm = ref(false);
+const categoryFormState = ref(false);
 
 function showCategoryForm() {
-  categoryForm.value = true;
+  categoryFormState.value = true;
 }
 
 function editCategory(category) {

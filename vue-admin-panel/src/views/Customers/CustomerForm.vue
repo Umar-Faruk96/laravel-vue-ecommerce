@@ -1,5 +1,5 @@
 <template>
-  <TransitionRoot appear :show="formModal" as="template">
+  <TransitionRoot appear :show="formState" as="template">
     <Dialog as="div" @close="closeCustomerForm" class="relative z-10">
       <TransitionChild
         as="template"
@@ -10,7 +10,7 @@
         leave-from="opacity-100"
         leave-to="opacity-0"
       >
-        <div class="fixed inset-0 bg-black/60" />
+        <div class="fixed inset-0 bg-black/60 transition-colors" />
       </TransitionChild>
 
       <div class="fixed inset-0 overflow-y-auto">
@@ -25,7 +25,7 @@
             leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-              class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white/90 p-4 text-left align-middle shadow-xl transition-all"
+              class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white/90 dark:bg-gray-400 p-4 text-left align-middle shadow-xl transition-all"
             >
               <Spinner
                 v-if="loading"
@@ -33,7 +33,10 @@
               />
 
               <header class="py-3 px-4 flex justify-between items-center">
-                <DialogTitle as="h3" class="text-lg font-medium leading-6 text-black/90">
+                <DialogTitle
+                  as="h3"
+                  class="text-lg font-medium leading-6 text-black/90 dark:text-gray-900"
+                >
                   Create new Customer
                 </DialogTitle>
 
@@ -47,16 +50,20 @@
               </header>
 
               <form @submit.prevent="submit">
-                <main class="bg-white/80 px-4 pt-5 pb-4 space-y-4">
+                <main
+                  class="bg-white/80 dark:bg-gray-500 rounded-lg px-4 pt-5 pb-4 space-y-4"
+                >
                   <!-- Customer Info -->
-                  <section>
+                  <section class="space-y-2">
                     <!--<pre class="dark:text-gray-600">{{ customer }}</pre>-->
                     <!--<pre class="dark:text-gray-600">{{ customer.status }}</pre>-->
                     <!--<pre class="dark:text-gray-600">{{ countries }}</pre>-->
                     <!--<pre class="dark:text-gray-600">{{ billingCountry.states }}</pre>-->
                     <!--<pre class="dark:text-gray-600">{{ billingStates }}</pre>-->
 
-                    <h2 class="text-lg font-semibold dark:text-gray-600">
+                    <h2
+                      class="text-lg mb-3 font-semibold dark:text-gray-200 text-gray-600"
+                    >
                       Customer Info
                     </h2>
 
@@ -94,7 +101,7 @@
                           v-model="customer.phone"
                           name="phone"
                           required
-                          class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                          class="block w-full px-3 py-2 border border-black/30 dark:border-gray-600 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-200 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:bg-gray-700 focus:z-10 sm:text-sm transition-colors rounded-md"
                           placeholder="Phone Number"
                         />
                         <small
@@ -117,8 +124,10 @@
                   <!--/ Customer Info -->
 
                   <!-- Billing Address -->
-                  <section>
-                    <h3 class="text-lg font-semibold dark:text-gray-600">
+                  <section class="space-y-2">
+                    <h3
+                      class="text-lg mb-3 font-semibold dark:text-gray-200 text-gray-600"
+                    >
                       Billing Address
                     </h3>
 
@@ -129,7 +138,7 @@
                           v-model="customer.billingAddress.house_number"
                           name="house_number"
                           required
-                          class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                          class="block w-full px-3 py-2 border border-black/30 dark:border-gray-600 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-200 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 focus:bg-gray-700 sm:text-sm transition-colors rounded-md"
                           placeholder="House Number"
                         />
                         <small
@@ -148,7 +157,7 @@
                           v-model="customer.billingAddress.area"
                           name="area"
                           required
-                          class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                          class="block w-full px-3 py-2 border border-black/30 dark:border-gray-600 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-200 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 focus:bg-gray-700 sm:text-sm transition-colors rounded-md"
                           placeholder="Area"
                         />
                         <small
@@ -169,7 +178,7 @@
                           v-model="customer.billingAddress.city"
                           name="city"
                           required
-                          class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                          class="block w-full px-3 py-2 border border-black/30 dark:border-gray-600 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-200 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 focus:bg-gray-700 sm:text-sm transition-colors rounded-md"
                           placeholder="City"
                         />
 
@@ -189,7 +198,7 @@
                           v-model="customer.billingAddress.zip_code"
                           name="zip_code"
                           required
-                          class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                          class="block w-full px-3 py-2 border border-black/30 dark:border-gray-600 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-200 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 focus:bg-gray-700 sm:text-sm transition-colors rounded-md"
                           placeholder="Zip Code"
                         />
                         <small
@@ -202,12 +211,13 @@
                         >
                       </div>
                     </div>
+
                     <div class="flex gap-3 flex-1">
                       <div class="w-1/2">
                         <select
                           v-model="customer.billingAddress.country_code"
                           required
-                          class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                          class="block w-full px-3 py-2 border border-black/30 dark:border-gray-600 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-200 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 focus:bg-gray-700 sm:text-sm transition-colors rounded-md"
                         >
                           <option v-for="country of countries" :value="country.code">
                             {{ country.name }}
@@ -231,7 +241,7 @@
                             v-model="customer.billingAddress.state"
                             name="state"
                             required
-                            class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                            class="block w-full px-3 py-2 border border-black/30 dark:border-gray-600 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-200 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 focus:bg-gray-700 sm:text-sm transition-colors rounded-md"
                             placeholder="State"
                           />
                         </template>
@@ -240,7 +250,7 @@
                           <select
                             v-model="customer.billingAddress.state"
                             required
-                            class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                            class="block w-full px-3 py-2 border border-black/30 dark:border-gray-600 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-200 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 focus:bg-gray-700 sm:text-sm transition-colors rounded-md"
                           >
                             <option v-for="state of billingStates" :value="state.key">
                               {{ state.value }}
@@ -262,8 +272,10 @@
                   <!--/ Billing Address -->
 
                   <!-- Shipping Address -->
-                  <section>
-                    <h3 class="text-lg font-semibold dark:text-gray-600">
+                  <section class="space-y-2">
+                    <h3
+                      class="text-lg mb-3 font-semibold dark:text-gray-200 text-gray-600"
+                    >
                       Shipping Address
                     </h3>
 
@@ -274,7 +286,7 @@
                           v-model="customer.shippingAddress.house_number"
                           name="house_number"
                           required
-                          class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                          class="block w-full px-3 py-2 border border-black/30 dark:border-gray-600 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-200 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 focus:bg-gray-700 sm:text-sm transition-colors rounded-md"
                           placeholder="House Number"
                         />
 
@@ -294,7 +306,7 @@
                           v-model="customer.shippingAddress.area"
                           name="area"
                           required
-                          class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                          class="block w-full px-3 py-2 border border-black/30 dark:border-gray-600 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-200 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 focus:bg-gray-700 sm:text-sm transition-colors rounded-md"
                           placeholder="Area"
                         />
 
@@ -316,7 +328,7 @@
                           v-model="customer.shippingAddress.city"
                           name="city"
                           required
-                          class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                          class="block w-full px-3 py-2 border border-black/30 dark:border-gray-600 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-200 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 focus:bg-gray-700 sm:text-sm transition-colors rounded-md"
                           placeholder="City"
                         />
 
@@ -336,7 +348,7 @@
                           v-model="customer.shippingAddress.zip_code"
                           name="zip_code"
                           required
-                          class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                          class="block w-full px-3 py-2 border border-black/30 dark:border-gray-600 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-200 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 focus:bg-gray-700 sm:text-sm transition-colors rounded-md"
                           placeholder="Zip Code"
                         />
 
@@ -355,7 +367,7 @@
                       <div class="w-1/2">
                         <select
                           v-model="customer.shippingAddress.country_code"
-                          class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                          class="block w-full px-3 py-2 border border-black/30 dark:border-gray-600 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-200 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 focus:bg-gray-700 sm:text-sm transition-colors rounded-md"
                         >
                           <option v-for="country of countries" :value="country.code">
                             {{ country.name }}
@@ -379,7 +391,7 @@
                             v-model="customer.shippingAddress.state"
                             name="state"
                             required
-                            class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                            class="block w-full px-3 py-2 border border-black/30 dark:border-gray-600 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-200 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 focus:bg-gray-700 sm:text-sm transition-colors rounded-md"
                             placeholder="State"
                           />
                         </template>
@@ -388,7 +400,7 @@
                           <select
                             v-model="customer.shippingAddress.state"
                             required
-                            class="block w-full mt-3 px-3 py-2 border border-black/30 placeholder-black/80 bg-white/60 text-black/90 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors rounded-md"
+                            class="block w-full px-3 py-2 border border-black/30 dark:border-gray-600 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-200 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 focus:bg-gray-700 sm:text-sm transition-colors rounded-md"
                           >
                             <option v-for="state of shippingStates" :value="state.key">
                               {{ state.value }}
@@ -419,7 +431,7 @@
                   </button>
                   <button
                     type="button"
-                    class="mt-3 w-full inline-flex justify-center rounded-md border border-black/30 shadow-sm px-4 py-2 bg-black/20 text-base font-medium text-black/80 hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black/40 sm:mt-0 sm:w-auto sm:text-sm transition-colors"
+                    class="mt-3 w-full inline-flex justify-center rounded-md border border-black/30 shadow-sm px-4 py-2 bg-black/20 text-base font-medium text-white/70 hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black/40 sm:mt-0 sm:w-auto sm:text-sm transition-colors"
                     @click="closeCustomerForm"
                     ref="cancelButton"
                   >
@@ -443,7 +455,7 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { XMarkIcon } from "@heroicons/vue/24/solid";
 import Spinner from "../../components/core/Spinner.vue";
 import store from "../../store/index.js";
@@ -476,11 +488,11 @@ const DEFAULT_CUSTOMER = {
 };
 
 const customer = ref({ ...DEFAULT_CUSTOMER });
-const formModal = defineModel("formModal");
+const formState = defineModel("modelValue");
 const router = useRouter();
 
 function closeCustomerForm() {
-  formModal.value = false;
+  formState.value = false;
   customer.value = { ...DEFAULT_CUSTOMER };
 }
 
@@ -498,7 +510,7 @@ function submit() {
 
       if (response.status === 201) {
         // TODO: Show create success message
-        formModal.value = false;
+        formState.value = false;
         router.push({ name: "app.customers" });
       }
     })
@@ -508,6 +520,10 @@ function submit() {
       console.error("Error creating customer:", error);
     });
 }
+
+onMounted(() => {
+  store.dispatch("getCountries");
+});
 
 const countries = computed(() => store.state.countries);
 

@@ -10,10 +10,10 @@
         leave-from="opacity-100"
         leave-to="opacity-0"
       >
-        <div class="fixed inset-0 bg-black bg-opacity-70 transition-opacity" />
+        <div class="fixed inset-0 bg-black/60 transition-colors" />
       </TransitionChild>
 
-      <div class="fixed z-10 inset-0 overflow-y-auto">
+      <section class="fixed z-10 inset-0 overflow-y-auto">
         <div
           class="flex items-end sm:items-center justify-center min-h-full p-4 text-center sm:p-0"
         >
@@ -61,6 +61,7 @@
                   </svg>
                 </button>
               </header>
+
               <form @submit.prevent="submit">
                 <div class="bg-white px-4 pt-5 pb-4">
                   <CustomInputV3
@@ -105,7 +106,7 @@
             </DialogPanel>
           </TransitionChild>
         </div>
-      </div>
+      </section>
     </Dialog>
   </TransitionRoot>
 </template>
@@ -140,7 +141,8 @@ const category = ref({
   parent_id: props.category.parent_id,
 });
 
-const categoryForm = defineModel("formModal");
+const categoryForm = defineModel("modelValue");
+const emit = defineEmits(["close"]);
 
 const show = computed({
   get: () => categoryForm.value,
