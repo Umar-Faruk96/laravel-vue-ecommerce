@@ -37,7 +37,7 @@
                 <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
                   {{
                     category.id
-                      ? `Update category: "${props.category.name}"`
+                      ? `Update Category: "${props.category.name}"`
                       : "Create new Category"
                   }}
                 </DialogTitle>
@@ -62,16 +62,27 @@
                 </button>
               </header>
 
+              <!-- <pre>{{ category }}</pre> -->
+
               <form @submit.prevent="submit">
                 <section class="bg-white/80 dark:bg-gray-500 px-4 pt-5 pb-4 space-y-2">
-                  <CustomInputV3
-                    v-model="category.name"
-                    label="Name"
-                    idFor="name"
-                    name="name"
-                    required
-                    :errors="errors['name']"
-                  />
+                  <div>
+                    <input
+                      type="text"
+                      v-model="category.name"
+                      label="Name"
+                      idFor="name"
+                      name="name"
+                      required
+                      class="block w-full px-3 py-2 border border-black/30 dark:border-gray-600 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-200 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 focus:bg-gray-700 sm:text-sm transition-colors rounded-md"
+                      placeholder="Category Name"
+                    />
+                    <small
+                      v-if="errors['name'] && errors['name'][0]"
+                      class="text-red-600"
+                      >{{ errors["name"][0] }}</small
+                    >
+                  </div>
 
                   <div>
                     <select
@@ -95,13 +106,25 @@
                     >
                   </div>
 
-                  <CustomInputV3
-                    type="checkbox"
-                    v-model="category.active"
-                    name="active"
-                    idFor="active"
-                    :errors="errors['active']"
-                  />
+                  <div class="flex gap-2 items-center">
+                    <input
+                      :id="category.id"
+                      type="checkbox"
+                      name="category_state"
+                      v-model="category.active"
+                      class="w-5 h-5 appearance-none bg-gray-300 hover:bg-gray-500 dark:bg-gray-700 dark:hover:bg-gray-800 rounded checked:bg-indigo-700 checked:hover:bg-indigo-700 checked:focus:ring-2 checked:ring-indigo-700 checked:ring-offset-2 relative checked:after:absolute checked:after:top-1/2 checked:after:left-1/2 checked:after:content-['✔'] checked:after:-translate-x-1/2 checked:after:-translate-y-1/2 transition-all"
+                      :checked="category.active"
+                    />
+                    <label
+                      :for="category.id"
+                      class="font-medium capitalize cursor-pointer"
+                      :class="{
+                        'text-gray-300': !category.active,
+                        'text-indigo-700 dark:text-indigo-100': category.active,
+                      }"
+                      >{{ category.active ? "Active" : "Inactive" }}</label
+                    >
+                  </div>
                 </section>
               </form>
               <footer

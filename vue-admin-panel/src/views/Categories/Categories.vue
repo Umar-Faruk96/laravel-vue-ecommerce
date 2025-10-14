@@ -39,6 +39,7 @@ function showCategoryForm() {
 }
 
 function editCategory(category) {
+  // console.log(category);
   category.parent_id = category.parent_id ?? 0;
   categoryData.value = category;
   showCategoryForm();
