@@ -20,20 +20,16 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
-import store from "@/store";
+import { ref } from "vue";
 import CategoryForm from "./CategoryForm.vue";
 import CategoriesTable from "./CategoriesTable.vue";
 
 const DEFAULT_CATEGORY = {
-  id: "",
-  title: "",
-  description: "",
-  image: "",
-  price: "",
+  id: null,
+  name: "",
+  active: 1,
+  parent_id: 0,
 };
-
-const categories = computed(() => store.state.categories);
 
 const categoryData = ref({ ...DEFAULT_CATEGORY });
 const categoryFormState = ref(false);

@@ -1,11 +1,17 @@
 <template>
   <div>
     <!-- Label for screen readers -->
-    <label v-if="label" :for="label.replace(' ', '_').toLowerCase()" class="sr-only">{{
-      label
-    }}</label>
+    <label
+      v-if="label && type !== 'checkbox'"
+      :for="label.replace(' ', '_').toLowerCase()"
+      class="sr-only"
+      >{{ label }}</label
+    >
 
-    <div class="flex rounded-md shadow-sm items-stretch">
+    <div
+      class="flex rounded-md items-stretch"
+      :class="{ 'shadow-sm': type !== 'checkbox' }"
+    >
       <!-- prepended content -->
       <span
         v-if="prepend"

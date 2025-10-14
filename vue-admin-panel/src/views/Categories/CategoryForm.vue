@@ -27,11 +27,11 @@
             leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <DialogPanel
-              class="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-[700px] sm:w-full"
+              class="relative bg-white/90 dark:bg-gray-400 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-[700px] sm:w-full"
             >
               <Spinner
                 v-if="loading"
-                class="absolute left-0 top-0 bg-white right-0 bottom-0 flex items-center justify-center"
+                class="absolute inset-0 flex items-center justify-center"
               />
               <header class="py-3 px-4 flex justify-between items-center">
                 <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
@@ -42,7 +42,7 @@
                   }}
                 </DialogTitle>
                 <button
-                  @click="closeCategoryForm()"
+                  @click="closeCategoryForm"
                   class="w-8 h-8 flex items-center justify-center rounded-full transition-colors cursor-pointer hover:bg-[rgba(0,0,0,0.2)]"
                 >
                   <svg
@@ -63,46 +63,65 @@
               </header>
 
               <form @submit.prevent="submit">
-                <div class="bg-white px-4 pt-5 pb-4">
+                <section class="bg-white/80 dark:bg-gray-500 px-4 pt-5 pb-4 space-y-2">
                   <CustomInputV3
-                    class="mb-2"
                     v-model="category.name"
                     label="Name"
+                    idFor="name"
+                    name="name"
+                    required
                     :errors="errors['name']"
                   />
-                  <CustomInputV3
-                    type="select"
-                    :select-options="parentCategories"
-                    class="mb-2"
-                    v-model="category.parent_id"
-                    label="Parent"
-                    :errors="errors['parent_id']"
-                  />
+
+                  <div>
+                    <select
+                      v-model="category.parent_id"
+                      required
+                      class="block w-full px-3 py-2 border border-black/30 dark:border-gray-600 placeholder-black/80 dark:placeholder-gray-300 bg-white/60 dark:bg-gray-600 text-black/90 dark:text-gray-200 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 focus:bg-gray-700 sm:text-sm transition-colors rounded-md"
+                    >
+                      <option
+                        v-for="(parentCategory, index) in parentCategories"
+                        :key="index"
+                        :value="parentCategory.key"
+                      >
+                        {{ parentCategory.name }}
+                      </option>
+                    </select>
+
+                    <small
+                      v-if="errors[parent_id] && errors[parent_id][0]"
+                      class="text-red-600"
+                      >{{ errors[parent_id][0] }}</small
+                    >
+                  </div>
+
                   <CustomInputV3
                     type="checkbox"
-                    class="mb-2"
                     v-model="category.active"
-                    label="Active"
+                    name="active"
+                    idFor="active"
                     :errors="errors['active']"
                   />
-                </div>
-                <footer class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                  <button
-                    type="submit"
-                    class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500"
-                  >
-                    Submit
-                  </button>
-                  <button
-                    type="button"
-                    class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                    @click="closeCategoryForm"
-                    ref="cancelButtonRef"
-                  >
-                    Cancel
-                  </button>
-                </footer>
+                </section>
               </form>
+              <footer
+                class="bg-gray-50 dark:bg-black/5 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
+              >
+                <button
+                  type="submit"
+                  class="mt-3 w-full inline-flex justify-center rounded-md shadow-sm px-4 py-2 text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm text-white/90 bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 transition-colors"
+                >
+                  Submit
+                </button>
+                <button
+                  type="button"
+                  class="mt-3 w-full inline-flex justify-center rounded-md border border-black/30 shadow-sm px-4 py-2 bg-black/20 hover:bg-black/10 text-base font-medium text-white/70 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black/40 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-colors"
+                  @click="closeCategoryForm"
+                  ref="cancelButtonRef"
+                >
+                  Cancel
+                </button>
+              </footer>
             </DialogPanel>
           </TransitionChild>
         </div>
@@ -151,18 +170,18 @@ const show = computed({
 
 const parentCategories = computed(() => {
   return [
-    { key: "", text: "Select Parent Category" },
+    { key: 0, name: "Select Parent Category" },
     ...store.state.categories.data
-      .filter((c) => {
+      .filter((stateCategory) => {
         if (category.value.id) {
-          return c.id !== category.value.id;
+          return stateCategory.id !== category.value.id;
         }
         return true;
       })
-      .map((c) => ({ key: c.id, text: c.name }))
-      .sort((c1, c2) => {
-        if (c1.text < c2.text) return -1;
-        if (c1.text > c2.text) return 1;
+      .map((category) => ({ key: category.id, name: category.name }))
+      .sort((category1, category2) => {
+        if (category1.text < category2.text) return -1;
+        if (category1.text > category2.text) return 1;
         return 0;
       }),
   ];
