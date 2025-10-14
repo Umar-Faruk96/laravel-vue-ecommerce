@@ -180,7 +180,7 @@ const categories = computed(() => store.state.categories);
 const sortField = ref("name");
 const sortDirection = ref("asc");
 
-const emit = defineEmits(["clickEdit"]);
+const emit = defineEmits(["click"]);
 
 onMounted(() => {
   getCategories();
