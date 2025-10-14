@@ -10,7 +10,7 @@
     </button>
   </div>
 
-  <CategoriesTable @clickEdit="editCategory" />
+  <CategoriesTable @click="editCategory" />
 
   <CategoryForm
     v-model="categoryFormState"

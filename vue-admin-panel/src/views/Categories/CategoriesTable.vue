@@ -220,6 +220,6 @@ function deleteCategory(category) {
 }
 
 function editCategory(category) {
-  emit("clickEdit", category);
+  emit("click", category);
 }
 </script>
