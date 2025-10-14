@@ -89,9 +89,9 @@
                     </select>
 
                     <small
-                      v-if="errors[parent_id] && errors[parent_id][0]"
+                      v-if="errors['parent_id'] && errors['parent_id'][0]"
                       class="text-red-600"
-                      >{{ errors[parent_id][0] }}</small
+                      >{{ errors["parent_id"][0] }}</small
                     >
                   </div>
 
