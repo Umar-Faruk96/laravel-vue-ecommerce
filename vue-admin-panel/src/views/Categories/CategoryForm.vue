@@ -113,7 +113,6 @@
                       name="category_state"
                       v-model="category.active"
                       :checked="category.active"
-                      required
                       class="w-5 h-5 appearance-none rounded relative transition-all checked:after:absolute checked:after:top-1/2 after:left-1/2 checked:after:content-['✔'] checked:after:-translate-x-1/2 checked:after:-translate-y-1/2"
                       :class="[
                         category.active
