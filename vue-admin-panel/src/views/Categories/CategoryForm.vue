@@ -63,6 +63,7 @@
               </header>
 
               <pre>{{ category }}</pre>
+              <pre>{{ errors }}</pre>
 
               <form @submit.prevent="submitCategory">
                 <section class="bg-white/80 dark:bg-gray-500 px-4 pt-5 pb-4 space-y-2">
@@ -101,7 +102,7 @@
 
                     <small
                       v-if="errors['parent_id'] && errors['parent_id'][0]"
-                      class="text-red-600"
+                      class="text-red-600 dark:text-red-200 sm:text-base"
                       >{{ errors["parent_id"][0] }}</small
                     >
                   </div>
@@ -239,6 +240,8 @@ function closeCategoryForm() {
 function submitCategory() {
   loading.value = true;
   category.value.active = !!category.value.active;
+  category.value.parent_id === 0 ? (category.value.parent_id = null) : null;
+
   if (category.value.id) {
     store
       .dispatch("updateCategory", category.value)
@@ -252,7 +255,9 @@ function submitCategory() {
       })
       .catch((err) => {
         loading.value = false;
-        errors.value = err.response.data.errors;
+        // debugger;
+        // console.log(err);
+        errors.value = err.data.errors;
       });
   } else {
     store
@@ -267,7 +272,7 @@ function submitCategory() {
       })
       .catch((err) => {
         loading.value = false;
-        errors.value = err.response.data.errors;
+        errors.value = err.data.errors;
       });
   }
 }
