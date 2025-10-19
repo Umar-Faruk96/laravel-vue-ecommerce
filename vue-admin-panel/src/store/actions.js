@@ -315,7 +315,7 @@ export const getCategories = async (
     }
 };
 
-export const createategory = async ({ commit }, category) => {
+export const createCategory = async ({ commit }, category) => {
     return axiosClient.post("/categories", category);
 };
 
