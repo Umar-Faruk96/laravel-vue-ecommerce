@@ -421,25 +421,25 @@
                   </section>
                   <!--/ Shipping Address -->
                 </main>
+                <footer
+                  class="bg-black/5 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse rounded-b-lg"
+                >
+                  <button
+                    type="submit"
+                    class="py-2 w-full sm:w-auto px-4 border border-transparent text-sm font-medium rounded-md text-white/90 bg-indigo-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 transition-colors"
+                  >
+                    Submit
+                  </button>
+                  <button
+                    type="button"
+                    class="mt-3 w-full inline-flex justify-center rounded-md border border-black/30 shadow-sm px-4 py-2 bg-black/20 hover:bg-black/10 text-base font-medium text-white/70 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black/40 sm:mt-0 sm:w-auto sm:text-sm transition-colors"
+                    @click="closeCustomerForm"
+                    ref="cancelButton"
+                  >
+                    Cancel
+                  </button>
+                </footer>
               </form>
-              <footer
-                class="bg-black/5 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse rounded-b-lg"
-              >
-                <button
-                  type="submit"
-                  class="py-2 w-full sm:w-auto px-4 border border-transparent text-sm font-medium rounded-md text-white/90 bg-indigo-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 transition-colors"
-                >
-                  Submit
-                </button>
-                <button
-                  type="button"
-                  class="mt-3 w-full inline-flex justify-center rounded-md border border-black/30 shadow-sm px-4 py-2 bg-black/20 hover:bg-black/10 text-base font-medium text-white/70 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black/40 sm:mt-0 sm:w-auto sm:text-sm transition-colors"
-                  @click="closeCustomerForm"
-                  ref="cancelButton"
-                >
-                  Cancel
-                </button>
-              </footer>
             </DialogPanel>
           </TransitionChild>
         </div>

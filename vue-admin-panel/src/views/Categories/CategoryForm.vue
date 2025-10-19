@@ -64,7 +64,7 @@
 
               <pre>{{ category }}</pre>
 
-              <form @submit.prevent="submit">
+              <form @submit.prevent="submitCategory">
                 <section class="bg-white/80 dark:bg-gray-500 px-4 pt-5 pb-4 space-y-2">
                   <div>
                     <input
@@ -132,25 +132,25 @@
                     >
                   </div>
                 </section>
+                <footer
+                  class="bg-gray-50 dark:bg-black/5 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
+                >
+                  <button
+                    type="submit"
+                    class="mt-3 w-full inline-flex justify-center rounded-md shadow-sm px-4 py-2 text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm text-white/90 bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 transition-colors"
+                  >
+                    Submit
+                  </button>
+                  <button
+                    type="button"
+                    class="mt-3 w-full inline-flex justify-center rounded-md border border-black/30 shadow-sm px-4 py-2 bg-black/20 hover:bg-black/10 text-base font-medium text-white/70 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black/40 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-colors"
+                    @click="closeCategoryForm"
+                    ref="cancelButtonRef"
+                  >
+                    Cancel
+                  </button>
+                </footer>
               </form>
-              <footer
-                class="bg-gray-50 dark:bg-black/5 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
-              >
-                <button
-                  type="submit"
-                  class="mt-3 w-full inline-flex justify-center rounded-md shadow-sm px-4 py-2 text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm text-white/90 bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 transition-colors"
-                >
-                  Submit
-                </button>
-                <button
-                  type="button"
-                  class="mt-3 w-full inline-flex justify-center rounded-md border border-black/30 shadow-sm px-4 py-2 bg-black/20 hover:bg-black/10 text-base font-medium text-white/70 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black/40 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-colors"
-                  @click="closeCategoryForm"
-                  ref="cancelButtonRef"
-                >
-                  Cancel
-                </button>
-              </footer>
             </DialogPanel>
           </TransitionChild>
         </div>
@@ -191,9 +191,9 @@ const category = ref({
 const categoryForm = defineModel("modelValue");
 const emit = defineEmits(["close"]);
 const DEFAULT_CATEGORY = {
-  id: null,
+  id: 0,
   name: "",
-  active: 1,
+  active: 0,
   parent_id: 0,
 };
 
@@ -237,7 +237,7 @@ function closeCategoryForm() {
   category.value = { ...DEFAULT_CATEGORY };
 }
 
-function submit() {
+function submitCategory() {
   loading.value = true;
   category.value.active = !!category.value.active;
   if (category.value.id) {
