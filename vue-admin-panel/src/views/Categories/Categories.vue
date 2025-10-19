@@ -25,7 +25,7 @@ import CategoryForm from "./CategoryForm.vue";
 import CategoriesTable from "./CategoriesTable.vue";
 
 const DEFAULT_CATEGORY = {
-  id: null,
+  id: 1,
   name: "",
   active: 1,
   parent_id: 0,

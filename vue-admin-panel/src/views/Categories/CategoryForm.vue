@@ -1,6 +1,6 @@
 <template>
-  <TransitionRoot as="template" :show="show">
-    <Dialog as="div" class="relative z-10" @close="show = false">
+  <TransitionRoot as="template" :show="categoryShow">
+    <Dialog as="div" class="relative z-10" @close="categoryShow = false">
       <TransitionChild
         as="template"
         enter="ease-out duration-300"
@@ -62,7 +62,7 @@
                 </button>
               </header>
 
-              <!-- <pre>{{ category }}</pre> -->
+              <pre>{{ category }}</pre>
 
               <form @submit.prevent="submit">
                 <section class="bg-white/80 dark:bg-gray-500 px-4 pt-5 pb-4 space-y-2">
@@ -112,8 +112,14 @@
                       type="checkbox"
                       name="category_state"
                       v-model="category.active"
-                      class="w-5 h-5 appearance-none bg-gray-300 hover:bg-gray-500 dark:bg-gray-700 dark:hover:bg-gray-800 rounded checked:bg-indigo-700 checked:hover:bg-indigo-700 checked:focus:ring-2 checked:ring-indigo-700 checked:ring-offset-2 relative checked:after:absolute checked:after:top-1/2 checked:after:left-1/2 checked:after:content-['✔'] checked:after:-translate-x-1/2 checked:after:-translate-y-1/2 transition-all"
                       :checked="category.active"
+                      required
+                      class="w-5 h-5 appearance-none rounded relative transition-all checked:after:absolute checked:after:top-1/2 after:left-1/2 checked:after:content-['✔'] checked:after:-translate-x-1/2 checked:after:-translate-y-1/2"
+                      :class="[
+                        category.active
+                          ? 'bg-indigo-700 hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-700 focus:ring-offset-2'
+                          : 'bg-gray-300 hover:bg-gray-500 dark:bg-gray-700 dark:hover:bg-gray-800',
+                      ]"
                     />
                     <label
                       :for="category.id"
@@ -162,7 +168,6 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import CustomInputV3 from "@/components/core/CustomInputV3.vue";
 import store from "@/store/index.js";
 import Spinner from "@/components/core/Spinner.vue";
 
@@ -179,14 +184,20 @@ const props = defineProps({
 const category = ref({
   id: props.category.id,
   name: props.category.name,
-  active: props.category.active,
+  active: props.category.active === 1 ? true : false,
   parent_id: props.category.parent_id,
 });
 
 const categoryForm = defineModel("modelValue");
 const emit = defineEmits(["close"]);
+const DEFAULT_CATEGORY = {
+  id: null,
+  name: "",
+  active: 1,
+  parent_id: 0,
+};
 
-const show = computed({
+const categoryShow = computed({
   get: () => categoryForm.value,
   set: (value) => (categoryForm.value = value),
 });
@@ -214,15 +225,16 @@ onUpdated(() => {
   category.value = {
     id: props.category.id,
     name: props.category.name,
-    active: props.category.active,
+    active: props.category.active === 1 ? true : false,
     parent_id: props.category.parent_id,
   };
 });
 
 function closeCategoryForm() {
-  show.value = false;
+  categoryShow.value = false;
   emit("close");
   errors.value = {};
+  category.value = { ...DEFAULT_CATEGORY };
 }
 
 function submit() {
