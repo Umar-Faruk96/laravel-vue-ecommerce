@@ -15,7 +15,7 @@ class CategoryController extends Controller
     public function index(Request $request): AnonymousResourceCollection
     {
         $sortBy = $request->input('sort_by', 'id');
-        $sortOrder = $request->input('sort_order', 'asc');
+        $sortOrder = $request->input('sort_order', 'desc');
 
         $categories = Category::orderBy($sortBy, $sortOrder)->latest()->get();
 
