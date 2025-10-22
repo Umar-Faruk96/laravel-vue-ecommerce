@@ -3,15 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Sluggable\{HasSlug, SlugOptions};
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class Product extends Model
 {
-    use HasSlug, SoftDeletes, HasFactory;
+    use HasFactory, HasSlug, SoftDeletes;
 
     protected $fillable = [
         'title',
@@ -20,7 +22,7 @@ class Product extends Model
         'quantity',
         'published',
         'created_by',
-        'updated_by'
+        'updated_by',
     ];
 
     public function getSlugOptions(): SlugOptions
@@ -51,7 +53,7 @@ class Product extends Model
         );
     }
 
-    public function categories()
+    public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class, 'product_categories');
     }
